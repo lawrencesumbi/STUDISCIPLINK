@@ -14,6 +14,7 @@ try {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
+    $role = $_POST['role']; // ✅ get role from form
 
     // Check if passwords match
     if ($password !== $confirm_password) {
@@ -36,11 +37,11 @@ try {
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert into database
-    $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $stmt->execute([$username, $hashedPassword]);
+    // Insert into database (with role)
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
+    $stmt->execute([$username, $hashedPassword, $role]);
 
-    $_SESSION['message'] = "Registration successful! You can now login.";
+    $_SESSION['message'] = "Registration successful as <b>$role</b>! You can now login.";
     $_SESSION['msg_type'] = "success";
     header("Location: register.php");
     exit;

@@ -12,7 +12,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Get form values
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
     // Check if user exists
@@ -21,9 +21,26 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        // Store session
+        // Store session info
         $_SESSION['username'] = $user['username'];
-        header("Location: dashboard.php");
+        $_SESSION['role'] = $user['role']; // store role in session
+
+        // Redirect based on role
+        switch ($user['role']) {
+            case 'admin':
+                header("Location: admin.php");
+                break;
+            case 'guidance':
+            case 'SAO':
+            case 'registrar':
+            case 'faculty':
+                header("Location: dashboard.php"); // generic user dashboard
+                break;
+            default:
+                $_SESSION['error'] = "Role not recognized.";
+                header("Location: login.php");
+                break;
+        }
         exit;
     } else {
         $_SESSION['error'] = "Invalid username or password.";
@@ -34,3 +51,4 @@ try {
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
+?>
