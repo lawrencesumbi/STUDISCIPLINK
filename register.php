@@ -222,7 +222,7 @@
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
             container.classList.add("hidden"); // hide container
-        }, 7000); // 7 seconds idle before fade out
+        }, 12000); // 12 seconds idle before fade out
     }
 
     // Reset timer on any mouse movement
