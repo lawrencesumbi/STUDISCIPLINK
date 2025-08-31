@@ -24,6 +24,11 @@ try {
         // Store session info
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role']; // store role in session
+        $_SESSION['user_id'] = $user['id']; // store user ID for logging
+
+        // Log login action
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user['id'], 'Logged in']);
 
         // Redirect based on role
         switch ($user['role']) {
