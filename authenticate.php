@@ -21,10 +21,18 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
+
+        // ✅ Check account status
+        if ($user['status'] !== 'active') {
+            $_SESSION['error'] = "Your account is pending approval. Please contact the administrator.";
+            header("Location: login.php");
+            exit;
+        }
+
         // Store session info
         $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role']; // store role in session
-        $_SESSION['user_id'] = $user['id']; // store user ID for logging
+        $_SESSION['role'] = $user['role']; 
+        $_SESSION['user_id'] = $user['id'];
 
         // Log login action
         $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
@@ -39,7 +47,7 @@ try {
             case 'SAO':
             case 'registrar':
             case 'faculty':
-                header("Location: dashboard.php"); // generic user dashboard
+                header("Location: dashboard.php");
                 break;
             default:
                 $_SESSION['error'] = "Role not recognized.";
@@ -47,6 +55,7 @@ try {
                 break;
         }
         exit;
+
     } else {
         $_SESSION['error'] = "Invalid username or password.";
         header("Location: login.php");
@@ -56,4 +65,3 @@ try {
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
-?>

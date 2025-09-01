@@ -62,8 +62,8 @@ try {
     <input type="hidden" name="id" id="user_id">
     <input type="text" name="username" id="username" placeholder="Username" required>
     <input type="password" name="password" id="password" placeholder="Password (leave blank to keep)">
-    <input type="text" name="email" id="email" placeholder="Email" required>
-    <input type="text" name="contact" id="contact" placeholder="Contact" required>
+    <input type="text" name="email" id="email" placeholder="Email">
+    <input type="text" name="contact" id="contact" placeholder="Contact">
     <select name="role" id="role" required>
         <option value="">Select Role</option>
         <option value="admin">Admin</option>
@@ -75,7 +75,7 @@ try {
     <select name="status" id="status" required>
         <option value="">Select Status</option>
         <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+        <option value="pending">Pending</option>
     </select>
     <button type="submit" name="add_user">Add User</button>
     <button type="submit" name="update_user">Update User</button>

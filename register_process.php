@@ -37,11 +37,11 @@ try {
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert into database (with role)
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
+    // Insert into database (with role + default status = 'pending')
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, role, status) VALUES (?, ?, ?, 'pending')");
     $stmt->execute([$username, $hashedPassword, $role]);
 
-    $_SESSION['message'] = "Registration successful as <b>$role</b>! You can now login.";
+    $_SESSION['message'] = "Registration successful as <b>$role</b>! Your account is pending approval.";
     $_SESSION['msg_type'] = "success";
     header("Location: register.php");
     exit;
