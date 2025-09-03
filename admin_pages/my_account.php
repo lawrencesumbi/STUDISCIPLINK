@@ -35,7 +35,7 @@ if (isset($_POST['update_user'])) {
     // ✅ Optional: Handle profile image upload
     $imgPath = $user['img']; // keep old image if not changed
     if (!empty($_FILES['img']['name'])) {
-        $targetDir = "uploads/";
+        $targetDir = "../studisciplink/userUploads/";
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
@@ -74,7 +74,7 @@ if (isset($_POST['update_user'])) {
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f4; }
         .container { width: 500px; margin: 50px auto; background: #fff; padding: 20px; border-radius: 10px; }
-        input, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
+        input, button { width: 92%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
         button { background: #4CAF50; color: white; cursor: pointer; }
         button:hover { background: #45a049; }
         img { max-width: 100px; margin: 10px 0; border-radius: 50%; }

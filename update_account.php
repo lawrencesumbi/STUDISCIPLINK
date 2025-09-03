@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle profile image
     $imgPath = null;
     if (!empty($_FILES['img']['name'])) {
-        $targetDir = "../uploads/";
+        $targetDir = "../studisciplink/userUploads/";
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
