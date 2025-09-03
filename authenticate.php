@@ -44,10 +44,16 @@ try {
                 header("Location: admin.php");
                 break;
             case 'guidance':
+                header("Location: guidance.php");
+                break;
             case 'SAO':
+                header("Location: sao.php");
+                break;
             case 'registrar':
+                header("Location: registrar.php");
+                break;
             case 'faculty':
-                header("Location: dashboard.php");
+                header("Location: faculty.php");
                 break;
             default:
                 $_SESSION['error'] = "Role not recognized.";

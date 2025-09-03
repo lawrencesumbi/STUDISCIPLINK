@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2025 at 01:28 PM
+-- Generation Time: Sep 03, 2025 at 04:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -97,7 +97,36 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (56, 1, 'Logged out', '2025-09-03 18:43:53'),
 (57, 1, 'Logged in', '2025-09-03 18:57:38'),
 (58, 1, 'Logged out', '2025-09-03 18:57:50'),
-(59, 6, 'Logged in', '2025-09-03 18:57:55');
+(59, 6, 'Logged in', '2025-09-03 18:57:55'),
+(60, 1, 'Logged in', '2025-09-03 19:34:06'),
+(61, 1, 'Logged out', '2025-09-03 19:47:58'),
+(62, 6, 'Logged in', '2025-09-03 19:48:15'),
+(63, 6, 'Logged in', '2025-09-03 19:49:05'),
+(64, 6, 'Logged out', '2025-09-03 20:32:24'),
+(65, 6, 'Logged in', '2025-09-03 20:32:29'),
+(66, 6, 'Logged out', '2025-09-03 20:55:26'),
+(67, 6, 'Logged in', '2025-09-03 20:55:31'),
+(68, 6, 'Logged out', '2025-09-03 20:56:16'),
+(69, 6, 'Logged in', '2025-09-03 20:56:21'),
+(70, 6, 'Logged out', '2025-09-03 20:58:38'),
+(71, 1, 'Logged in', '2025-09-03 21:02:04'),
+(72, 1, 'Logged out', '2025-09-03 21:02:12'),
+(73, 6, 'Logged in', '2025-09-03 21:02:17'),
+(74, 6, 'Logged out', '2025-09-03 21:25:17'),
+(75, 1, 'Logged in', '2025-09-03 21:25:24'),
+(76, 1, 'Logged out', '2025-09-03 21:25:44'),
+(77, 6, 'Logged in', '2025-09-03 21:25:50'),
+(78, 6, 'Added student: Daniel Padilla for School Year 2025-2026', '2025-09-03 22:14:45'),
+(79, 6, 'Deleted student ID 4: Daniel Padilla', '2025-09-03 22:15:07'),
+(80, 6, 'Deleted student ID 3: Daniel Padilla', '2025-09-03 22:15:09'),
+(81, 6, 'Deleted student ID 3:  ', '2025-09-03 22:15:12'),
+(82, 6, 'Deleted student ID 3:  ', '2025-09-03 22:15:16'),
+(83, 6, 'Logged out', '2025-09-03 22:16:15'),
+(84, 1, 'Logged in', '2025-09-03 22:16:19'),
+(85, 1, 'Logged out', '2025-09-03 22:16:50'),
+(86, 6, 'Logged in', '2025-09-03 22:17:00'),
+(87, 6, 'Added student: Coco Martin for School Year 2025-2026', '2025-09-03 22:17:24'),
+(88, 6, 'Deleted student ID 2: Daniel Padilla', '2025-09-03 22:18:42');
 
 -- --------------------------------------------------------
 
@@ -107,8 +136,16 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 
 CREATE TABLE `programs` (
   `id` int(11) NOT NULL,
+  `program_code` varchar(50) NOT NULL,
   `program_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `programs`
+--
+
+INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
+(1, 'BSIT', 'Bachelor of Science in Information Technology');
 
 -- --------------------------------------------------------
 
@@ -118,8 +155,17 @@ CREATE TABLE `programs` (
 
 CREATE TABLE `school_years` (
   `id` int(11) NOT NULL,
-  `school_year` varchar(50) NOT NULL
+  `school_year` varchar(50) NOT NULL,
+  `is_current` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `school_years`
+--
+
+INSERT INTO `school_years` (`id`, `school_year`, `is_current`) VALUES
+(1, '2024-2025', 0),
+(2, '2025-2026', 1);
 
 -- --------------------------------------------------------
 
@@ -129,9 +175,15 @@ CREATE TABLE `school_years` (
 
 CREATE TABLE `sections` (
   `id` int(11) NOT NULL,
-  `section_name` varchar(50) NOT NULL,
-  `year_level_id` int(11) NOT NULL
+  `section_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sections`
+--
+
+INSERT INTO `sections` (`id`, `section_name`) VALUES
+(2, 'A');
 
 -- --------------------------------------------------------
 
@@ -147,11 +199,18 @@ CREATE TABLE `students` (
   `program_id` int(11) NOT NULL,
   `year_level_id` int(11) NOT NULL,
   `section_id` int(11) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
   `contact` varchar(20) NOT NULL,
   `img` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `program_id`, `year_level_id`, `section_id`, `address`, `contact`, `img`, `user_id`) VALUES
+(5, 'Coco', 'Martin', 2, 1, 2, 2, 'Manilla Philippines', '09123456789', '', 6);
 
 -- --------------------------------------------------------
 
@@ -196,6 +255,14 @@ CREATE TABLE `year_levels` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `year_levels`
+--
+
+INSERT INTO `year_levels` (`id`, `year_level`) VALUES
+(1, 'First Year'),
+(2, 'Second Year');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -222,8 +289,7 @@ ALTER TABLE `school_years`
 -- Indexes for table `sections`
 --
 ALTER TABLE `sections`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `year_level_id` (`year_level_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `students`
@@ -257,31 +323,31 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `school_years`
 --
 ALTER TABLE `school_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -293,7 +359,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `year_levels`
 --
 ALTER TABLE `year_levels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -306,18 +372,13 @@ ALTER TABLE `logs`
   ADD CONSTRAINT `logs_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `sections`
---
-ALTER TABLE `sections`
-  ADD CONSTRAINT `sections_year_level_id_fr` FOREIGN KEY (`year_level_id`) REFERENCES `year_levels` (`id`);
-
---
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
   ADD CONSTRAINT `students_program_id_fr` FOREIGN KEY (`program_id`) REFERENCES `programs` (`id`),
   ADD CONSTRAINT `students_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
   ADD CONSTRAINT `students_section_id` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`),
+  ADD CONSTRAINT `students_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `students_year_level_id_fr` FOREIGN KEY (`year_level_id`) REFERENCES `year_levels` (`id`);
 COMMIT;
 
