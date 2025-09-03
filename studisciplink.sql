@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 01, 2025 at 05:03 AM
+-- Generation Time: Sep 03, 2025 at 04:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,31 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (5, 5, 'Logged in', '2025-09-01 10:55:51'),
 (6, 7, 'Logged in', '2025-09-01 10:57:41'),
 (7, 7, 'Logged out', '2025-09-01 11:00:11'),
-(8, 5, 'Logged in', '2025-09-01 11:00:17');
+(8, 5, 'Logged in', '2025-09-01 11:00:17'),
+(9, 5, 'Logged out', '2025-09-01 22:30:57'),
+(10, 5, 'Logged in', '2025-09-03 09:06:21'),
+(11, 5, 'Updated account details', '2025-09-03 10:25:05'),
+(12, 5, 'Logged out', '2025-09-03 10:25:27'),
+(13, 7, 'Logged in', '2025-09-03 10:25:31'),
+(14, 7, 'Updated account details', '2025-09-03 10:25:57'),
+(15, 7, 'Logged out', '2025-09-03 10:31:52'),
+(16, 7, 'Logged in', '2025-09-03 10:31:57'),
+(17, 7, 'Updated account details', '2025-09-03 10:39:56'),
+(18, 7, 'Updated account details', '2025-09-03 10:40:16'),
+(19, 7, 'Logged in', '2025-09-03 10:40:38'),
+(20, 7, 'Updated account details', '2025-09-03 10:41:21'),
+(21, 7, 'Updated account details', '2025-09-03 10:42:16'),
+(22, 7, 'Updated account details', '2025-09-03 10:43:16'),
+(23, 7, 'Updated account details', '2025-09-03 10:43:39'),
+(24, 7, 'Updated account details', '2025-09-03 10:45:22'),
+(25, 7, 'Logged out', '2025-09-03 10:45:59'),
+(26, 5, 'Logged in', '2025-09-03 10:46:11'),
+(27, 5, 'Logged out', '2025-09-03 10:49:25'),
+(28, 5, 'Logged in', '2025-09-03 10:49:36'),
+(29, 5, 'Updated account details', '2025-09-03 10:49:41'),
+(30, 5, 'Updated account details', '2025-09-03 10:49:51'),
+(31, 5, 'Logged out', '2025-09-03 10:49:55'),
+(32, 5, 'Logged in', '2025-09-03 10:50:05');
 
 -- --------------------------------------------------------
 
@@ -74,9 +98,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', '', '', 'pending', ''),
 (3, 'lawrenceguian', '$2y$10$PNQ.mHdPylHsdTWcJxjkoOWjdwFs4jnVEFpQXoAzRvVuBDkxUoavO', 'registrar', '', '', 'pending', ''),
 (4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', '', '', 'pending', ''),
-(5, 'jaymaicanarvasa', '$2y$10$iQlTStnMK5gMUU.3t9JOpea0OHAReJWCcN4Sno2j4x67UgN1aR3ki', 'admin', '', '', 'active', ''),
+(5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
 (6, 'draymisa', '$2y$10$Uegpk.88TaBNKRLoy.bd.OIGaWyBTqhf8u0V.E5TNwBXuD6FOcj66', 'admin', '', '', 'pending', ''),
-(7, 'jaylonmantillas', '$2y$10$IMV8ML3fCRtFc9b4Gqj0oeGzhoZJPAciZ9fdIgLPUXrL.7hvOAUFu', 'admin', '', '', 'active', '');
+(7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'active', '');
 
 --
 -- Indexes for dumped tables
@@ -104,7 +128,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `users`
