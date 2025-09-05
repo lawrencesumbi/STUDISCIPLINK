@@ -1,16 +1,32 @@
 <?php
 session_start();
-require 'db_connect.php'; // 🔹 include your DB connection
+require 'db_connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_SESSION['user_id'];
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$id = $_SESSION['user_id'];
+
+// Fetch user data
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    die("User not found.");
+}
+
+// -------------------- UPDATE ACCOUNT INFO --------------------
+if (isset($_POST['update_info'])) {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $contact = trim($_POST['contact']);
-    $password = $_POST['password'];
 
     // Handle profile image
-    $imgPath = null;
+    $imgPath = $user['img']; // keep old image if not replaced
     if (!empty($_FILES['img']['name'])) {
         $targetDir = "../studisciplink/userUploads/";
         if (!is_dir($targetDir)) {
@@ -20,32 +36,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES['img']['tmp_name'], $imgPath);
     }
 
-    // Build update query
-    $sql = "UPDATE users SET username=?, email=?, contact=?";
-    $params = [$username, $email, $contact];
+    // Update query
+    $stmt = $pdo->prepare("UPDATE users SET username=?, email=?, contact=?, img=? WHERE id=?");
+    $stmt->execute([$username, $email, $contact, $imgPath, $id]);
 
-    if (!empty($password)) {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql .= ", password=?";
-        $params[] = $hashedPassword;
-    }
-
-    if ($imgPath) {
-        $sql .= ", img=?";
-        $params[] = $imgPath;
-    }
-
-    $sql .= " WHERE id=?";
-    $params[] = $id;
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-
-    // Log the update
-    $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, 'Updated account details', NOW())");
+    // Log action
+    $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, 'Updated account info', NOW())");
     $log->execute([$id]);
 
-    $_SESSION['message'] = "Account updated successfully!";
+    $_SESSION['message'] = "Account information updated successfully!";
+    header("Location: admin.php?page=my_account");
+    exit;
+}
+
+// -------------------- CHANGE PASSWORD --------------------
+if (isset($_POST['change_password'])) {
+    $oldPassword = $_POST['old_password'];
+    $newPassword = $_POST['new_password'];
+    $confirmPassword = $_POST['confirm_password'];
+
+    // Verify old password
+    if (!password_verify($oldPassword, $user['password'])) {
+        $_SESSION['pass_message'] = "Old password is incorrect.";
+        header("Location: admin.php?page=my_account");
+        exit;
+    }
+
+    // Check new password confirmation
+    if ($newPassword !== $confirmPassword) {
+        $_SESSION['pass_message'] = "New password and confirm password do not match.";
+        header("Location: admin.php?page=my_account");
+        exit;
+    }
+
+    // Update password
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("UPDATE users SET password=? WHERE id=?");
+    $stmt->execute([$hashedPassword, $id]);
+
+    // Log action
+    $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, 'Changed password', NOW())");
+    $log->execute([$id]);
+
+    $_SESSION['pass_message'] = "Password changed successfully!";
     header("Location: admin.php?page=my_account");
     exit;
 }
