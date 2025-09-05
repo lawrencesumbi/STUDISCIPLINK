@@ -43,6 +43,43 @@
             box-shadow: 0 12px 12px rgba(0,0,0,0.25);
             overflow: hidden;
             backdrop-filter: blur(10px);
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+            z-index: 2;
+        }
+        .register-container.hidden {
+            opacity: 0;
+            pointer-events: none; /* Prevent clicking when hidden */
+        }
+
+        /* Welcome text when idle */
+        .welcome-message {
+            background: rgba(230, 15, 15, 0.5);
+            border-radius: 20px;
+            position: absolute;
+            width: 75%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .welcome-message.show {
+            opacity: 1;
+        }
+        .welcome-message h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 58px;
+            margin-bottom: 15px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.6);
+        }
+        .welcome-message p {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
         }
 
         /* Left side image */
@@ -115,7 +152,7 @@
         }
 
         a {
-            color: #d13131ff;;
+            color: #d13131ff;
             text-decoration: none;
             font-weight: bold;
         }
@@ -141,22 +178,18 @@
             background: #fff;
             box-shadow: 0 0 6px rgba(33,150,243,0.3);
         }
-
-        .register-container {
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
-        }
-        .register-container.hidden {
-            opacity: 0;
-            pointer-events: none; /* Prevent clicking when hidden */
-        }
-
     </style>
 </head>
 <body>
 
 <!-- Slideshow background -->
 <div id="bg-slideshow"></div>
+
+<!-- Welcome message -->
+<div class="welcome-message" id="welcomeMessage">
+    <h1>Welcome to STUDISCIPLINK</h1>
+    <p>A comprehensive platform designed to help schools manage student affairs, track disciplinary records, and support the holistic growth of every learner.</p>
+</div>
 
 <!-- Registration form with image on left -->
 <div class="register-container">
@@ -216,20 +249,21 @@
 <script>
     let idleTimer;
     const container = document.querySelector('.register-container');
+    const welcomeMessage = document.getElementById('welcomeMessage');
 
     function resetIdleTimer() {
-        container.classList.remove("hidden"); // show container
+        container.classList.remove("hidden"); // show form
+        welcomeMessage.classList.remove("show"); // hide welcome
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
-            container.classList.add("hidden"); // hide container
-        }, 12000); // 12 seconds idle before fade out
+            container.classList.add("hidden"); // hide form
+            welcomeMessage.classList.add("show"); // show welcome
+        }, 12000); // 12 seconds idle
     }
 
-    // Reset timer on any mouse movement
     window.addEventListener("mousemove", resetIdleTimer);
     window.addEventListener("keydown", resetIdleTimer);
 
-    // Start initially
     resetIdleTimer();
 </script>
 

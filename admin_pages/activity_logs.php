@@ -26,7 +26,6 @@ try {
 }
 ?>
 
-<h3>Activity Logs</h3>
 <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
     <thead style="background:#c41e1e; color:white;">
         <tr>
