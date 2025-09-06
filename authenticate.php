@@ -24,7 +24,7 @@ try {
 
         // ✅ Check account status
         if ($user['status'] !== 'active') {
-            $_SESSION['error'] = "Your account is pending approval. Please contact the administrator.";
+            $_SESSION['error'] = "Account pending, contact the admin.";
             header("Location: login.php");
             exit;
         }

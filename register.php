@@ -20,19 +20,35 @@
         }
 
         /* Background slideshow */
+        /* Slideshow background */
         #bg-slideshow {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -1; /* behind everything */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-image: url('img/scc4.png'); /* initial image */
-            transition: opacity 1s ease-in-out;
-            opacity: 1;
+            transition: opacity .8s ease-in-out;
+
+            /* Zoom animation */
+            animation: zoomEffect 15s ease-in-out infinite;
+        }
+
+        /* Keyframes for zoom */
+        @keyframes zoomEffect {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25); /* zoom in slightly */
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Wrapper for left image + form */
@@ -66,6 +82,7 @@
             z-index: 1;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            padding: 30px 40px;
         }
         .welcome-message.show {
             opacity: 1;
@@ -85,7 +102,7 @@
         /* Left side image */
         .register-image {
             width: 500px;
-            background: url('img/scc.png') no-repeat center center;
+            background: url('img/scclogo.jpg') no-repeat center center;
             background-size: cover;
         }
 
@@ -258,7 +275,7 @@
         idleTimer = setTimeout(() => {
             container.classList.add("hidden"); // hide form
             welcomeMessage.classList.add("show"); // show welcome
-        }, 12000); // 12 seconds idle
+        }, 7000); // 7 seconds idle
     }
 
     window.addEventListener("mousemove", resetIdleTimer);

@@ -34,6 +34,22 @@
             background-repeat: no-repeat;
             background-image: url('img/scc4.png'); /* initial image */
             transition: opacity .8s ease-in-out;
+
+            /* Zoom animation */
+            animation: zoomEffect 15s ease-in-out infinite;
+        }
+
+        /* Keyframes for zoom */
+        @keyframes zoomEffect {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25); /* zoom in slightly */
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Container for image + form */
@@ -69,6 +85,7 @@
             z-index: 1;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            padding: 30px 40px;
         }
         .welcome-message.show {
             opacity: 1;
@@ -193,7 +210,7 @@
 <div class="container">
     <!-- Left image panel -->
     <div class="left-panel">
-        <img src="img/studisciplink.jpg" alt="Logo">
+        <img src="img/studisciplinks.jpg" alt="Logo">
     </div>
 
     <!-- Right login form -->
@@ -248,7 +265,7 @@
         idleTimer = setTimeout(() => {
             container.classList.add("hidden"); // hide login
             welcomeMessage.classList.add("show"); // show welcome
-        }, 12000); // 12 seconds idle before fade out
+        }, 7000); // 7 seconds idle before fade out
     }
 
     // Reset timer on any mouse movement or key press
