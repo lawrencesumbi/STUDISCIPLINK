@@ -14,7 +14,6 @@ $stmt = $pdo->prepare("SELECT * FROM users WHERE id=?");
 $stmt->execute([$id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 $allowed_pages = ['dashboard', 'manage_users', 'activity_logs', 'my_account'];

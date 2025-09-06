@@ -1,4 +1,5 @@
 <?php
+require 'db_connect.php';
 session_start();
 
 // Redirect if not logged in or not registrar
@@ -6,6 +7,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'registrar') {
     header("Location: login.php");
     exit;
 }
+
+// Fetch logged in user
+$id = $_SESSION['user_id'];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id=?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
@@ -38,11 +45,28 @@ if (!in_array($page, $allowed_pages)) {
         .header h2 { margin:0; }
         .header a { text-decoration:none; color:#c41e1e; font-weight:bold; }
         .header span{font-weight: bold;color: #c41e1e;}
+        .profile-photo {
+            text-align: center;
+        }
+        .profile-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #ebe0e0ff;
+        }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
+    <div class="column profile-photo">
+        <?php if (!empty($user['img'])): ?>
+            <img src="<?php echo htmlspecialchars($user['img']); ?>" alt="Profile Image">
+        <?php else: ?>
+            <img src="default.png" alt="Profile Image">
+        <?php endif; ?>
+    </div>
     <h2>Registrar Panel</h2>
     <a href="?page=dashboard">Dashboard</a>
     <a href="?page=manage_school_year">Manage School Year</a>

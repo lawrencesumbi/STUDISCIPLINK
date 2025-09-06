@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2025 at 04:54 PM
+-- Generation Time: Sep 06, 2025 at 06:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -313,7 +313,23 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (272, 6, 'Deleted student ID 25: Angel Amaro', '2025-09-06 22:50:35'),
 (273, 6, 'Updated student ID 5', '2025-09-06 22:51:06'),
 (274, 6, 'Logged out', '2025-09-06 22:52:00'),
-(275, 1, 'Logged in', '2025-09-06 22:52:20');
+(275, 1, 'Logged in', '2025-09-06 22:52:20'),
+(276, 1, 'Logged out', '2025-09-06 22:58:02'),
+(277, 1, 'Logged in', '2025-09-06 22:58:48'),
+(278, 1, 'Logged out', '2025-09-06 23:03:49'),
+(279, 1, 'Logged in', '2025-09-06 23:03:53'),
+(280, 1, 'Logged in', '2025-09-06 23:40:15'),
+(281, 1, 'Logged out', '2025-09-06 23:41:44'),
+(282, 6, 'Logged in', '2025-09-06 23:41:49'),
+(283, 6, 'Logged out', '2025-09-06 23:45:32'),
+(284, 1, 'Logged in', '2025-09-06 23:45:36'),
+(285, 1, 'Logged out', '2025-09-06 23:50:26'),
+(286, 6, 'Logged in', '2025-09-06 23:50:31'),
+(287, 6, 'Logged out', '2025-09-06 23:50:40'),
+(288, 1, 'Logged in', '2025-09-06 23:53:49'),
+(289, 1, 'Logged out', '2025-09-07 00:07:56'),
+(290, 6, 'Logged in', '2025-09-07 00:14:47'),
+(291, 6, 'Logged out', '2025-09-07 00:26:32');
 
 -- --------------------------------------------------------
 
@@ -520,7 +536,7 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
 
 --
 -- AUTO_INCREMENT for table `programs`
