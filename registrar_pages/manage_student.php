@@ -35,7 +35,7 @@ function log_activity($pdo, $user_id, $action) {
     $stmt->execute([$user_id, $action]);
 }
 
-// Add student
+// After adding student
 if (isset($_POST['add_student'])) {
     $stmt = $pdo->prepare("INSERT INTO students 
         (first_name, last_name, school_year_id, section_id, year_level_id, program_id, address, contact, user_id) 
@@ -51,6 +51,12 @@ if (isset($_POST['add_student'])) {
         trim($_POST['contact']),
         $current_user_id
     ]);
+
+    // ✅ Remember last selected values
+    $_SESSION['last_program'] = $_POST['program_id'];
+    $_SESSION['last_year'] = $_POST['year_level_id'];
+    $_SESSION['last_section'] = $_POST['section_id'];
+
     log_activity($pdo, $current_user_id, "Added student: {$_POST['first_name']} {$_POST['last_name']}");
     $message = "<p class='success-msg'>Student added successfully!</p>";
 }
@@ -72,6 +78,11 @@ if (isset($_POST['update_student'])) {
         $current_user_id,
         $id
     ]);
+
+    // ✅ Remember last selected values
+    $_SESSION['last_program'] = $_POST['program_id'];
+    $_SESSION['last_year'] = $_POST['year_level_id'];
+    $_SESSION['last_section'] = $_POST['section_id'];
     log_activity($pdo, $current_user_id, "Updated student ID $id");
     $message = "<p class='success-msg'>Student updated successfully!</p>";
 }
@@ -142,37 +153,55 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
     <form method="POST" class="form-box">
 
         <!-- Program -->
-        <select name="program_id" required>
-            <option value="">Select Program</option>
-            <?php foreach ($programs as $p): ?>
-                <option value="<?= $p['id'] ?>" 
-                    <?= isset($edit_student['program_id']) && $edit_student['program_id']==$p['id'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($p['program_name']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+<select name="program_id" required>
+    <option value="">Select Program</option>
+    <?php foreach ($programs as $p): ?>
+        <option value="<?= $p['id'] ?>"
+            <?php 
+                if (isset($edit_student['program_id']) && $edit_student['program_id'] == $p['id']) {
+                    echo 'selected';
+                } elseif (!$edit_mode && isset($_SESSION['last_program']) && $_SESSION['last_program'] == $p['id']) {
+                    echo 'selected';
+                }
+            ?>>
+            <?= htmlspecialchars($p['program_name']) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
 
-        <!-- Year Level -->
-        <select name="year_level_id" required>
-            <option value="">Select Year Level</option>
-            <?php foreach ($year_levels as $yl): ?>
-                <option value="<?= $yl['id'] ?>" 
-                    <?= isset($edit_student['year_level_id']) && $edit_student['year_level_id']==$yl['id'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($yl['year_level']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+<!-- Year Level -->
+<select name="year_level_id" required>
+    <option value="">Select Year Level</option>
+    <?php foreach ($year_levels as $yl): ?>
+        <option value="<?= $yl['id'] ?>"
+            <?php 
+                if (isset($edit_student['year_level_id']) && $edit_student['year_level_id'] == $yl['id']) {
+                    echo 'selected';
+                } elseif (!$edit_mode && isset($_SESSION['last_year']) && $_SESSION['last_year'] == $yl['id']) {
+                    echo 'selected';
+                }
+            ?>>
+            <?= htmlspecialchars($yl['year_level']) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
 
-        <!-- Section -->
-        <select name="section_id" required>
-            <option value="">Select Section</option>
-            <?php foreach ($sections as $sec): ?>
-                <option value="<?= $sec['id'] ?>" 
-                    <?= isset($edit_student['section_id']) && $edit_student['section_id']==$sec['id'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($sec['section_name']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+<!-- Section -->
+<select name="section_id" required>
+    <option value="">Select Section</option>
+    <?php foreach ($sections as $sec): ?>
+        <option value="<?= $sec['id'] ?>"
+            <?php 
+                if (isset($edit_student['section_id']) && $edit_student['section_id'] == $sec['id']) {
+                    echo 'selected';
+                } elseif (!$edit_mode && isset($_SESSION['last_section']) && $_SESSION['last_section'] == $sec['id']) {
+                    echo 'selected';
+                }
+            ?>>
+            <?= htmlspecialchars($sec['section_name']) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
 
         <!-- First & Last Name -->
         <input type="text" name="first_name" placeholder="First Name"
@@ -332,9 +361,9 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 .inline-form { display:inline-block; margin:2px; }
 .btn { padding:6px 12px; border-radius:6px; border:none; cursor:pointer; font-weight:bold; color:white; }
 .btn-primary { background:#fc6464ff; }
-.btn-warning { background:#ffc107; color:black; }
+.btn-warning { background:#27ae60;  }
 .btn-danger { background:#dc3545; }
-.btn-info { background:#17a2b8; }
+.btn-info { background:#27ae60;  }
 .btn-secondary { background:gray; text-decoration:none; color:white; padding:6px 12px; border-radius:6px; }
 .btn:hover { opacity:0.9; }
 </style>
