@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2025 at 04:19 PM
+-- Generation Time: Sep 06, 2025 at 02:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -126,7 +126,164 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (85, 1, 'Logged out', '2025-09-03 22:16:50'),
 (86, 6, 'Logged in', '2025-09-03 22:17:00'),
 (87, 6, 'Added student: Coco Martin for School Year 2025-2026', '2025-09-03 22:17:24'),
-(88, 6, 'Deleted student ID 2: Daniel Padilla', '2025-09-03 22:18:42');
+(88, 6, 'Deleted student ID 2: Daniel Padilla', '2025-09-03 22:18:42'),
+(89, 6, 'Logged out', '2025-09-03 22:22:41'),
+(90, 1, 'Logged in', '2025-09-03 22:22:47'),
+(91, 1, 'Logged in', '2025-09-05 08:30:53'),
+(92, 1, 'Logged out', '2025-09-05 08:56:54'),
+(93, 1, 'Logged in', '2025-09-05 08:56:58'),
+(94, 1, 'Logged in', '2025-09-05 09:40:56'),
+(95, 1, 'Updated account details', '2025-09-05 11:48:27'),
+(96, 1, 'Updated account details', '2025-09-05 11:49:15'),
+(97, 1, 'Updated account details', '2025-09-05 11:49:35'),
+(98, 1, 'Updated account details', '2025-09-05 11:50:18'),
+(99, 1, 'Logged out', '2025-09-05 11:50:19'),
+(100, 1, 'Logged in', '2025-09-05 11:50:27'),
+(101, 1, 'Updated account details', '2025-09-05 22:55:11'),
+(102, 1, 'Logged out', '2025-09-05 22:55:16'),
+(103, 1, 'Logged in', '2025-09-05 22:55:54'),
+(104, 1, 'Logged out', '2025-09-05 23:06:07'),
+(105, 1, 'Logged in', '2025-09-05 23:06:16'),
+(106, 1, 'Changed password', '2025-09-05 23:36:07'),
+(107, 1, 'Logged out', '2025-09-05 23:36:12'),
+(108, 1, 'Logged in', '2025-09-05 23:36:26'),
+(109, 1, 'Updated account details', '2025-09-05 23:37:52'),
+(110, 1, 'Logged out', '2025-09-05 23:37:58'),
+(111, 1, 'Logged in', '2025-09-05 23:39:38'),
+(112, 1, 'Updated account details', '2025-09-05 23:39:57'),
+(113, 1, 'Updated account info', '2025-09-05 23:44:28'),
+(114, 1, 'Updated account info', '2025-09-05 23:45:05'),
+(115, 1, 'Updated account info', '2025-09-05 23:45:17'),
+(116, 1, 'Updated account info', '2025-09-05 23:45:56'),
+(117, 1, 'Updated account info', '2025-09-05 23:48:33'),
+(118, 1, 'Updated account info', '2025-09-05 23:48:54'),
+(119, 1, 'Changed password', '2025-09-05 23:49:42'),
+(120, 1, 'Logged out', '2025-09-05 23:50:18'),
+(121, 1, 'Logged in', '2025-09-05 23:50:26'),
+(122, 1, 'Changed password', '2025-09-05 23:51:10'),
+(123, 1, 'Updated account info', '2025-09-05 23:53:56'),
+(124, 1, 'Updated account info', '2025-09-05 23:54:17'),
+(125, 1, 'Logged out', '2025-09-06 00:00:08'),
+(126, 1, 'Logged in', '2025-09-06 00:00:35'),
+(127, 1, 'Updated account info', '2025-09-06 00:00:57'),
+(128, 1, 'Changed password', '2025-09-06 00:01:11'),
+(129, 1, 'Changed password', '2025-09-06 00:01:46'),
+(130, 1, 'Logged in', '2025-09-06 00:02:02'),
+(131, 1, 'Logged in', '2025-09-06 00:02:22'),
+(132, 1, 'Logged in', '2025-09-06 00:03:09'),
+(133, 1, 'Changed password', '2025-09-06 00:03:18'),
+(134, 1, 'Logged out', '2025-09-06 00:03:24'),
+(135, 1, 'Logged in', '2025-09-06 00:03:32'),
+(136, 1, 'Changed password', '2025-09-06 00:04:09'),
+(137, 1, 'Logged out', '2025-09-06 00:04:21'),
+(138, 1, 'Logged in', '2025-09-06 00:04:27'),
+(139, 1, 'Updated account info', '2025-09-06 00:05:35'),
+(140, 1, 'Updated account info', '2025-09-06 00:06:47'),
+(141, 1, 'Logged in', '2025-09-06 00:08:07'),
+(142, 1, 'Logged in', '2025-09-06 00:08:27'),
+(143, 1, 'Logged in', '2025-09-06 00:08:46'),
+(144, 1, 'Updated account info', '2025-09-06 00:08:52'),
+(145, 1, 'Updated account info', '2025-09-06 00:15:28'),
+(146, 1, 'Logged in', '2025-09-06 00:16:27'),
+(147, 1, 'Logged in', '2025-09-06 00:16:42'),
+(148, 1, 'Updated account info', '2025-09-06 00:16:47'),
+(149, 1, 'Logged out', '2025-09-06 00:20:57'),
+(150, 1, 'Logged in', '2025-09-06 00:21:15'),
+(151, 1, 'Logged in', '2025-09-06 00:22:00'),
+(152, 1, 'Logged in', '2025-09-06 00:23:27'),
+(153, 1, 'Updated account info', '2025-09-06 00:23:41'),
+(154, 1, 'Updated account info', '2025-09-06 00:28:54'),
+(155, 1, 'Changed password', '2025-09-06 00:29:35'),
+(156, 1, 'Logged in', '2025-09-06 00:34:10'),
+(157, 1, 'Logged in', '2025-09-06 00:35:37'),
+(158, 1, 'Updated account info', '2025-09-06 00:38:35'),
+(159, 1, 'Updated account info', '2025-09-06 00:38:55'),
+(160, 1, 'Changed password', '2025-09-06 00:39:12'),
+(161, 1, 'Updated account info', '2025-09-06 00:39:25'),
+(162, 1, 'Logged out', '2025-09-06 00:39:29'),
+(163, 1, 'Logged in', '2025-09-06 00:39:34'),
+(164, 1, 'Updated account info', '2025-09-06 00:48:00'),
+(165, 1, 'Updated account info', '2025-09-06 00:54:18'),
+(166, 1, 'Changed password', '2025-09-06 00:54:53'),
+(167, 1, 'Logged out', '2025-09-06 00:54:55'),
+(168, 1, 'Logged in', '2025-09-06 00:55:03'),
+(169, 1, 'Changed password', '2025-09-06 00:55:17'),
+(170, 1, 'Logged out', '2025-09-06 00:55:21'),
+(171, 1, 'Logged in', '2025-09-06 00:55:25'),
+(172, 1, 'Logged out', '2025-09-06 08:38:04'),
+(173, 6, 'Logged in', '2025-09-06 08:38:11'),
+(174, 6, 'Logged out', '2025-09-06 09:05:10'),
+(175, 1, 'Logged in', '2025-09-06 09:05:14'),
+(176, 1, 'Logged out', '2025-09-06 09:05:23'),
+(177, 6, 'Logged in', '2025-09-06 09:05:28'),
+(178, 6, 'Logged out', '2025-09-06 09:07:02'),
+(179, 6, 'Logged in', '2025-09-06 09:07:29'),
+(180, 6, 'Added student: Daniel Padilla', '2025-09-06 12:38:14'),
+(181, 6, 'Added student: Daniel Padilla', '2025-09-06 12:38:17'),
+(182, 6, 'Deleted student ID 7: Daniel Padilla', '2025-09-06 12:38:21'),
+(183, 6, 'Logged out', '2025-09-06 12:44:41'),
+(184, 1, 'Logged in', '2025-09-06 12:44:45'),
+(185, 1, 'Logged out', '2025-09-06 12:45:09'),
+(186, 6, 'Logged in', '2025-09-06 12:45:14'),
+(187, 6, 'Added student: Ronald Rosales', '2025-09-06 12:56:06'),
+(188, 6, 'Added student: Mark Zaragosa', '2025-09-06 12:56:40'),
+(189, 6, 'Updated student ID 8', '2025-09-06 12:59:16'),
+(190, 6, 'Updated student ID 8', '2025-09-06 13:05:23'),
+(191, 6, 'Updated student ID 8', '2025-09-06 13:05:41'),
+(192, 6, 'Updated student ID 8', '2025-09-06 13:05:46'),
+(193, 6, 'Logged out', '2025-09-06 13:35:22'),
+(194, 1, 'Logged in', '2025-09-06 13:35:26'),
+(195, 1, 'Logged out', '2025-09-06 13:36:51'),
+(196, 1, 'Logged in', '2025-09-06 13:36:59'),
+(197, 1, 'Logged out', '2025-09-06 13:37:02'),
+(198, 6, 'Logged in', '2025-09-06 13:37:06'),
+(199, 6, 'Logged out', '2025-09-06 14:00:38'),
+(200, 6, 'Logged in', '2025-09-06 14:00:48'),
+(201, 6, 'Updated student ID 9', '2025-09-06 14:02:04'),
+(202, 6, 'Updated student ID 9', '2025-09-06 14:03:22'),
+(203, 6, 'Updated student ID 5', '2025-09-06 19:54:50'),
+(204, 6, 'Added student: Emman Bas', '2025-09-06 19:57:42'),
+(205, 6, 'Added student: Emman Bas', '2025-09-06 19:58:31'),
+(206, 6, 'Added student: Emman Bas', '2025-09-06 19:58:40'),
+(207, 6, 'Added student: Emman Bas', '2025-09-06 19:58:51'),
+(208, 6, 'Added student: Emman Bas', '2025-09-06 19:59:01'),
+(209, 6, 'Added student: Emman Bas', '2025-09-06 19:59:06'),
+(210, 6, 'Added student: Emman Bas', '2025-09-06 19:59:33'),
+(211, 6, 'Added student: Emman Bas', '2025-09-06 19:59:43'),
+(212, 6, 'Added student: Emman Bas', '2025-09-06 19:59:58'),
+(213, 6, 'Added student: Emman Bas', '2025-09-06 20:00:19'),
+(214, 6, 'Logged out', '2025-09-06 20:01:59'),
+(215, 1, 'Logged in', '2025-09-06 20:02:05'),
+(216, 1, 'Logged out', '2025-09-06 20:02:22'),
+(217, 6, 'Logged in', '2025-09-06 20:02:27'),
+(218, 6, 'Deleted student ID 19: Emman Bas', '2025-09-06 20:04:04'),
+(219, 6, 'Deleted student ID 18: Emman Bas', '2025-09-06 20:04:19'),
+(220, 6, 'Deleted student ID 10: Emman Bas', '2025-09-06 20:04:21'),
+(221, 6, 'Deleted student ID 11: Emman Bas', '2025-09-06 20:04:22'),
+(222, 6, 'Deleted student ID 12: Emman Bas', '2025-09-06 20:04:22'),
+(223, 6, 'Deleted student ID 13: Emman Bas', '2025-09-06 20:04:23'),
+(224, 6, 'Deleted student ID 14: Emman Bas', '2025-09-06 20:04:23'),
+(225, 6, 'Deleted student ID 15: Emman Bas', '2025-09-06 20:04:24'),
+(226, 6, 'Deleted student ID 16: Emman Bas', '2025-09-06 20:04:25'),
+(227, 6, 'Added student: Robin Padilla', '2025-09-06 20:09:53'),
+(228, 6, 'Added student: John Doe', '2025-09-06 20:15:14'),
+(229, 6, 'Added student: John Doe', '2025-09-06 20:15:14'),
+(230, 6, 'Deleted student ID 22: John Doe', '2025-09-06 20:15:30'),
+(231, 6, 'Added student: John Dave', '2025-09-06 20:15:57'),
+(232, 6, 'Added student: John Dave', '2025-09-06 20:15:57'),
+(233, 6, 'Deleted student ID 24: John Dave', '2025-09-06 20:16:20'),
+(234, 6, 'Updated student ID 21', '2025-09-06 20:16:32'),
+(235, 6, 'Updated student ID 21', '2025-09-06 20:34:53'),
+(236, 6, 'Updated student ID 21', '2025-09-06 20:34:57'),
+(237, 6, 'Updated student ID 23', '2025-09-06 20:35:05'),
+(238, 6, 'Updated student ID 23', '2025-09-06 20:35:11'),
+(239, 6, 'Added student: Angel Amaro', '2025-09-06 20:35:45'),
+(240, 6, 'Added student: Angel Amaro', '2025-09-06 20:35:54'),
+(241, 6, 'Added student: Angel Amaro', '2025-09-06 20:36:01'),
+(242, 6, 'Deleted student ID 27: Angel Amaro', '2025-09-06 20:36:06'),
+(243, 6, 'Deleted student ID 26: Angel Amaro', '2025-09-06 20:36:09'),
+(244, 6, 'Updated account info', '2025-09-06 20:46:22'),
+(245, 6, 'Logged in', '2025-09-06 20:46:29');
 
 -- --------------------------------------------------------
 
@@ -145,7 +302,8 @@ CREATE TABLE `programs` (
 --
 
 INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
-(1, 'BSIT', 'Bachelor of Science in Information Technology');
+(1, 'BSIT', 'Bachelor of Science in Information Technology'),
+(2, 'BSED', 'Bachelor of Science in Secondary Education');
 
 -- --------------------------------------------------------
 
@@ -165,7 +323,8 @@ CREATE TABLE `school_years` (
 
 INSERT INTO `school_years` (`id`, `school_year`, `is_current`) VALUES
 (1, '2024-2025', 0),
-(2, '2025-2026', 1);
+(2, '2025-2026', 1),
+(3, '2026-2027', 0);
 
 -- --------------------------------------------------------
 
@@ -183,7 +342,8 @@ CREATE TABLE `sections` (
 --
 
 INSERT INTO `sections` (`id`, `section_name`) VALUES
-(2, 'A');
+(2, 'A'),
+(3, 'B');
 
 -- --------------------------------------------------------
 
@@ -210,7 +370,15 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `program_id`, `year_level_id`, `section_id`, `address`, `contact`, `img`, `user_id`) VALUES
-(5, 'Coco', 'Martin', 2, 1, 2, 2, 'Manilla Philippines', '09123456789', '', 6);
+(5, 'Hello', 'Martin', 2, 1, 2, 2, 'Manilla Philippines', '09123456789', '', 6),
+(6, 'Daniel', 'Padilla', 2, 2, 1, 3, 'Quezon City', '09123456789', '', 6),
+(8, 'Ronald', 'Rosales', 2, 1, 1, 2, 'Toledo Cebu', '09123456789', '', 6),
+(9, 'Mark', 'Saragosa', 2, 1, 1, 2, 'Naga Cebu', '09123456789', '', 6),
+(17, 'Emman', 'Bas', 2, 1, 2, 2, 'Poblacion Minglanilla Cebu', '09123456789', '', 6),
+(20, 'Robin', 'Padilla', 1, 2, 1, 2, 'Manila Philippines', '09123456789', '', 6),
+(21, 'John', 'Does', 2, 2, 2, 3, 'No Address', '09123456789', '', 6),
+(23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6),
+(25, 'Angel', 'Amaro', 2, 1, 2, 2, 'Minglanilla Cebu', '09123456789', '', 6);
 
 -- --------------------------------------------------------
 
@@ -234,12 +402,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
-(1, 'lawrencesumbi', '$2y$10$J6OtiLmeKknSeAsAb7yddehn1ZFlCuS4ybOvjqRXU/hazPJznKvXi', 'admin', 'guiansumbi@gmail.com', '09753140724', 'active', '../studisciplink/userUploads/homeIMG.jpg'),
+(1, 'lawrencesumbi', '$2y$10$RgwJiQxgLqPkbV0I.BMdzuihz3MTEvJ94pUkx2sD87MOkRo1fq66K', 'admin', 'guiansumbi@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
 (2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', '', '', 'pending', ''),
 (3, 'lawrenceguian', '$2y$10$PNQ.mHdPylHsdTWcJxjkoOWjdwFs4jnVEFpQXoAzRvVuBDkxUoavO', 'guidance', '', '', 'pending', ''),
 (4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', '', '', 'pending', ''),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
-(6, 'draymisa', '$2y$10$Uegpk.88TaBNKRLoy.bd.OIGaWyBTqhf8u0V.E5TNwBXuD6FOcj66', 'registrar', '', '', 'active', ''),
+(6, 'draymisa', '$2y$10$Uegpk.88TaBNKRLoy.bd.OIGaWyBTqhf8u0V.E5TNwBXuD6FOcj66', 'registrar', 'draymisa@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$dYo05XtAvt0yTqgFiex6VOnPqrlSDlO6Tbc55tVVrUFd26s5KWogq', 'admin', '', '', 'active', '');
 
@@ -323,31 +491,31 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
 
 --
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `school_years`
 --
 ALTER TABLE `school_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
