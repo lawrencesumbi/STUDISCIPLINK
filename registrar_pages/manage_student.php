@@ -104,7 +104,7 @@ $filter_year = $_GET['filter_year'] ?? '';
 $filter_section = $_GET['filter_section'] ?? '';
 
 $sql = "
-    SELECT st.*, sec.section_name, yl.year_level, p.program_name
+    SELECT st.*, sec.section_name, yl.year_level, p.program_code
     FROM students st
     LEFT JOIN sections sec ON st.section_id = sec.id
     LEFT JOIN year_levels yl ON st.year_level_id = yl.id
@@ -130,77 +130,81 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h3>SY: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
+    <h3>School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
     <?= $message; ?>
 </div>
 
-<!-- 3-column layout -->
-<div style="display:flex; gap:20px; margin-top:20px;">
+<!-- Flex container for add/update + search -->
+<div class="flex-container">
+    <!-- Add / Update Student Form Container -->
+    <div class="container half">
+    <h4><?= $edit_mode ? "Update Student" : "Add Student" ?></h4>
+    <form method="POST" class="form-box">
 
-    <!-- Left: Add / Update Form -->
-    <div style="flex:1;">
-        <h4><?= $edit_mode ? "Update Student" : "Add Student" ?></h4>
-        <form method="POST" class="form-box">
-            <input type="text" name="first_name" placeholder="First Name"
-                   value="<?= htmlspecialchars($edit_student['first_name'] ?? '') ?>" required>
-            <input type="text" name="last_name" placeholder="Last Name"
-                   value="<?= htmlspecialchars($edit_student['last_name'] ?? '') ?>" required>
+        <!-- Program -->
+        <select name="program_id" required>
+            <option value="">Select Program</option>
+            <?php foreach ($programs as $p): ?>
+                <option value="<?= $p['id'] ?>" 
+                    <?= isset($edit_student['program_id']) && $edit_student['program_id']==$p['id'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($p['program_name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <select name="section_id" required>
-                <option value="">Select Section</option>
-                <?php foreach ($sections as $sec): ?>
-                    <option value="<?= $sec['id'] ?>" 
-                        <?= isset($edit_student['section_id']) && $edit_student['section_id']==$sec['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($sec['section_name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <!-- Year Level -->
+        <select name="year_level_id" required>
+            <option value="">Select Year Level</option>
+            <?php foreach ($year_levels as $yl): ?>
+                <option value="<?= $yl['id'] ?>" 
+                    <?= isset($edit_student['year_level_id']) && $edit_student['year_level_id']==$yl['id'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($yl['year_level']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <select name="year_level_id" required>
-                <option value="">Select Year Level</option>
-                <?php foreach ($year_levels as $yl): ?>
-                    <option value="<?= $yl['id'] ?>" 
-                        <?= isset($edit_student['year_level_id']) && $edit_student['year_level_id']==$yl['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($yl['year_level']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <!-- Section -->
+        <select name="section_id" required>
+            <option value="">Select Section</option>
+            <?php foreach ($sections as $sec): ?>
+                <option value="<?= $sec['id'] ?>" 
+                    <?= isset($edit_student['section_id']) && $edit_student['section_id']==$sec['id'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($sec['section_name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <select name="program_id" required>
-                <option value="">Select Program</option>
-                <?php foreach ($programs as $p): ?>
-                    <option value="<?= $p['id'] ?>" 
-                        <?= isset($edit_student['program_id']) && $edit_student['program_id']==$p['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($p['program_name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <!-- First & Last Name -->
+        <input type="text" name="first_name" placeholder="First Name"
+               value="<?= htmlspecialchars($edit_student['first_name'] ?? '') ?>" required>
+        <input type="text" name="last_name" placeholder="Last Name"
+               value="<?= htmlspecialchars($edit_student['last_name'] ?? '') ?>" required>
 
-            <input type="text" name="address" placeholder="Address"
-                   value="<?= htmlspecialchars($edit_student['address'] ?? '') ?>">
-            <input type="text" name="contact" placeholder="Contact"
-                   value="<?= htmlspecialchars($edit_student['contact'] ?? '') ?>">
+        <!-- Address & Contact -->
+        <input type="text" name="contact" placeholder="Contact"
+               value="<?= htmlspecialchars($edit_student['contact'] ?? '') ?>">
+        <input type="text" name="address" placeholder="Address"
+               value="<?= htmlspecialchars($edit_student['address'] ?? '') ?>">
 
-            <?php if ($edit_mode): ?>
-                <input type="hidden" name="id" value="<?= $edit_student['id'] ?>">
-                <button type="submit" name="update_student" class="btn btn-warning">Update Student</button>
-                <a href="" class="btn btn-secondary">Cancel</a>
-            <?php else: ?>
-                <button type="submit" name="add_student" class="btn btn-primary">Add Student</button>
-            <?php endif; ?>
-        </form>
-    </div>
-
-    <!-- Right: Search & Filters -->
-    <div style="flex:1;">
+        <?php if ($edit_mode): ?>
+            <input type="hidden" name="id" value="<?= $edit_student['id'] ?>">
+            <button type="submit" name="update_student" class="btn btn-warning">Update Student</button>
+            <a href="" class="btn btn-secondary">Cancel</a>
+        <?php else: ?>
+            <button type="submit" name="add_student" class="btn btn-primary">Add Student</button>
+        <?php endif; ?>
+    </form>
+</div>
+    <!-- Search & Filter Container -->
+    <div class="container half">
         <h4>Search & Filter</h4>
         <form method="GET" action="registrar.php" class="form-box">
             <input type="hidden" name="page" value="manage_student">
             
-            <input type="text" name="search" placeholder="Search students..." value="<?= htmlspecialchars($search) ?>">
+            
             
             <select name="filter_program">
-                <option value="">All Programs</option>
+                <option value="">Select Programs</option>
                 <?php foreach ($programs as $p): ?>
                     <option value="<?= $p['id'] ?>" <?= $filter_program == $p['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($p['program_name']) ?>
@@ -209,7 +213,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
             </select>
             
             <select name="filter_year">
-                <option value="">All Year Levels</option>
+                <option value="">Select Year Levels</option>
                 <?php foreach ($year_levels as $yl): ?>
                     <option value="<?= $yl['id'] ?>" <?= $filter_year == $yl['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($yl['year_level']) ?>
@@ -218,7 +222,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
             </select>
             
             <select name="filter_section">
-                <option value="">All Sections</option>
+                <option value="">Select Sections</option>
                 <?php foreach ($sections as $sec): ?>
                     <option value="<?= $sec['id'] ?>" <?= $filter_section == $sec['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($sec['section_name']) ?>
@@ -226,13 +230,14 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </select>
 
+            <input type="text" name="search" placeholder="Search students..." value="<?= htmlspecialchars($search) ?>">
+
             <button type="submit" class="btn btn-info">Apply</button>
             <?php if (!empty($search) || $filter_program || $filter_year || $filter_section): ?>
                 <a href="registrar.php?page=manage_student" class="btn btn-secondary">Clear</a>
             <?php endif; ?>
         </form>
     </div>
-
 </div>
 
 <!-- Table -->
@@ -261,17 +266,14 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($stu['last_name']) ?></td>
                         <td><?= htmlspecialchars($stu['section_name']) ?></td>
                         <td><?= htmlspecialchars($stu['year_level']) ?></td>
-                        <td><?= htmlspecialchars($stu['program_name']) ?></td>
+                        <td><?= htmlspecialchars($stu['program_code']) ?></td>
                         <td><?= htmlspecialchars($stu['address']) ?></td>
                         <td><?= htmlspecialchars($stu['contact']) ?></td>
                         <td>
-                            <!-- Edit -->
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="id" value="<?= $stu['id'] ?>">
                                 <button type="submit" name="edit_student" class="btn btn-info">Edit</button>
                             </form>
-
-                            <!-- Delete -->
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="id" value="<?= $stu['id'] ?>">
                                 <button type="submit" name="delete_student" class="btn btn-danger"
@@ -289,10 +291,39 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <style>
-.container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
+.flex-container {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+.container {
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    margin-top:5px;
+}
+.half {
+    flex: 1;
+    max-width: 50%;
+}
 .success-msg { color:green; font-weight:bold; margin-bottom:10px; }
 .error-msg { color:red; font-weight:bold; margin-bottom:10px; }
-.form-box input, .form-box select { padding:8px; border-radius:6px; border:1px solid #ccc; margin:5px 10px 10px 0; width:100%; }
+.form-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-box input,
+.form-box select {
+    padding: 5px; 
+    border: 1px solid #bebebeff;
+    border-radius: 10px;
+    flex: 1 1 calc(25% - 10px); /* two columns */
+    min-width: 150px;
+}
+
 .table-box { max-height:400px; overflow-y:auto; }
 .styled-table { width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
 .styled-table th, .styled-table td { padding:10px; border:1px solid #ddd; text-align:left; }
@@ -304,6 +335,6 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 .btn-warning { background:#ffc107; color:black; }
 .btn-danger { background:#dc3545; }
 .btn-info { background:#17a2b8; }
-.btn-secondary { background:gray; text-decoration:none; }
+.btn-secondary { background:gray; text-decoration:none; color:white; padding:6px 12px; border-radius:6px; }
 .btn:hover { opacity:0.9; }
 </style>
