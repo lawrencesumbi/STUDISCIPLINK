@@ -1,4 +1,5 @@
 <?php
+require 'db_connect.php';
 session_start();
 
 // Redirect if not logged in or not admin
@@ -6,6 +7,13 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
     exit;
 }
+
+// Fetch logged in user
+$id = $_SESSION['user_id'];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id=?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
@@ -91,11 +99,28 @@ if(!in_array($page, $allowed_pages)) {
             font-weight: bold;
             color: #c41e1e;
         }
+        .profile-photo {
+            text-align: center;
+        }
+        .profile-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #ebe0e0ff;
+        }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
+    <div class="column profile-photo">
+        <?php if (!empty($user['img'])): ?>
+            <img src="<?php echo htmlspecialchars($user['img']); ?>" alt="Profile Image">
+        <?php else: ?>
+            <img src="default.png" alt="Profile Image">
+        <?php endif; ?>
+    </div>
     <h2>Admin Panel</h2>
     <a href="?page=dashboard" class="<?php echo $page=='dashboard' ? 'active' : ''; ?>">Dashboard</a>
     <a href="?page=manage_users" class="<?php echo $page=='manage_users' ? 'active' : ''; ?>">Manage Users</a>

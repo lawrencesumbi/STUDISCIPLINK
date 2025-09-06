@@ -29,9 +29,7 @@ body {
     gap: 30px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
-.column {
-    flex: 1;
-}
+
 .profile-img {
     margin: auto 0;
     text-align: center;
