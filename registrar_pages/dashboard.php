@@ -27,24 +27,59 @@ if ($current_sy_id) {
 $total_programs = $pdo->query("SELECT COUNT(*) FROM programs")->fetchColumn();
 ?>
 
-<h3>Registrar Dashboard</h3>
-
-<div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
+<!-- Dashboard Stats -->
+<div class="stats-container">
     <!-- Current School Year -->
-    <div style="flex:1; padding:20px; background:#c41e1e; color:white; border-radius:8px;">
+    <div class="stat-box box-red">
         <h4>Current School Year</h4>
-        <p style="font-size:24px; font-weight:bold;"><?= htmlspecialchars($current_school_year) ?></p>
+        <p class="stat-value"><?= htmlspecialchars($current_school_year) ?></p>
     </div>
 
     <!-- Total Students -->
-    <div style="flex:1; padding:20px; background:#ff6b6b; color:white; border-radius:8px;">
+    <div class="stat-box box-dark-red">
         <h4>Total Students</h4>
-        <p style="font-size:24px; font-weight:bold;"><?= $total_students ?></p>
+        <p class="stat-value"><?= $total_students ?></p>
     </div>
 
     <!-- Total Programs -->
-    <div style="flex:1; padding:20px; background:#ff9999; color:white; border-radius:8px;">
+    <div class="stat-box box-light-red">
         <h4>Total Programs</h4>
-        <p style="font-size:24px; font-weight:bold;"><?= $total_programs ?></p>
+        <p class="stat-value"><?= $total_programs ?></p>
     </div>
 </div>
+
+<style>
+.stats-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.stat-box {
+    flex: 1;
+    padding: 20px;
+    color: white;
+    border-radius: 8px;
+    min-width: 200px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Colors */
+.box-red {
+    background: #ff0000ff;
+}
+
+.box-dark-red {
+    background: #c41616ff;
+}
+
+.box-light-red {
+    background: #8d2525ff;
+}
+</style>

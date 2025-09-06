@@ -37,6 +37,7 @@ if (!in_array($page, $allowed_pages)) {
         .header { display:flex; justify-content:space-between; align-items:center; background:#ecf0f1; padding:10px 20px; border-radius:8px; }
         .header h2 { margin:0; }
         .header a { text-decoration:none; color:#c41e1e; font-weight:bold; }
+        .header span{font-weight: bold;color: #c41e1e;}
     </style>
 </head>
 <body>
