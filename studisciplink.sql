@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2025 at 02:47 PM
+-- Generation Time: Sep 06, 2025 at 04:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -283,7 +283,37 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (242, 6, 'Deleted student ID 27: Angel Amaro', '2025-09-06 20:36:06'),
 (243, 6, 'Deleted student ID 26: Angel Amaro', '2025-09-06 20:36:09'),
 (244, 6, 'Updated account info', '2025-09-06 20:46:22'),
-(245, 6, 'Logged in', '2025-09-06 20:46:29');
+(245, 6, 'Logged in', '2025-09-06 20:46:29'),
+(246, 6, 'Updated student ID 21', '2025-09-06 20:50:20'),
+(247, 6, 'Updated student ID 21', '2025-09-06 20:50:28'),
+(248, 6, 'Logged out', '2025-09-06 20:50:33'),
+(249, 1, 'Logged in', '2025-09-06 21:15:51'),
+(250, 1, 'Logged out', '2025-09-06 21:16:00'),
+(251, 1, 'Logged in', '2025-09-06 21:34:45'),
+(252, 1, 'Logged out', '2025-09-06 21:34:46'),
+(253, 1, 'Logged in', '2025-09-06 22:20:35'),
+(254, 1, 'Logged out', '2025-09-06 22:20:38'),
+(255, 1, 'Logged in', '2025-09-06 22:32:27'),
+(256, 1, 'Logged out', '2025-09-06 22:32:29'),
+(257, 1, 'Logged in', '2025-09-06 22:35:42'),
+(258, 1, 'Logged out', '2025-09-06 22:35:44'),
+(259, 1, 'Logged in', '2025-09-06 22:36:26'),
+(260, 1, 'Changed password', '2025-09-06 22:38:11'),
+(261, 1, 'Logged out', '2025-09-06 22:38:15'),
+(262, 1, 'Logged in', '2025-09-06 22:38:23'),
+(263, 1, 'Updated account info', '2025-09-06 22:38:28'),
+(264, 1, 'Updated account info', '2025-09-06 22:39:00'),
+(265, 1, 'Logged out', '2025-09-06 22:39:35'),
+(266, 6, 'Logged in', '2025-09-06 22:39:39'),
+(267, 6, 'Logged out', '2025-09-06 22:40:13'),
+(268, 1, 'Logged in', '2025-09-06 22:40:17'),
+(269, 1, 'Logged out', '2025-09-06 22:41:52'),
+(270, 6, 'Logged in', '2025-09-06 22:41:56'),
+(271, 6, 'Updated student ID 5', '2025-09-06 22:49:55'),
+(272, 6, 'Deleted student ID 25: Angel Amaro', '2025-09-06 22:50:35'),
+(273, 6, 'Updated student ID 5', '2025-09-06 22:51:06'),
+(274, 6, 'Logged out', '2025-09-06 22:52:00'),
+(275, 1, 'Logged in', '2025-09-06 22:52:20');
 
 -- --------------------------------------------------------
 
@@ -370,15 +400,14 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `program_id`, `year_level_id`, `section_id`, `address`, `contact`, `img`, `user_id`) VALUES
-(5, 'Hello', 'Martin', 2, 1, 2, 2, 'Manilla Philippines', '09123456789', '', 6),
+(5, 'Hello', 'World', 2, 1, 2, 2, 'Manila Philippines', '09303172724', '', 6),
 (6, 'Daniel', 'Padilla', 2, 2, 1, 3, 'Quezon City', '09123456789', '', 6),
 (8, 'Ronald', 'Rosales', 2, 1, 1, 2, 'Toledo Cebu', '09123456789', '', 6),
 (9, 'Mark', 'Saragosa', 2, 1, 1, 2, 'Naga Cebu', '09123456789', '', 6),
 (17, 'Emman', 'Bas', 2, 1, 2, 2, 'Poblacion Minglanilla Cebu', '09123456789', '', 6),
 (20, 'Robin', 'Padilla', 1, 2, 1, 2, 'Manila Philippines', '09123456789', '', 6),
-(21, 'John', 'Does', 2, 2, 2, 3, 'No Address', '09123456789', '', 6),
-(23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6),
-(25, 'Angel', 'Amaro', 2, 1, 2, 2, 'Minglanilla Cebu', '09123456789', '', 6);
+(21, 'John', 'Does', 2, 2, 2, 3, 'Naga Cebu', '09123456789', '', 6),
+(23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6);
 
 -- --------------------------------------------------------
 
@@ -402,8 +431,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
-(1, 'lawrencesumbi', '$2y$10$RgwJiQxgLqPkbV0I.BMdzuihz3MTEvJ94pUkx2sD87MOkRo1fq66K', 'admin', 'guiansumbi@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
-(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', '', '', 'pending', ''),
+(1, 'lawrencesumbi', '$2y$10$Qkms3SwV7VELd/el4gYole26pT0HDU.AUu2o5YNLG7l.7iTI5kD6a', 'admin', 'guiansumbi@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
+(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
 (3, 'lawrenceguian', '$2y$10$PNQ.mHdPylHsdTWcJxjkoOWjdwFs4jnVEFpQXoAzRvVuBDkxUoavO', 'guidance', '', '', 'pending', ''),
 (4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', '', '', 'pending', ''),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
@@ -491,7 +520,7 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
 
 --
 -- AUTO_INCREMENT for table `programs`

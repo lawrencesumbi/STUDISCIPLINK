@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/../db_connect.php';
 
+$message = "";
+
 // Variables for edit mode
 $edit_mode = false;
 $edit_id = null;
@@ -11,7 +13,7 @@ if (isset($_POST['add_school_year'])) {
     $school_year = trim($_POST['school_year']);
     $stmt = $pdo->prepare("INSERT INTO school_years (school_year, is_current) VALUES (?, 0)");
     $stmt->execute([$school_year]);
-    echo "<p class='success-msg'>School Year added successfully!</p>";
+    $message = "<p class='success-msg'>School Year added successfully!</p>";
 }
 
 // Handle update school year
@@ -20,7 +22,7 @@ if (isset($_POST['update_school_year'])) {
     $school_year = trim($_POST['school_year']);
     $stmt = $pdo->prepare("UPDATE school_years SET school_year=? WHERE id=?");
     $stmt->execute([$school_year, $id]);
-    echo "<p class='success-msg'>School Year updated successfully!</p>";
+    $message = "<p class='success-msg'>School Year updated successfully!</p>";
 }
 
 // Handle delete
@@ -28,7 +30,7 @@ if (isset($_POST['delete_school_year'])) {
     $id = $_POST['id'];
     $stmt = $pdo->prepare("DELETE FROM school_years WHERE id=?");
     $stmt->execute([$id]);
-    echo "<p class='error-msg'>School Year deleted successfully!</p>";
+    $message = "<p class='error-msg'>School Year deleted successfully!</p>";
 }
 
 // Handle set current school year (persistent)
@@ -37,7 +39,7 @@ if (isset($_POST['select_sy'])) {
     $pdo->query("UPDATE school_years SET is_current = 0");
     $stmt = $pdo->prepare("UPDATE school_years SET is_current = 1 WHERE id=?");
     $stmt->execute([$id]);
-    echo "<p class='success-msg'>School Year set as current successfully!</p>";
+    $message = "<p class='success-msg'>School Year set as current successfully!</p>";
 }
 
 // Handle edit (populate form)
@@ -62,6 +64,7 @@ $current_sy_id = $current_sy_row ? $current_sy_row['id'] : null;
 ?>
 
 <div class="container">
+    <?= $message; ?>
 
     <!-- Add / Update Form -->
     <form method="POST" class="form-box">

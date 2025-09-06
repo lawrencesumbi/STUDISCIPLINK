@@ -182,6 +182,7 @@
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
+            line-height: 1.5;
         }
 
         .register-link a {
@@ -225,7 +226,9 @@
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
+            <p><a href="forgot_password.php">Forgot Password?</a></p>
             Don’t have an account? <a href="register.php">Register here</a>
+            
         </div>
     </div>
 </div>
