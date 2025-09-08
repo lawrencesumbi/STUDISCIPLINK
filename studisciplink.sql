@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2025 at 06:26 PM
+-- Generation Time: Sep 08, 2025 at 09:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `studisciplink`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `class_enrollments`
+--
+
+CREATE TABLE `class_enrollments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `program_id` int(11) NOT NULL,
+  `year_level_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  `school_year_id` int(11) NOT NULL,
+  `enrolled_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -329,7 +345,35 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (288, 1, 'Logged in', '2025-09-06 23:53:49'),
 (289, 1, 'Logged out', '2025-09-07 00:07:56'),
 (290, 6, 'Logged in', '2025-09-07 00:14:47'),
-(291, 6, 'Logged out', '2025-09-07 00:26:32');
+(291, 6, 'Logged out', '2025-09-07 00:26:32'),
+(292, 1, 'Logged in', '2025-09-08 13:53:06'),
+(293, 1, 'Logged out', '2025-09-08 13:54:15'),
+(294, 6, 'Logged in', '2025-09-08 13:54:20'),
+(295, 6, 'Logged out', '2025-09-08 13:55:50'),
+(296, 1, 'Logged in', '2025-09-08 14:02:42'),
+(297, 1, 'Logged out', '2025-09-08 14:03:32'),
+(298, 6, 'Logged in', '2025-09-08 14:03:46'),
+(299, 6, 'Logged out', '2025-09-08 14:04:07'),
+(300, 6, 'Logged in', '2025-09-08 14:05:13'),
+(301, 6, 'Logged out', '2025-09-08 14:05:36'),
+(302, 6, 'Logged in', '2025-09-08 14:20:30'),
+(303, 6, 'Logged out', '2025-09-08 14:37:31'),
+(304, 1, 'Logged in', '2025-09-08 14:37:35'),
+(305, 1, 'Logged out', '2025-09-08 14:57:58'),
+(306, 1, 'Logged in', '2025-09-08 14:58:08'),
+(307, 1, 'Logged out', '2025-09-08 14:58:20'),
+(308, 4, 'Logged in', '2025-09-08 14:58:26'),
+(309, 4, 'Logged out', '2025-09-08 14:58:41'),
+(310, 4, 'Logged in', '2025-09-08 14:58:48'),
+(311, 4, 'Logged out', '2025-09-08 15:00:00'),
+(312, 6, 'Logged in', '2025-09-08 15:00:04'),
+(313, 6, 'Logged out', '2025-09-08 15:00:25'),
+(314, 4, 'Logged in', '2025-09-08 15:01:01'),
+(315, 4, 'Logged out', '2025-09-08 15:09:30'),
+(316, 6, 'Logged in', '2025-09-08 15:09:38'),
+(317, 6, 'Logged out', '2025-09-08 15:18:02'),
+(318, 4, 'Logged in', '2025-09-08 15:18:08'),
+(319, 4, 'Logged in', '2025-09-08 15:19:04');
 
 -- --------------------------------------------------------
 
@@ -368,8 +412,8 @@ CREATE TABLE `school_years` (
 --
 
 INSERT INTO `school_years` (`id`, `school_year`, `is_current`) VALUES
-(1, '2024-2025', 0),
-(2, '2025-2026', 1),
+(1, '2024-2025', 1),
+(2, '2025-2026', 0),
 (3, '2026-2027', 0);
 
 -- --------------------------------------------------------
@@ -428,6 +472,24 @@ INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `prog
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `student_violations`
+--
+
+CREATE TABLE `student_violations` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `violation_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `location` varchar(50) NOT NULL,
+  `date_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(50) NOT NULL,
+  `proof` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -447,14 +509,33 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
-(1, 'lawrencesumbi', '$2y$10$Qkms3SwV7VELd/el4gYole26pT0HDU.AUu2o5YNLG7l.7iTI5kD6a', 'admin', 'guiansumbi@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
+(1, 'lawrencesumbi', '$2y$10$eoO.JWj0qqQhU0Sy90kS7eeHW8HGRhpFwIH.AxEbM./syWWc.H/c2', 'admin', 'guiansumbi@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
 (2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
 (3, 'lawrenceguian', '$2y$10$PNQ.mHdPylHsdTWcJxjkoOWjdwFs4jnVEFpQXoAzRvVuBDkxUoavO', 'guidance', '', '', 'pending', ''),
-(4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', '', '', 'pending', ''),
+(4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', '', '', 'active', ''),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
 (6, 'draymisa', '$2y$10$Uegpk.88TaBNKRLoy.bd.OIGaWyBTqhf8u0V.E5TNwBXuD6FOcj66', 'registrar', 'draymisa@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$dYo05XtAvt0yTqgFiex6VOnPqrlSDlO6Tbc55tVVrUFd26s5KWogq', 'admin', '', '', 'active', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `violations`
+--
+
+CREATE TABLE `violations` (
+  `id` int(11) NOT NULL,
+  `violation` varchar(100) NOT NULL,
+  `severity` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `violations`
+--
+
+INSERT INTO `violations` (`id`, `violation`, `severity`) VALUES
+(1, 'Cheating', 'Minor');
 
 -- --------------------------------------------------------
 
@@ -478,6 +559,17 @@ INSERT INTO `year_levels` (`id`, `year_level`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `class_enrollments`
+--
+ALTER TABLE `class_enrollments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `program_id` (`program_id`),
+  ADD KEY `year_level_id` (`year_level_id`),
+  ADD KEY `section_id` (`section_id`),
+  ADD KEY `school_year_id` (`school_year_id`);
 
 --
 -- Indexes for table `logs`
@@ -516,11 +608,27 @@ ALTER TABLE `students`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `student_violations`
+--
+ALTER TABLE `student_violations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `violation_id` (`violation_id`),
+  ADD KEY `timestamp` (`date_time`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `violations`
+--
+ALTER TABLE `violations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `year_levels`
@@ -533,10 +641,16 @@ ALTER TABLE `year_levels`
 --
 
 --
+-- AUTO_INCREMENT for table `class_enrollments`
+--
+ALTER TABLE `class_enrollments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=320;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -563,10 +677,22 @@ ALTER TABLE `students`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
+-- AUTO_INCREMENT for table `student_violations`
+--
+ALTER TABLE `student_violations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `violations`
+--
+ALTER TABLE `violations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `year_levels`
@@ -577,6 +703,16 @@ ALTER TABLE `year_levels`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `class_enrollments`
+--
+ALTER TABLE `class_enrollments`
+  ADD CONSTRAINT `class_enrollments_program_id_fr` FOREIGN KEY (`program_id`) REFERENCES `programs` (`id`),
+  ADD CONSTRAINT `class_enrollments_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
+  ADD CONSTRAINT `class_enrollments_section_id_fr` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`),
+  ADD CONSTRAINT `class_enrollments_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `class_enrollments_year_level_id_fr` FOREIGN KEY (`year_level_id`) REFERENCES `year_levels` (`id`);
 
 --
 -- Constraints for table `logs`
@@ -593,6 +729,14 @@ ALTER TABLE `students`
   ADD CONSTRAINT `students_section_id` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`),
   ADD CONSTRAINT `students_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `students_year_level_id_fr` FOREIGN KEY (`year_level_id`) REFERENCES `year_levels` (`id`);
+
+--
+-- Constraints for table `student_violations`
+--
+ALTER TABLE `student_violations`
+  ADD CONSTRAINT `student_violations_student_id_fr` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `student_violations_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `student_violations_violation_id_fr` FOREIGN KEY (`violation_id`) REFERENCES `violations` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

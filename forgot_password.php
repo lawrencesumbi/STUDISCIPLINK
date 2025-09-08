@@ -5,20 +5,20 @@ require __DIR__ . '/db_connect.php'; // adjust path if needed
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']);
-    $contact = trim($_POST['contact']);
+    $username = trim($_POST['username']);
+    $email_or_contact = trim($_POST['email_or_contact']);
     $new_password = trim($_POST['new_password']);
     $confirm_password = trim($_POST['confirm_password']);
 
     if ($new_password !== $confirm_password) {
         $message = "<p class='msg'>Passwords do not match.</p>";
     } else {
-        // Check if email and contact exist
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND contact = ?");
-        $stmt->execute([$email, $contact]);
+        // Check if username exists with either email OR contact
+        $stmt = $pdo->prepare("SELECT id, email, contact FROM users WHERE username = ?");
+        $stmt->execute([$username]);
         $user = $stmt->fetch();
 
-        if ($user) {
+        if ($user && ($user['email'] === $email_or_contact || $user['contact'] === $email_or_contact)) {
             // Update password
             $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
             $update = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "<p class='success'>Password reset successfully. 
                         <a class='login-link' href='login.php'>Login here</a></p>";
         } else {
-            $message = "<p class='msg'>No account found with that email and contact.</p>";
+            $message = "<p class='msg'>Username and Email/Contact do not match our records.</p>";
         }
     }
 }
@@ -119,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Reset Password</h2>
         <?= $message ?>
         <form method="POST">
-            <input type="email" name="email" placeholder="Enter your Email" required>
-            <input type="text" name="contact" placeholder="Enter your Contact Number" required>
+            <input type="text" name="username" placeholder="Enter your Username" required>
+            <input type="text" name="email_or_contact" placeholder="Enter your Email or Contact Number" required>
             <input type="password" name="new_password" placeholder="New Password" required>
             <input type="password" name="confirm_password" placeholder="Confirm Password" required>
             <button type="submit">Reset Password</button>
