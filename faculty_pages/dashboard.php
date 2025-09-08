@@ -1,6 +1,13 @@
 <?php
 require __DIR__ . '/../db_connect.php'; // include your database connection
 
+// Get logged-in user
+if (!isset($_SESSION['user_id'])) {
+    echo "<p style='color:red;'>You must be logged in.</p>";
+    exit;
+}
+$user_id = $_SESSION['user_id'];
+
 // Get the current school year from DB
 $current_sy_row = $pdo->query("SELECT * FROM school_years WHERE is_current = 1 LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
@@ -14,17 +21,37 @@ if ($current_sy_row) {
     $current_school_year = $current_sy_row ? $current_sy_row['school_year'] : "None";
 }
 
-// Total students for selected school year
+// Total Classes for this faculty in current school year
 if ($current_sy_id) {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM students WHERE school_year_id = ?");
-    $stmt->execute([$current_sy_id]);
-    $total_students = $stmt->fetchColumn();
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM class_enrollments WHERE user_id = ? AND school_year_id = ?");
+    $stmt->execute([$user_id, $current_sy_id]);
+    $total_classes = $stmt->fetchColumn();
 } else {
-    $total_students = $pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM class_enrollments WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $total_classes = $stmt->fetchColumn();
 }
 
-// Total programs (assuming programs are not school year dependent)
-$total_programs = $pdo->query("SELECT COUNT(*) FROM programs")->fetchColumn();
+// Total Students under this faculty’s classes in current school year
+if ($current_sy_id) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(DISTINCT se.student_id)
+        FROM student_enrollments se
+        JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
+        WHERE ce.user_id = ? AND ce.school_year_id = ?
+    ");
+    $stmt->execute([$user_id, $current_sy_id]);
+    $total_students = $stmt->fetchColumn();
+} else {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(DISTINCT se.student_id)
+        FROM student_enrollments se
+        JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
+        WHERE ce.user_id = ?
+    ");
+    $stmt->execute([$user_id]);
+    $total_students = $stmt->fetchColumn();
+}
 ?>
 
 <!-- Dashboard Stats -->
@@ -35,16 +62,16 @@ $total_programs = $pdo->query("SELECT COUNT(*) FROM programs")->fetchColumn();
         <p class="stat-value"><?= htmlspecialchars($current_school_year) ?></p>
     </div>
 
-    <!-- Total Students -->
+    <!-- Total Classes -->
     <div class="stat-box box-dark-red">
-        <h4>Total Students</h4>
-        <p class="stat-value"><?= $total_students ?></p>
+        <h4>Total Classes</h4>
+        <p class="stat-value"><?= $total_classes ?></p>
     </div>
 
-    <!-- Total Programs -->
+    <!-- Total Students -->
     <div class="stat-box box-light-red">
-        <h4>Total Programs</h4>
-        <p class="stat-value"><?= $total_programs ?></p>
+        <h4>Total Students</h4>
+        <p class="stat-value"><?= $total_students ?></p>
     </div>
 </div>
 
@@ -62,10 +89,12 @@ $total_programs = $pdo->query("SELECT COUNT(*) FROM programs")->fetchColumn();
     color: white;
     border-radius: 8px;
     min-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .stat-value {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     margin: 0;
 }

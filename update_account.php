@@ -19,6 +19,22 @@ if (!$user) {
     die("User not found.");
 }
 
+// Role-based landing pages
+function getLandingPage($role) {
+    switch ($role) {
+        case 'admin':
+            return "admin.php?page=my_account";
+        case 'faculty':
+            return "faculty.php?page=my_account";
+        case 'registrar':
+            return "registrar.php?page=my_account";
+        default:
+            return "login.php"; // fallback if role not recognized
+    }
+}
+
+$redirectPage = getLandingPage($user['role']);
+
 // -------------------- UPDATE ACCOUNT INFO --------------------
 if (isset($_POST['update_info'])) {
     $username = trim($_POST['username']);
@@ -45,7 +61,7 @@ if (isset($_POST['update_info'])) {
     $log->execute([$id]);
 
     $_SESSION['message'] = "Account information updated successfully!";
-    header("Location: admin.php?page=my_account");
+    header("Location: " . $redirectPage);
     exit;
 }
 
@@ -58,14 +74,14 @@ if (isset($_POST['change_password'])) {
     // Verify old password
     if (!password_verify($oldPassword, $user['password'])) {
         $_SESSION['pass_message'] = "Old password is incorrect.";
-        header("Location: admin.php?page=my_account");
+        header("Location: " . $redirectPage);
         exit;
     }
 
     // Check new password confirmation
     if ($newPassword !== $confirmPassword) {
         $_SESSION['pass_message'] = "New password and confirm password do not match.";
-        header("Location: admin.php?page=my_account");
+        header("Location: " . $redirectPage);
         exit;
     }
 
@@ -79,7 +95,7 @@ if (isset($_POST['change_password'])) {
     $log->execute([$id]);
 
     $_SESSION['pass_message'] = "Password changed successfully!";
-    header("Location: admin.php?page=my_account");
+    header("Location: " . $redirectPage);
     exit;
 }
 ?>

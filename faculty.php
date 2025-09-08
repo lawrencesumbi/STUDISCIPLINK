@@ -71,7 +71,7 @@ if (!in_array($page, $allowed_pages)) {
     <a href="?page=dashboard">Dashboard</a>
     <a href="?page=manage_school_year">Manage School Year</a>
     <a href="?page=manage_student">Manage Student</a>
-    <a href="?page=manage_student_violation">Manage Student Violation</a>
+    <a href="?page=manage_student_violation">Student Violation</a>
     <a href="?page=my_account">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
