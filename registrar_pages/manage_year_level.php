@@ -7,13 +7,15 @@ $message = "";
 // Variables to control edit mode
 $edit_mode = false;
 $edit_id = null;
-$edit_value = "";
+$edit_year_level = "";
+$edit_year_code = "";
 
 // Handle add new year level
 if (isset($_POST['add_year_level'])) {
     $year_level = trim($_POST['year_level']);
-    $stmt = $pdo->prepare("INSERT INTO year_levels (year_level) VALUES (?)");
-    $stmt->execute([$year_level]);
+    $year_code = trim($_POST['year_code']);
+    $stmt = $pdo->prepare("INSERT INTO year_levels (year_level, year_code) VALUES (?, ?)");
+    $stmt->execute([$year_level, $year_code]);
     $message = "<p class='success-msg'>Year Level added successfully!</p>";
 }
 
@@ -21,8 +23,9 @@ if (isset($_POST['add_year_level'])) {
 if (isset($_POST['update_year_level'])) {
     $id = $_POST['id'];
     $year_level = trim($_POST['year_level']);
-    $stmt = $pdo->prepare("UPDATE year_levels SET year_level=? WHERE id=?");
-    $stmt->execute([$year_level, $id]);
+    $year_code = trim($_POST['year_code']);
+    $stmt = $pdo->prepare("UPDATE year_levels SET year_level=?, year_code=? WHERE id=?");
+    $stmt->execute([$year_level, $year_code, $id]);
     $message = "<p class='success-msg'>Year Level updated successfully!</p>";
 }
 
@@ -42,7 +45,8 @@ if (isset($_POST['edit_year_level'])) {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($row) {
         $edit_mode = true;
-        $edit_value = $row['year_level'];
+        $edit_year_level = $row['year_level'];
+        $edit_year_code = $row['year_code'];
     }
 }
 
@@ -56,7 +60,9 @@ $year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAl
     <!-- Add/Update Form -->
     <form method="POST" class="form-box">
         <input type="text" name="year_level" placeholder="Enter Year Level" 
-               value="<?= htmlspecialchars($edit_value); ?>" required>
+               value="<?= htmlspecialchars($edit_year_level); ?>" required>
+        <input type="text" name="year_code" placeholder="Enter Year Code" 
+               value="<?= htmlspecialchars($edit_year_code); ?>" required>
         <?php if ($edit_mode): ?>
             <input type="hidden" name="id" value="<?= $edit_id; ?>">
             <button type="submit" name="update_year_level" class="btn btn-warning">Update Year Level</button>
@@ -73,6 +79,7 @@ $year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAl
                 <tr>
                     <th>ID</th>
                     <th>Year Level</th>
+                    <th>Year Code</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -81,6 +88,7 @@ $year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAl
                 <tr>
                     <td><?= $yl['id']; ?></td>
                     <td><?= htmlspecialchars($yl['year_level']); ?></td>
+                    <td><?= htmlspecialchars($yl['year_code']); ?></td>
                     <td>
                         <!-- Edit button -->
                         <form method="POST" class="inline-form">

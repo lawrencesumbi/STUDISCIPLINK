@@ -18,7 +18,7 @@ $current_sy_id = $current_sy['id'];
 
 // ---------------------- FETCH STUDENTS ----------------------
 $stmt = $pdo->prepare("
-    SELECT s.id, s.first_name, s.last_name, p.program_code, yl.year_level, sec.section_name
+    SELECT s.id, s.first_name, s.last_name, p.program_code, yl.year_code, sec.section_name
     FROM student_enrollments se
     JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
     JOIN students s ON se.student_id = s.id
@@ -44,10 +44,11 @@ if (isset($_POST['add_violation'])) {
 
     if (!empty($student_id) && !empty($violation_id) && !empty($location)) {
         $stmt = $pdo->prepare("
-            INSERT INTO student_violations (student_id, violation_id, description, location, date_time, status, user_id)
-            VALUES (?, ?, ?, ?, NOW(), 'Pending', ?)
+            INSERT INTO student_violations 
+                (student_id, violation_id, description, location, date_time, status, user_id, school_year_id)
+            VALUES (?, ?, ?, ?, NOW(), 'Pending', ?, ?)
         ");
-        $stmt->execute([$student_id, $violation_id, $description, $location, $user_id]);
+        $stmt->execute([$student_id, $violation_id, $description, $location, $user_id, $current_sy_id]);
         $message = "<p class='success-msg'>Violation recorded successfully (Pending status).</p>";
     } else {
         $message = "<p class='error-msg'>Please complete all required fields.</p>";
@@ -56,7 +57,10 @@ if (isset($_POST['add_violation'])) {
 
 // ---------------------- FETCH STUDENT VIOLATIONS ----------------------
 $stmt = $pdo->prepare("
-    SELECT sv.id, s.first_name, s.last_name, p.program_code, yl.year_level, sec.section_name,
+    SELECT sv.id, s.first_name, s.last_name, 
+           p.program_code, 
+           yl.year_code AS year_level,  -- ✅ alias fixes warning
+           sec.section_name,
            v.violation, sv.description, sv.location, sv.date_time, sv.status
     FROM student_violations sv
     JOIN students s ON sv.student_id = s.id
@@ -77,7 +81,7 @@ $totalViolations = count($studentViolations);
 <div class="two-column">
     <!-- Left: Record Violation -->
     <div class="container">
-        <h3>Record Violation</h3>
+        <h3>Report Student</h3>
         <?= $message; ?>
 
         <form method="POST" class="form-box">
@@ -88,7 +92,7 @@ $totalViolations = count($studentViolations);
                         <option value="">Select Student</option>
                         <?php foreach ($students as $stu): ?>
                             <option value="<?= $stu['id'] ?>">
-                                <?= htmlspecialchars($stu['last_name'] . ", " . $stu['first_name'] . " - " . $stu['program_code'] . " " . $stu['year_level'] . " " . $stu['section_name']); ?>
+                                <?= htmlspecialchars($stu['first_name'] . " " . $stu['last_name'] . " - " . $stu['program_code'] . " " . $stu['year_code'] . " " . $stu['section_name']); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -117,8 +121,8 @@ $totalViolations = count($studentViolations);
             });
             </script>
 
-            <label>Description (optional)</label>
-            <textarea name="description" placeholder="Add Details..."></textarea>
+            <label>Description</label>
+            <textarea name="description" placeholder="Specify Details..."></textarea>
 
             <label>Location</label>
             <input type="text" name="location" required placeholder="Enter location">
@@ -130,7 +134,7 @@ $totalViolations = count($studentViolations);
     <!-- Right: Filters -->
     <div class="container">
         <h3>(School Year: <?= htmlspecialchars($current_sy['school_year']); ?>)</h3>
-        <h4>Search & Filter Violations</h4>
+        <h4>Search & Filter</h4>
         <div class="form-box filter-grid">
             <input type="text" id="violationSearch" placeholder="Search student or violations...">
 

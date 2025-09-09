@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2025 at 10:40 AM
+-- Generation Time: Sep 09, 2025 at 05:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -437,7 +437,47 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (372, 1, 'Logged out', '2025-09-09 15:35:18'),
 (373, 6, 'Logged in', '2025-09-09 15:35:23'),
 (374, 6, 'Logged out', '2025-09-09 15:37:20'),
-(375, 4, 'Logged in', '2025-09-09 15:37:25');
+(375, 4, 'Logged in', '2025-09-09 15:37:25'),
+(376, 4, 'Logged out', '2025-09-09 17:01:14'),
+(377, 6, 'Logged in', '2025-09-09 17:01:19'),
+(378, 6, 'Logged out', '2025-09-09 17:01:34'),
+(379, 4, 'Logged in', '2025-09-09 17:01:43'),
+(380, 4, 'Logged out', '2025-09-09 20:09:55'),
+(381, 6, 'Logged in', '2025-09-09 20:10:00'),
+(382, 6, 'Logged out', '2025-09-09 20:10:11'),
+(383, 4, 'Logged in', '2025-09-09 20:10:16'),
+(384, 4, 'Logged out', '2025-09-09 20:11:31'),
+(385, 1, 'Logged in', '2025-09-09 21:44:40'),
+(386, 1, 'Updated account info', '2025-09-09 21:45:10'),
+(387, 1, 'Updated account info', '2025-09-09 21:45:17'),
+(388, 1, 'Changed password', '2025-09-09 21:45:31'),
+(389, 1, 'Logged out', '2025-09-09 21:45:33'),
+(390, 1, 'Logged in', '2025-09-09 21:45:36'),
+(391, 1, 'Logged out', '2025-09-09 21:45:49'),
+(392, 6, 'Logged in', '2025-09-09 21:45:55'),
+(393, 6, 'Updated account info', '2025-09-09 21:46:08'),
+(394, 6, 'Changed password', '2025-09-09 21:46:19'),
+(395, 6, 'Logged out', '2025-09-09 21:46:21'),
+(396, 4, 'Logged in', '2025-09-09 21:46:27'),
+(397, 4, 'Updated account info', '2025-09-09 21:47:48'),
+(398, 4, 'Changed password', '2025-09-09 21:47:56'),
+(399, 4, 'Logged out', '2025-09-09 21:48:05'),
+(400, 4, 'Logged in', '2025-09-09 21:48:13'),
+(401, 4, 'Logged out', '2025-09-09 21:48:30'),
+(402, 4, 'Logged in', '2025-09-09 21:54:15'),
+(403, 4, 'Logged out', '2025-09-09 22:26:25'),
+(404, 6, 'Logged in', '2025-09-09 22:26:36'),
+(405, 6, 'Logged out', '2025-09-09 22:31:12'),
+(406, 1, 'Logged in', '2025-09-09 22:31:19'),
+(407, 1, 'Logged out', '2025-09-09 22:31:27'),
+(408, 6, 'Logged in', '2025-09-09 22:31:37'),
+(409, 6, 'Logged out', '2025-09-09 22:33:33'),
+(410, 4, 'Logged in', '2025-09-09 22:33:38'),
+(411, 4, 'Logged out', '2025-09-09 23:01:17'),
+(412, 6, 'Logged in', '2025-09-09 23:01:25'),
+(413, 6, 'Updated student ID 21', '2025-09-09 23:01:43'),
+(414, 6, 'Logged out', '2025-09-09 23:01:45'),
+(415, 4, 'Logged in', '2025-09-09 23:01:50');
 
 -- --------------------------------------------------------
 
@@ -458,7 +498,9 @@ CREATE TABLE `programs` (
 INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
 (1, 'BSIT', 'Bachelor of Science in Information Technology'),
 (2, 'BSED', 'Bachelor of Science in Secondary Education'),
-(3, 'BSCRIM', 'Bachelor of Science in Criminology');
+(3, 'BSCRIM', 'Bachelor of Science in Criminology'),
+(4, 'BSTM', 'Bachelor of Science in Tourism Management'),
+(5, 'BSN', 'Bachelor of Science in Nursing');
 
 -- --------------------------------------------------------
 
@@ -499,7 +541,8 @@ CREATE TABLE `sections` (
 INSERT INTO `sections` (`id`, `section_name`) VALUES
 (2, 'A'),
 (3, 'B'),
-(5, 'C');
+(5, 'C'),
+(6, 'D');
 
 -- --------------------------------------------------------
 
@@ -532,7 +575,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `prog
 (9, 'Mark', 'Saragosa', 2, 1, 1, 2, 'Naga Cebu', '09123456789', '', 6),
 (17, 'Emman', 'Bas', 2, 1, 2, 2, 'Poblacion Minglanilla Cebu', '09123456789', '', 6),
 (20, 'Robin', 'Padilla', 1, 2, 1, 2, 'Manila Philippines', '09123456789', '', 6),
-(21, 'John', 'Does', 2, 2, 2, 3, 'Naga Cebu', '09123456789', '', 6),
+(21, 'John', 'Doe', 2, 2, 2, 3, 'Naga Cebu', '09123456789', '', 6),
 (23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6);
 
 -- --------------------------------------------------------
@@ -575,6 +618,13 @@ CREATE TABLE `student_violations` (
   `school_year_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `student_violations`
+--
+
+INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
+(7, 21, 1, 'Cheat in Examination. Brought a cheatsheet.', 'Room 301', '2025-09-09 23:04:24', 'Pending', 4, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -597,12 +647,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
-(1, 'lawrencesumbi', '$2y$10$eoO.JWj0qqQhU0Sy90kS7eeHW8HGRhpFwIH.AxEbM./syWWc.H/c2', 'admin', 'guian@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
+(1, 'admin', '$2y$10$ov6ePzMX3b96jDzNgEXGFuuHHAvKRJ6E7BPyhb6505aYKbHkmsZAW', 'admin', 'administrator@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
 (2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
 (3, 'lawrenceguian', '$2y$10$PNQ.mHdPylHsdTWcJxjkoOWjdwFs4jnVEFpQXoAzRvVuBDkxUoavO', 'guidance', '', '', 'pending', ''),
-(4, 'davidvergara', '$2y$10$NskSedV6lqQnqBvSVVJXj.cG7Y4rhntTKxc0icydSwvKyXdV8mN0S', 'faculty', 'davidvergara@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/f56486c5427dc5a7ed81252862d87c96.jpg'),
+(4, 'faculty', '$2y$10$GToR8dPdBzjm9mnaZGx9peH7R10B6lF7pUVZpjSBa8FmK5.yqCEDy', 'faculty', 'faculty@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/f56486c5427dc5a7ed81252862d87c96.jpg'),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
-(6, 'draymisa', '$2y$10$Uegpk.88TaBNKRLoy.bd.OIGaWyBTqhf8u0V.E5TNwBXuD6FOcj66', 'registrar', 'draymisabayot@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
+(6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$dYo05XtAvt0yTqgFiex6VOnPqrlSDlO6Tbc55tVVrUFd26s5KWogq', 'admin', '', '', 'active', '');
 
@@ -633,16 +683,19 @@ INSERT INTO `violations` (`id`, `violation`) VALUES
 
 CREATE TABLE `year_levels` (
   `id` int(11) NOT NULL,
-  `year_level` varchar(50) NOT NULL
+  `year_level` varchar(50) NOT NULL,
+  `year_code` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `year_levels`
 --
 
-INSERT INTO `year_levels` (`id`, `year_level`) VALUES
-(1, 'First Year'),
-(2, 'Second Year');
+INSERT INTO `year_levels` (`id`, `year_level`, `year_code`) VALUES
+(1, 'First Year', '1'),
+(2, 'Second Year', '2'),
+(3, 'Third Year', '3'),
+(4, 'Fourth Year', '4');
 
 --
 -- Indexes for dumped tables
@@ -747,13 +800,13 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=416;
 
 --
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `school_years`
@@ -765,7 +818,7 @@ ALTER TABLE `school_years`
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -783,7 +836,7 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -801,7 +854,7 @@ ALTER TABLE `violations`
 -- AUTO_INCREMENT for table `year_levels`
 --
 ALTER TABLE `year_levels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

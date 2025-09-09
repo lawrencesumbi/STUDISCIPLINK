@@ -2,8 +2,8 @@
 require 'db_connect.php';
 session_start();
 
-// Redirect if not logged in or not faculty
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'faculty') {
+// Redirect if not logged in or not guidance
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'guidance') {
     header("Location: login.php");
     exit;
 }
@@ -16,7 +16,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
-$allowed_pages = ['dashboard', 'manage_school_year', 'manage_student', 'student_violation', 'my_account'];
+$allowed_pages = ['dashboard', 'manage_school_year', 'manage_violation', 'record_violation', 'my_account'];
 
 if (!in_array($page, $allowed_pages)) {
     $page = 'dashboard';
@@ -25,7 +25,7 @@ if (!in_array($page, $allowed_pages)) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Faculty Dashboard</title>
+    <title>Guidance Dashboard</title>
     <style>
         body { margin:0; font-family:'Roboto', sans-serif; background:#f4f4f4; }
 
@@ -67,11 +67,11 @@ if (!in_array($page, $allowed_pages)) {
             <img src="default.png" alt="Profile Image">
         <?php endif; ?>
     </div>
-    <h2>Faculty Panel</h2>
+    <h2>Guidance Panel</h2>
     <a href="?page=dashboard">Dashboard</a>
     <a href="?page=manage_school_year">School Year</a>
-    <a href="?page=manage_student">Manage Student</a>
-    <a href="?page=student_violation">Student Violation</a>
+    <a href="?page=manage_violation">Manage Violation</a>
+    <a href="?page=record_violation">Record Violation</a>
     <a href="?page=my_account">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
@@ -85,7 +85,7 @@ if (!in_array($page, $allowed_pages)) {
     <div class="content" style="margin-top:20px;">
         <?php
         // Include specific pages
-        $pageFile = "faculty_pages/{$page}.php";
+        $pageFile = "guidance_pages/{$page}.php";
         if (file_exists($pageFile)) {
             include $pageFile;
         } else {

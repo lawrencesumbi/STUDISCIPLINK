@@ -130,7 +130,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
             <select name="class_enrollment_id" required>
                 <option value="">Select Class to Delete</option>
                 <?php
-                $classes = $pdo->prepare("SELECT ce.id, p.program_code, yl.year_level, sec.section_name
+                $classes = $pdo->prepare("SELECT ce.id, p.program_code, yl.year_code, sec.section_name
                                           FROM class_enrollments ce
                                           JOIN programs p ON ce.program_id = p.id
                                           JOIN year_levels yl ON ce.year_level_id = yl.id
@@ -138,7 +138,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
                                           WHERE ce.user_id=? AND ce.school_year_id=?");
                 $classes->execute([$user_id, $current_sy_id]);
                 foreach ($classes as $cl): ?>
-                    <option value="<?= $cl['id'] ?>"><?= htmlspecialchars($cl['program_code'] . " - " . $cl['year_level'] . " - " . $cl['section_name']) ?></option>
+                    <option value="<?= $cl['id'] ?>"><?= htmlspecialchars($cl['program_code'] . "  " . $cl['year_code'] . "  " . $cl['section_name']) ?></option>
                 <?php endforeach; ?>
             </select>
             <button type="submit" name="delete_class" class="btn btn-danger" onclick="return confirm('Delete this class and all its students?')">Delete</button>
