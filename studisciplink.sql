@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2025 at 05:59 PM
+-- Generation Time: Sep 09, 2025 at 10:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -411,7 +411,33 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (346, 6, 'Updated account info', '2025-09-08 23:56:24'),
 (347, 6, 'Logged out', '2025-09-08 23:56:31'),
 (348, 4, 'Logged in', '2025-09-08 23:56:37'),
-(349, 4, 'Updated account info', '2025-09-08 23:56:48');
+(349, 4, 'Updated account info', '2025-09-08 23:56:48'),
+(350, 4, 'Logged in', '2025-09-09 10:03:44'),
+(351, 4, 'Logged in', '2025-09-09 10:03:51'),
+(352, 1, 'Logged in', '2025-09-09 10:04:05'),
+(353, 1, 'Logged out', '2025-09-09 10:04:19'),
+(354, 4, 'Logged in', '2025-09-09 10:04:23'),
+(355, 6, 'Logged in', '2025-09-09 10:05:34'),
+(356, 6, 'Logged out', '2025-09-09 10:05:41'),
+(357, 4, 'Logged in', '2025-09-09 10:05:48'),
+(358, 4, 'Logged in', '2025-09-09 10:05:54'),
+(359, 4, 'Logged in', '2025-09-09 10:06:13'),
+(360, 4, 'Logged out', '2025-09-09 10:06:39'),
+(361, 4, 'Logged in', '2025-09-09 10:06:43'),
+(362, 4, 'Logged in', '2025-09-09 10:07:08'),
+(363, 4, 'Logged in', '2025-09-09 10:08:24'),
+(364, 4, 'Logged in', '2025-09-09 10:08:54'),
+(365, 4, 'Logged in', '2025-09-09 10:31:40'),
+(366, 4, 'Logged out', '2025-09-09 12:26:23'),
+(367, 6, 'Logged in', '2025-09-09 12:26:29'),
+(368, 6, 'Logged out', '2025-09-09 13:55:05'),
+(369, 4, 'Logged in', '2025-09-09 13:58:42'),
+(370, 4, 'Logged out', '2025-09-09 15:34:00'),
+(371, 1, 'Logged in', '2025-09-09 15:34:04'),
+(372, 1, 'Logged out', '2025-09-09 15:35:18'),
+(373, 6, 'Logged in', '2025-09-09 15:35:23'),
+(374, 6, 'Logged out', '2025-09-09 15:37:20'),
+(375, 4, 'Logged in', '2025-09-09 15:37:25');
 
 -- --------------------------------------------------------
 
@@ -431,7 +457,8 @@ CREATE TABLE `programs` (
 
 INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
 (1, 'BSIT', 'Bachelor of Science in Information Technology'),
-(2, 'BSED', 'Bachelor of Science in Secondary Education');
+(2, 'BSED', 'Bachelor of Science in Secondary Education'),
+(3, 'BSCRIM', 'Bachelor of Science in Criminology');
 
 -- --------------------------------------------------------
 
@@ -471,7 +498,8 @@ CREATE TABLE `sections` (
 
 INSERT INTO `sections` (`id`, `section_name`) VALUES
 (2, 'A'),
-(3, 'B');
+(3, 'B'),
+(5, 'C');
 
 -- --------------------------------------------------------
 
@@ -543,8 +571,8 @@ CREATE TABLE `student_violations` (
   `location` varchar(50) NOT NULL,
   `date_time` datetime NOT NULL DEFAULT current_timestamp(),
   `status` varchar(50) NOT NULL,
-  `proof` varchar(255) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `school_year_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -586,16 +614,16 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 
 CREATE TABLE `violations` (
   `id` int(11) NOT NULL,
-  `violation` varchar(100) NOT NULL,
-  `severity` varchar(50) NOT NULL
+  `violation` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `violations`
 --
 
-INSERT INTO `violations` (`id`, `violation`, `severity`) VALUES
-(1, 'Cheating', 'Minor');
+INSERT INTO `violations` (`id`, `violation`) VALUES
+(1, 'Cheating'),
+(2, 'Vandalism');
 
 -- --------------------------------------------------------
 
@@ -683,7 +711,8 @@ ALTER TABLE `student_violations`
   ADD KEY `student_id` (`student_id`),
   ADD KEY `violation_id` (`violation_id`),
   ADD KEY `timestamp` (`date_time`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `school_year_id` (`school_year_id`);
 
 --
 -- Indexes for table `users`
@@ -718,13 +747,13 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=350;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
 
 --
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `school_years`
@@ -736,7 +765,7 @@ ALTER TABLE `school_years`
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -754,7 +783,7 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -766,7 +795,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `violations`
 --
 ALTER TABLE `violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `year_levels`
@@ -815,6 +844,7 @@ ALTER TABLE `student_enrollments`
 -- Constraints for table `student_violations`
 --
 ALTER TABLE `student_violations`
+  ADD CONSTRAINT `student_violations_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
   ADD CONSTRAINT `student_violations_student_id_fr` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
   ADD CONSTRAINT `student_violations_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `student_violations_violation_id_fr` FOREIGN KEY (`violation_id`) REFERENCES `violations` (`id`);

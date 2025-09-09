@@ -16,7 +16,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
-$allowed_pages = ['dashboard', 'manage_school_year', 'manage_student', 'manage_student_violation', 'my_account'];
+$allowed_pages = ['dashboard', 'manage_school_year', 'manage_student', 'student_violation', 'my_account'];
 
 if (!in_array($page, $allowed_pages)) {
     $page = 'dashboard';
@@ -71,7 +71,7 @@ if (!in_array($page, $allowed_pages)) {
     <a href="?page=dashboard">Dashboard</a>
     <a href="?page=manage_school_year">Manage School Year</a>
     <a href="?page=manage_student">Manage Student</a>
-    <a href="?page=manage_student_violation">Student Violation</a>
+    <a href="?page=student_violation">Student Violation</a>
     <a href="?page=my_account">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
