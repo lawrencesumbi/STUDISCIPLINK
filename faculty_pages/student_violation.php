@@ -77,7 +77,7 @@ $totalViolations = count($studentViolations);
 <div class="two-column">
     <!-- Left: Record Violation -->
     <div class="container">
-        <h3>Record Student Violation</h3>
+        <h3>Record Violation</h3>
         <?= $message; ?>
 
         <form method="POST" class="form-box">
@@ -112,16 +112,16 @@ $totalViolations = count($studentViolations);
 
             <script>
             $(document).ready(function() {
-                $('#studentSelect').select2({ placeholder: "Search or select a student", allowClear: true, width: '100%' });
-                $('#violationSelect').select2({ placeholder: "Search or select a violation", allowClear: true, width: '100%' });
+                $('#studentSelect').select2({ placeholder: "Select a student", allowClear: true, width: '100%' });
+                $('#violationSelect').select2({ placeholder: "Select a violation", allowClear: true, width: '100%' });
             });
             </script>
 
             <label>Description (optional)</label>
-            <textarea name="description" placeholder="Add details if needed..."></textarea>
+            <textarea name="description" placeholder="Add Details..."></textarea>
 
             <label>Location</label>
-            <input type="text" name="location" required placeholder="Enter location of violation">
+            <input type="text" name="location" required placeholder="Enter location">
 
             <button type="submit" name="add_violation" class="btn btn-primary">Submit Violation</button>
         </form>
@@ -318,7 +318,7 @@ function cancelFilters() {
 .form-box {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     margin-bottom: 10px;
 }
 .form-box select,
@@ -330,7 +330,7 @@ function cancelFilters() {
     margin-bottom: 10px;
     width: 96%;
 }
-.form-box textarea { min-height: 50px; }
+.form-box textarea { min-height: 20px; }
 
 /* === Form grid (2 per row for student & violation) === */
 .form-row {
@@ -341,6 +341,7 @@ function cancelFilters() {
 .form-row > div {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 /* === Filter grid (3 per row, search full width) === */
@@ -366,7 +367,7 @@ function cancelFilters() {
     cursor: pointer;
     font-weight: bold;
     color: white;
-    background: #c41e1e;
+    background: #27ae60;e;
 }
 .btn:hover { opacity: 0.9; }
 .btn-secondary { background: #6c757d; color: white; }
