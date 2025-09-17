@@ -155,7 +155,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
     <div class="container half">
         <h4>Search & Filter</h4>
         <form method="GET" action="faculty.php" class="form-box">
-            <input type="hidden" name="page" value="manage_student">
+            <input type="hidden" name="page" value="manage_classes">
 
             <select name="filter_program">
                 <option value="">All Programs</option>
@@ -188,7 +188,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
 
             <button type="submit" class="btn btn-info">Apply</button>
             <?php if ($search || $filter_program || $filter_year || $filter_section): ?>
-                <a href="faculty.php?page=manage_student" class="btn btn-secondary">Clear</a>
+                <a href="faculty.php?page=manage_classes" class="btn btn-secondary">Clear</a>
             <?php endif; ?>
         </form>
     </div>

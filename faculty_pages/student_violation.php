@@ -258,7 +258,7 @@ $totalViolations = count($studentViolations);
             <th>Violation</th>
             <th>Description</th>
             <th>Location</th>
-            <th>Date</th>
+            <th>Date Reported</th>
             <th>Status</th>
             <th>Actions</th> <!-- ✅ NEW -->
         </tr>
