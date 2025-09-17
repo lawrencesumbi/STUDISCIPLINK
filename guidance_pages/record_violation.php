@@ -17,11 +17,12 @@ $current_sy = $current_sy_row ? $current_sy_row['school_year'] : "None";
 // Messages
 $message = "";
 
-// Edit mode
+// Edit mode vars
 $edit_mode = false;
 $edit_id = null;
 $edit_action = "";
 $edit_remarks = "";
+$edit_violation_id = null;
 
 // ✅ Handle Add Record
 if (isset($_POST['add_record'])) {
@@ -62,30 +63,50 @@ if (isset($_POST['delete_record'])) {
 // ✅ Handle Edit Mode
 if (isset($_POST['edit_record'])) {
     $edit_id = $_POST['id'];
-    $stmt = $pdo->prepare("SELECT * FROM record_violations WHERE id=?");
+    $stmt = $pdo->prepare("
+        SELECT rv.*, sv.id AS violation_id
+        FROM record_violations rv
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        WHERE rv.id=?
+    ");
     $stmt->execute([$edit_id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($row) {
         $edit_mode = true;
         $edit_action = $row['action_taken'];
         $edit_remarks = $row['remarks'];
+        $edit_violation_id = $row['violation_id'];
     }
 }
 
-// ✅ Fetch all records (filtered by current school year)
-$records = $pdo->prepare("
+// ✅ Handle Search
+$search = isset($_GET['search']) ? trim($_GET['search']) : "";
+
+// ✅ Fetch all records (filtered by current school year + search)
+$query = "
     SELECT rv.*, sv.description AS violation_description, st.first_name, st.last_name, sy.school_year
     FROM record_violations rv
     JOIN student_violations sv ON rv.student_violations_id = sv.id
     JOIN students st ON sv.student_id = st.id
     JOIN school_years sy ON rv.school_year_id = sy.id
     WHERE rv.school_year_id = ?
-    ORDER BY rv.date_recorded DESC
-");
-$records->execute([$current_sy_id]);
+";
+
+$params = [$current_sy_id];
+
+if ($search !== "") {
+    $query .= " AND (st.first_name LIKE ? OR st.last_name LIKE ? OR sv.description LIKE ? OR rv.action_taken LIKE ? OR rv.remarks LIKE ?)";
+    $like = "%" . $search . "%";
+    $params = [$current_sy_id, $like, $like, $like, $like, $like];
+}
+
+$query .= " ORDER BY rv.date_recorded DESC";
+
+$records = $pdo->prepare($query);
+$records->execute($params);
 $records = $records->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch student violations for dropdown (only current SY)
+// Fetch student violations for dropdown (only current SY + Pending)
 $student_violations = $pdo->prepare("
     SELECT sv.id, st.first_name, st.last_name, sv.description
     FROM student_violations sv
@@ -96,7 +117,7 @@ $student_violations = $pdo->prepare("
 $student_violations->execute([$current_sy_id]);
 $student_violations = $student_violations->fetchAll(PDO::FETCH_ASSOC);
 
-// ---------------------- FETCH STUDENT VIOLATIONS ----------------------
+// ---------------------- FETCH STUDENT VIOLATIONS (Pending only) ----------------------
 $stmt = $pdo->prepare("
     SELECT sv.id, s.first_name, s.last_name, 
            p.program_code, 
@@ -134,7 +155,6 @@ $totalViolations = count($studentViolations);
             <th>Location</th>
             <th>Date Reported</th>
             <th>Status</th>
-            
         </tr>
     </thead>
     <tbody>
@@ -150,7 +170,6 @@ $totalViolations = count($studentViolations);
                     <td><?= htmlspecialchars($v['location']); ?></td>
                     <td><?= htmlspecialchars($v['date_time']); ?></td>
                     <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
-                    
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
@@ -160,43 +179,61 @@ $totalViolations = count($studentViolations);
 </table>
 </div>
 
-
 <div class="container">
     <?= $message; ?>
 
-        <!-- Current School Year -->
-        <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
+    <!-- Current School Year -->
+    <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
 
-        <!-- Add / Update Form -->
-        <form method="POST" class="form-box">
-            <!-- Student Violation Dropdown -->
-            <select name="student_violations_id" required>
-                <option value="">-- Select Student Violation --</option>
-                <?php foreach ($student_violations as $sv): ?>
-                    <option value="<?= $sv['id']; ?>"><?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['description']; ?></option>
-                <?php endforeach; ?>
-            </select>
+    <!-- Add / Update Form -->
+    <form method="POST" class="form-box">
+        <!-- Student Violation Dropdown -->
+        <select name="student_violations_id" required <?= $edit_mode ? "disabled" : "" ?>>
+            <option value="">-- Select Student Violation --</option>
+            <?php foreach ($student_violations as $sv): ?>
+                <option value="<?= $sv['id']; ?>"
+                    <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
+                    <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['description']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-            <input type="text" name="action_taken" placeholder="Enter Action Taken"
-                value="<?= htmlspecialchars($edit_action); ?>" required>
-            <input type="text" name="remarks" placeholder="Enter Remarks"
-                value="<?= htmlspecialchars($edit_remarks); ?>">
+        <?php if ($edit_mode): ?>
+            <!-- Keep violation ID in form even if disabled -->
+            <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
+        <?php endif; ?>
 
-            <?php if ($edit_mode): ?>
-                <input type="hidden" name="id" value="<?= $edit_id; ?>">
-                <button type="submit" name="update_record" class="btn btn-warning">Update</button>
-                <a href="manage_record_violations.php" class="btn btn-secondary">Cancel</a>
-            <?php else: ?>
-                <button type="submit" name="add_record" class="btn btn-primary">Add Record</button>
-            <?php endif; ?>
-        </form>
+        <input type="text" name="action_taken" placeholder="Enter Action Taken"
+            value="<?= htmlspecialchars($edit_action); ?>" required>
+        <input type="text" name="remarks" class="remarks-input" placeholder="Enter Remarks"
+            value="<?= htmlspecialchars($edit_remarks); ?>">
+
+        <?php if ($edit_mode): ?>
+            <input type="hidden" name="id" value="<?= $edit_id; ?>">
+            <button type="submit" name="update_record" class="btn btn-warning">Update</button>
+            <a href="guidance.php?page=record_violation" class="btn btn-secondary">Cancel</a>
+        <?php else: ?>
+            <button type="submit" name="add_record" class="btn btn-primary">Add Record</button>
+        <?php endif; ?>
+    </form>
 </div>
 
-
 <div class="container">           
-
     <!-- Records Table -->
     <div class="table-box">
+        <h4>RECORDED Student Violations</h4>
+
+        <!-- ✅ Search Form -->
+        <form method="GET" class="form-box" style="margin-bottom:15px;">
+            <input type="hidden" name="page" value="record_violation">
+            <input type="text" name="search" placeholder="Search records..."
+                   value="<?= htmlspecialchars($search) ?>">
+            <button type="submit" class="btn btn-info">Search</button>
+            <?php if ($search): ?>
+                <a href="guidance.php?page=record_violation" class="btn btn-secondary">Clear</a>
+            <?php endif; ?>
+        </form>
+
         <table class="styled-table">
             <thead>
                 <tr>
@@ -206,45 +243,47 @@ $totalViolations = count($studentViolations);
                     <th>Action Taken</th>
                     <th>Remarks</th>
                     <th>Date Recorded</th>
-                    
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($records as $r): ?>
-                <tr>
-                    <td><?= $r['id']; ?></td>
-                    <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
-                    <td><?= htmlspecialchars($r['violation_description']); ?></td>
-                    <td><?= htmlspecialchars($r['action_taken']); ?></td>
-                    <td><?= htmlspecialchars($r['remarks']); ?></td>
-                    <td><?= $r['date_recorded']; ?></td>
-                    
-                    <td>
-                        <!-- Edit -->
-                        <form method="POST" class="inline-form">
-                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                            <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
-                        </form>
+            <?php if ($records): ?>
+                <?php foreach ($records as $r): ?>
+                    <tr>
+                        <td><?= $r['id']; ?></td>
+                        <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
+                        <td><?= htmlspecialchars($r['violation_description']); ?></td>
+                        <td><?= htmlspecialchars($r['action_taken']); ?></td>
+                        <td><?= htmlspecialchars($r['remarks']); ?></td>
+                        <td><?= $r['date_recorded']; ?></td>
+                        
+                        <td>
+                            <!-- Edit -->
+                            <form method="POST" class="inline-form">
+                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
+                            </form>
 
-                        <!-- Delete -->
-                        <form method="POST" class="inline-form">
-                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                            <button type="submit" name="delete_record" class="btn btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this record?')">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+                            <!-- Delete -->
+                            <form method="POST" class="inline-form">
+                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                <button type="submit" name="delete_record" class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this record?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="7" style="text-align:center;">No matching records found.</td></tr>
+            <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
 
 <style>
-/* Same style as manage_section */
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
 .success-msg { color:green; font-weight:bold; margin-bottom:10px; }
 .error-msg { color:red; font-weight:bold; margin-bottom:10px; }
@@ -265,4 +304,7 @@ $totalViolations = count($studentViolations);
 .btn-info { background:#27ae60; }
 .btn-secondary { background:gray; text-decoration:none; }
 .btn:hover { opacity:0.9; }
+.remarks-input {
+    width: 400px; /* or 100% if you want it to take the whole row */
+}
 </style>
