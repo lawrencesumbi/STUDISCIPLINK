@@ -28,6 +28,8 @@ function getLandingPage($role) {
             return "faculty.php?page=my_account";
         case 'registrar':
             return "registrar.php?page=my_account";
+        case 'guidance':
+            return "guidance.php?page=my_account";
         default:
             return "login.php"; // fallback if role not recognized
     }

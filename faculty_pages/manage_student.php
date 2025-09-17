@@ -29,12 +29,17 @@ if (isset($_POST['enroll_class'])) {
     $year_level_id = $_POST['year_level_id'];
     $section_id = $_POST['section_id'];
 
-    $stmt = $pdo->prepare("SELECT * FROM students WHERE program_id=? AND year_level_id=? AND section_id=?");
-    $stmt->execute([$program_id, $year_level_id, $section_id]);
+    // ✅ Only select students in the current school year
+    $stmt = $pdo->prepare("SELECT * FROM students 
+                           WHERE program_id=? AND year_level_id=? AND section_id=? 
+                           AND school_year_id=?");
+    $stmt->execute([$program_id, $year_level_id, $section_id, $current_sy_id]);
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($students) {
-        $stmt = $pdo->prepare("INSERT INTO class_enrollments (user_id, program_id, year_level_id, section_id, school_year_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO class_enrollments 
+            (user_id, program_id, year_level_id, section_id, school_year_id) 
+            VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$user_id, $program_id, $year_level_id, $section_id, $current_sy_id]);
         $class_enrollment_id = $pdo->lastInsertId();
 
@@ -44,9 +49,10 @@ if (isset($_POST['enroll_class'])) {
         }
         $message = "<p class='success-msg'>Class enrolled successfully (" . count($students) . " students added)</p>";
     } else {
-        $message = "<p class='error-msg'>No students found for this Program, Year Level, and Section.</p>";
+        $message = "<p class='error-msg'>No students found.</p>";
     }
 }
+
 
 // Delete class (removes all its student_enrollments too)
 if (isset($_POST['delete_class'])) {
