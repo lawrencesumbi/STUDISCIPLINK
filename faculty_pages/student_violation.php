@@ -36,6 +36,9 @@ $violations = $pdo->query("SELECT * FROM violations ORDER BY violation ASC")->fe
 
 // ---------------------- HANDLE ADD VIOLATION ----------------------
 $message = "";
+$edit_id = null;
+$edit_data = null;
+
 if (isset($_POST['add_violation'])) {
     $student_id = $_POST['student_id'];
     $violation_id = $_POST['violation_id'];
@@ -55,11 +58,60 @@ if (isset($_POST['add_violation'])) {
     }
 }
 
+// Load record for editing
+if (isset($_GET['edit_id'])) {
+    $edit_id = intval($_GET['edit_id']);
+    $stmt = $pdo->prepare("SELECT * FROM student_violations WHERE id=? AND user_id=? LIMIT 1");
+    $stmt->execute([$edit_id, $user_id]);
+    $edit_data = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// Delete violation
+if (isset($_GET['delete_id'])) {
+    $delete_id = intval($_GET['delete_id']);
+    $stmt = $pdo->prepare("DELETE FROM student_violations WHERE id=? AND user_id=? AND status='Pending'");
+    $stmt->execute([$delete_id, $user_id]);
+    $message = "<p class='success-msg'>Violation deleted successfully.</p>";
+}
+
+// Add new or update
+if (isset($_POST['save_violation'])) {
+    $student_id = $_POST['student_id'];
+    $violation_id = $_POST['violation_id'];
+    $description = trim($_POST['description']);
+    $location = trim($_POST['location']);
+    $hidden_id = $_POST['hidden_id'] ?? "";
+
+    if (!empty($student_id) && !empty($violation_id) && !empty($location)) {
+        if ($hidden_id) {
+            // Update
+            $stmt = $pdo->prepare("
+                UPDATE student_violations 
+                SET student_id=?, violation_id=?, description=?, location=?
+                WHERE id=? AND user_id=? AND status='Pending'
+            ");
+            $stmt->execute([$student_id, $violation_id, $description, $location, $hidden_id, $user_id]);
+            $message = "<p class='success-msg'>Violation updated successfully.</p>";
+        } else {
+            // Insert
+            $stmt = $pdo->prepare("
+                INSERT INTO student_violations 
+                    (student_id, violation_id, description, location, date_time, status, user_id, school_year_id)
+                VALUES (?, ?, ?, ?, NOW(), 'Pending', ?, ?)
+            ");
+            $stmt->execute([$student_id, $violation_id, $description, $location, $user_id, $current_sy_id]);
+            $message = "<p class='success-msg'>Violation recorded successfully (Pending status).</p>";
+        }
+    } else {
+        $message = "<p class='error-msg'>Please complete all required fields.</p>";
+    }
+}
+
 // ---------------------- FETCH STUDENT VIOLATIONS ----------------------
 $stmt = $pdo->prepare("
     SELECT sv.id, s.first_name, s.last_name, 
            p.program_code, 
-           yl.year_code AS year_level,  -- ✅ alias fixes warning
+           yl.year_code AS year_level,
            sec.section_name,
            v.violation, sv.description, sv.location, sv.date_time, sv.status
     FROM student_violations sv
@@ -68,10 +120,11 @@ $stmt = $pdo->prepare("
     JOIN year_levels yl ON s.year_level_id = yl.id
     JOIN sections sec ON s.section_id = sec.id
     JOIN violations v ON sv.violation_id = v.id
-    WHERE sv.user_id = ?
+    WHERE sv.user_id = ? AND sv.school_year_id = ?
     ORDER BY sv.date_time DESC
 ");
-$stmt->execute([$user_id]);
+$stmt->execute([$user_id, $current_sy_id]);
+
 $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ---------------------- TOTAL VIOLATIONS ----------------------
@@ -83,52 +136,54 @@ $totalViolations = count($studentViolations);
     <div class="container">
         <h3>Report Student</h3>
         <?= $message; ?>
+<!-- Report Student Form -->
+<form method="POST" class="form-box">
+    <input type="hidden" name="hidden_id" value="<?= $edit_data['id'] ?? '' ?>">
 
-        <form method="POST" class="form-box">
-            <div class="form-row">
-                <div>
-                    <label>Student</label>
-                    <select name="student_id" id="studentSelect" required>
-                        <option value="">Select Student</option>
-                        <?php foreach ($students as $stu): ?>
-                            <option value="<?= $stu['id'] ?>">
-                                <?= htmlspecialchars($stu['first_name'] . " " . $stu['last_name'] . " - " . $stu['program_code'] . " " . $stu['year_code'] . " " . $stu['section_name']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+    <div class="form-row">
+        <div>
+            <label>Student</label>
+            <select name="student_id" id="studentSelect" required>
+                <option value="">Select Student</option>
+                <?php foreach ($students as $stu): ?>
+                    <option value="<?= $stu['id'] ?>"
+                        <?= ($edit_data && $edit_data['student_id'] == $stu['id']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($stu['first_name'] . " " . $stu['last_name'] . " - " . $stu['program_code'] . " " . $stu['year_code'] . " " . $stu['section_name']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-                <div>
-                    <label>Violation</label>
-                    <select name="violation_id" id="violationSelect" required>
-                        <option value="">Select Violation</option>
-                        <?php foreach ($violations as $vio): ?>
-                            <option value="<?= $vio['id'] ?>"><?= htmlspecialchars($vio['violation']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
+        <div>
+            <label>Violation</label>
+            <select name="violation_id" id="violationSelect" required>
+                <option value="">Select Violation</option>
+                <?php foreach ($violations as $vio): ?>
+                    <option value="<?= $vio['id'] ?>"
+                        <?= ($edit_data && $edit_data['violation_id'] == $vio['id']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($vio['violation']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
 
-            <!-- Load jQuery + Select2 (via CDN) -->
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <label>Description</label>
+    <textarea name="description" placeholder="Specify Details..."><?= $edit_data['description'] ?? '' ?></textarea>
 
-            <script>
-            $(document).ready(function() {
-                $('#studentSelect').select2({ placeholder: "Select a student", allowClear: true, width: '100%' });
-                $('#violationSelect').select2({ placeholder: "Select a violation", allowClear: true, width: '100%' });
-            });
-            </script>
+    <label>Location</label>
+    <input type="text" name="location" required placeholder="Enter location"
+           value="<?= $edit_data['location'] ?? '' ?>">
 
-            <label>Description</label>
-            <textarea name="description" placeholder="Specify Details..."></textarea>
+    <!-- Buttons -->
+    <?php if ($edit_data): ?>
+        <button type="submit" name="save_violation" class="btn btn-primary">Update Violation</button>
+        <a href="faculty.php?page=student_violation" class="btn btn-secondary">Cancel</a>
+    <?php else: ?>
+        <button type="submit" name="add_violation" class="btn btn-primary">Submit Violation</button>
+    <?php endif; ?>
+</form>
 
-            <label>Location</label>
-            <input type="text" name="location" required placeholder="Enter location">
-
-            <button type="submit" name="add_violation" class="btn btn-primary">Submit Violation</button>
-        </form>
     </div>
 
     <!-- Right: Filters -->
@@ -194,39 +249,50 @@ $totalViolations = count($studentViolations);
     <h4>My Recorded Violations (Total: <?= $totalViolations ?>)</h4>
 
     <table class="styled-table" id="violationTable">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Program</th>
-                <th>Year</th>
-                <th>Section</th>
-                <th>Violation</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($totalViolations > 0): ?>
-                <?php foreach ($studentViolations as $v): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($v['last_name'] . ", " . $v['first_name']); ?></td>
-                        <td><?= htmlspecialchars($v['program_code']); ?></td>
-                        <td><?= htmlspecialchars($v['year_level']); ?></td>
-                        <td><?= htmlspecialchars($v['section_name']); ?></td>
-                        <td><?= htmlspecialchars($v['violation']); ?></td>
-                        <td><?= htmlspecialchars($v['description']); ?></td>
-                        <td><?= htmlspecialchars($v['location']); ?></td>
-                        <td><?= htmlspecialchars($v['date_time']); ?></td>
-                        <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="9" style="text-align:center;">No violations recorded yet.</td></tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Program</th>
+            <th>Year</th>
+            <th>Section</th>
+            <th>Violation</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th> <!-- ✅ NEW -->
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($totalViolations > 0): ?>
+            <?php foreach ($studentViolations as $v): ?>
+                <tr>
+                    <td><?= htmlspecialchars($v['last_name'] . ", " . $v['first_name']); ?></td>
+                    <td><?= htmlspecialchars($v['program_code']); ?></td>
+                    <td><?= htmlspecialchars($v['year_level']); ?></td>
+                    <td><?= htmlspecialchars($v['section_name']); ?></td>
+                    <td><?= htmlspecialchars($v['violation']); ?></td>
+                    <td><?= htmlspecialchars($v['description']); ?></td>
+                    <td><?= htmlspecialchars($v['location']); ?></td>
+                    <td><?= htmlspecialchars($v['date_time']); ?></td>
+                    <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
+                    <td>
+                        <?php if ($v['status'] === 'Pending'): ?>
+                            <a href="faculty.php?page=student_violation&edit_id=<?= $v['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="faculty.php?page=student_violation&delete_id=<?= $v['id'] ?>" 
+                               onclick="return confirm('Are you sure you want to delete this violation?');"
+                               class="btn btn-sm btn-secondary">Delete</a>
+                        <?php else: ?>
+                            <em>N/A</em>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr><td colspan="10" style="text-align:center;">No violations recorded yet.</td></tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 </div>
 
 <script>
@@ -288,7 +354,7 @@ function applyFilters() {
 
 // CANCEL FILTERS → refresh page
 function cancelFilters() {
-    location.reload();
+    window.location.href = "faculty.php?page=student_violation";
 }
 </script>
 
@@ -371,11 +437,19 @@ function cancelFilters() {
     cursor: pointer;
     font-weight: bold;
     color: white;
-    background: #27ae60;e;
+    background: #27ae60;
 }
 .btn:hover { opacity: 0.9; }
-.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary { background: #c41e1e; color: white; }
 .btn-secondary:hover { opacity: 0.9; }
+
+.btn btn-sm btn-primary {}
+
+a.btn {
+    text-decoration: none;   /* removes underline */
+    display: inline-block;   /* makes it behave like a button */
+    text-align: center;
+}
 
 /* === Tables === */
 .styled-table {

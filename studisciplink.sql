@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2025 at 05:09 PM
+-- Generation Time: Sep 17, 2025 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `class_enrollments` (
 
 INSERT INTO `class_enrollments` (`id`, `user_id`, `program_id`, `year_level_id`, `section_id`, `school_year_id`, `enrolled_at`) VALUES
 (1, 4, 1, 1, 2, 2, 0),
-(3, 4, 2, 2, 3, 2, 0);
+(3, 4, 2, 2, 3, 2, 0),
+(4, 4, 2, 1, 2, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -477,7 +478,22 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (412, 6, 'Logged in', '2025-09-09 23:01:25'),
 (413, 6, 'Updated student ID 21', '2025-09-09 23:01:43'),
 (414, 6, 'Logged out', '2025-09-09 23:01:45'),
-(415, 4, 'Logged in', '2025-09-09 23:01:50');
+(415, 4, 'Logged in', '2025-09-09 23:01:50'),
+(416, 4, 'Logged out', '2025-09-10 10:25:05'),
+(417, 1, 'Logged in', '2025-09-10 10:25:14'),
+(418, 1, 'Logged out', '2025-09-10 10:25:28'),
+(419, 6, 'Logged in', '2025-09-10 10:25:33'),
+(420, 6, 'Logged out', '2025-09-10 11:08:52'),
+(421, 4, 'Logged in', '2025-09-10 11:08:59'),
+(422, 1, 'Logged in', '2025-09-17 11:21:18'),
+(423, 1, 'Logged out', '2025-09-17 11:26:55'),
+(424, 6, 'Logged in', '2025-09-17 11:27:29'),
+(425, 6, 'Logged out', '2025-09-17 15:49:36'),
+(426, 4, 'Logged in', '2025-09-17 15:49:41'),
+(427, 4, 'Logged out', '2025-09-17 17:48:11'),
+(428, 8, 'Logged in', '2025-09-17 17:50:32'),
+(429, 8, 'Logged out', '2025-09-17 17:51:58'),
+(430, 4, 'Logged in', '2025-09-17 17:52:09');
 
 -- --------------------------------------------------------
 
@@ -598,7 +614,8 @@ CREATE TABLE `student_enrollments` (
 INSERT INTO `student_enrollments` (`id`, `class_enrollment_id`, `student_id`, `enrolled_at`) VALUES
 (1, 1, 8, '2025-09-08 15:02:32'),
 (2, 1, 9, '2025-09-08 15:02:32'),
-(4, 3, 21, '2025-09-08 15:28:06');
+(4, 3, 21, '2025-09-08 15:28:06'),
+(5, 4, 20, '2025-09-17 07:51:01');
 
 -- --------------------------------------------------------
 
@@ -623,7 +640,7 @@ CREATE TABLE `student_violations` (
 --
 
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
-(7, 21, 1, 'Cheat in Examination. Brought a cheatsheet.', 'Room 301', '2025-09-09 23:04:24', 'Pending', 4, 2);
+(20, 8, 2, 'Sample', 'sample', '2025-09-17 16:01:52', 'Pending', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -654,7 +671,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
-(8, 'johndoe', '$2y$10$dYo05XtAvt0yTqgFiex6VOnPqrlSDlO6Tbc55tVVrUFd26s5KWogq', 'admin', '', '', 'active', '');
+(8, 'johndoe', '$2y$10$Z3V1iXmOxKJT6DAOFksm3.IkZuJXHYJ77uDR3tU1HOWzJ44UDPD7W', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', '');
 
 -- --------------------------------------------------------
 
@@ -794,13 +811,13 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `class_enrollments`
 --
 ALTER TABLE `class_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=416;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=431;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -830,13 +847,13 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
