@@ -82,15 +82,24 @@ if (isset($_POST['edit_record'])) {
 // ✅ Handle Search
 $search = isset($_GET['search']) ? trim($_GET['search']) : "";
 
-// ✅ Fetch all records (filtered by current school year + search)
 $query = "
-    SELECT rv.*, sv.description AS violation_description, st.first_name, st.last_name, sy.school_year
+    SELECT rv.*, 
+           sv.description AS violation_description, 
+           st.first_name, st.last_name, 
+           p.program_code, 
+           yl.year_code AS year_level, 
+           sec.section_name,
+           sy.school_year
     FROM record_violations rv
     JOIN student_violations sv ON rv.student_violations_id = sv.id
     JOIN students st ON sv.student_id = st.id
+    JOIN programs p ON st.program_id = p.id
+    JOIN year_levels yl ON st.year_level_id = yl.id
+    JOIN sections sec ON st.section_id = sec.id
     JOIN school_years sy ON rv.school_year_id = sy.id
     WHERE rv.school_year_id = ?
 ";
+
 
 $params = [$current_sy_id];
 
@@ -179,107 +188,159 @@ $totalViolations = count($studentViolations);
 </table>
 </div>
 
-<div class="container">
-    <?= $message; ?>
+<div class="container two-columns">
+    <!-- LEFT SIDE: Form -->
+    <div class="left-box">
+        <?= $message; ?>
+        <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
 
-    <!-- Current School Year -->
-    <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
+        <form method="POST" class="form-box">
+            <!-- Student Violation Dropdown -->
+            <select name="student_violations_id" required <?= $edit_mode ? "disabled" : "" ?>>
+                <option value="">-- Select Student Violation --</option>
+                <?php foreach ($student_violations as $sv): ?>
+                    <option value="<?= $sv['id']; ?>"
+                        <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
+                        <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['description']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-    <!-- Add / Update Form -->
-    <form method="POST" class="form-box">
-        <!-- Student Violation Dropdown -->
-        <select name="student_violations_id" required <?= $edit_mode ? "disabled" : "" ?>>
-            <option value="">-- Select Student Violation --</option>
-            <?php foreach ($student_violations as $sv): ?>
-                <option value="<?= $sv['id']; ?>"
-                    <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
-                    <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['description']; ?>
-                </option>
+            <?php if ($edit_mode): ?>
+                <!-- Keep violation ID in form even if disabled -->
+                <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
+            <?php endif; ?>
+
+            <input type="text" name="action_taken" placeholder="Enter Sanction"
+                value="<?= htmlspecialchars($edit_action); ?>" required>
+            <input type="text" name="remarks" class="remarks-input" placeholder="Enter Remarks"
+                value="<?= htmlspecialchars($edit_remarks); ?>">
+
+            <?php if ($edit_mode): ?>
+                <input type="hidden" name="id" value="<?= $edit_id; ?>">
+                <button type="submit" name="update_record" class="btn btn-warning">Update</button>
+                <a href="guidance.php?page=record_violation" class="btn btn-secondary">Cancel</a>
+            <?php else: ?>
+                <button type="submit" name="add_record" class="btn btn-primary">Add Record</button>
+            <?php endif; ?>
+        </form>
+    </div>
+
+    <!-- RIGHT SIDE: Search + Filter -->
+    <div class="right-box">
+    
+    <h4>Search & Filter</h4>
+
+    <div class="form-box">
+
+        <!-- Search input -->
+        <input type="text" id="recordSearch" class="search-input" placeholder="Search student or violations...">
+
+    </div>
+
+    <div class="form-box filter-grid">
+
+        <!-- Program Filter -->
+        <select id="filterProgram">
+            <option value="">All Programs</option>
+            <?php foreach (array_unique(array_column($records, 'program_code')) as $program): ?>
+                <option value="<?= htmlspecialchars($program) ?>"><?= htmlspecialchars($program) ?></option>
             <?php endforeach; ?>
         </select>
 
-        <?php if ($edit_mode): ?>
-            <!-- Keep violation ID in form even if disabled -->
-            <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
-        <?php endif; ?>
+        <!-- Year Level Filter -->
+        <select id="filterYear">
+            <option value="">All Year Levels</option>
+            <?php foreach (array_unique(array_column($records, 'year_level')) as $year): ?>
+                <option value="<?= htmlspecialchars($year) ?>"><?= htmlspecialchars($year) ?></option>
+            <?php endforeach; ?>
+        </select>
 
-        <input type="text" name="action_taken" placeholder="Enter Action Taken"
-            value="<?= htmlspecialchars($edit_action); ?>" required>
-        <input type="text" name="remarks" class="remarks-input" placeholder="Enter Remarks"
-            value="<?= htmlspecialchars($edit_remarks); ?>">
+        <!-- Section Filter -->
+        <select id="filterSection">
+            <option value="">All Sections</option>
+            <?php foreach (array_unique(array_column($records, 'section_name')) as $sec): ?>
+                <option value="<?= htmlspecialchars($sec) ?>"><?= htmlspecialchars($sec) ?></option>
+            <?php endforeach; ?>
+        </select>
 
-        <?php if ($edit_mode): ?>
-            <input type="hidden" name="id" value="<?= $edit_id; ?>">
-            <button type="submit" name="update_record" class="btn btn-warning">Update</button>
-            <a href="guidance.php?page=record_violation" class="btn btn-secondary">Cancel</a>
-        <?php else: ?>
-            <button type="submit" name="add_record" class="btn btn-primary">Add Record</button>
-        <?php endif; ?>
-    </form>
+        <!-- Violation Filter -->
+        <select id="filterViolation">
+            <option value="">All Violations</option>
+            <?php foreach (array_unique(array_column($records, 'violation_description')) as $vio): ?>
+                <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        
+
+        
+        
+    </div>
+
+    <div class="filter-buttons">
+            <button type="button" class="btn btn-info" onclick="applyRecordFilters()">Apply</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelRecordFilters()">Cancel</button>
+    </div>
 </div>
+
+</div>
+
 
 <div class="container">           
     <!-- Records Table -->
     <div class="table-box">
         <h4>RECORDED Student Violations</h4>
 
-        <!-- ✅ Search Form -->
-        <form method="GET" class="form-box" style="margin-bottom:15px;">
-            <input type="hidden" name="page" value="record_violation">
-            <input type="text" name="search" placeholder="Search records..."
-                   value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" class="btn btn-info">Search</button>
-            <?php if ($search): ?>
-                <a href="guidance.php?page=record_violation" class="btn btn-secondary">Clear</a>
-            <?php endif; ?>
-        </form>
-
         <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Student</th>
-                    <th>Violation</th>
-                    <th>Action Taken</th>
-                    <th>Remarks</th>
-                    <th>Date Recorded</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php if ($records): ?>
-                <?php foreach ($records as $r): ?>
-                    <tr>
-                        <td><?= $r['id']; ?></td>
-                        <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
-                        <td><?= htmlspecialchars($r['violation_description']); ?></td>
-                        <td><?= htmlspecialchars($r['action_taken']); ?></td>
-                        <td><?= htmlspecialchars($r['remarks']); ?></td>
-                        <td><?= $r['date_recorded']; ?></td>
-                        
-                        <td>
-                            <!-- Edit -->
-                            <form method="POST" class="inline-form">
-                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                                <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
-                            </form>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Violation</th>
+            <th>Action Taken</th>
+            <th>Remarks</th>
+            <th>Date Recorded</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if ($records): ?>
+        <?php foreach ($records as $r): ?>
+            <tr>
+                <td><?= $r['id']; ?></td>
+                <td><?= htmlspecialchars($r['last_name'] . ", " . $r['first_name']); ?></td>
+                <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
+                <td><?= htmlspecialchars($r['violation_description']); ?></td>
+                <td><?= htmlspecialchars($r['action_taken']); ?></td>
+                <td><?= htmlspecialchars($r['remarks']); ?></td>
+                <td><?= $r['date_recorded']; ?></td>
+                <td>
+                    <!-- Edit -->
+                    <form method="POST" class="inline-form">
+                        <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                        <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
+                    </form>
 
-                            <!-- Delete -->
-                            <form method="POST" class="inline-form">
-                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                                <button type="submit" name="delete_record" class="btn btn-danger"
-                                        onclick="return confirm('Are you sure you want to delete this record?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="7" style="text-align:center;">No matching records found.</td></tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
+                    <!-- Delete -->
+                    <form method="POST" class="inline-form">
+                        <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                        <button type="submit" name="delete_record" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this record?')">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+
+
     </div>
 </div>
 
@@ -287,9 +348,19 @@ $totalViolations = count($studentViolations);
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
 .success-msg { color:green; font-weight:bold; margin-bottom:10px; }
 .error-msg { color:red; font-weight:bold; margin-bottom:10px; }
-.form-box { margin-bottom:20px; }
-.form-box input, .form-box select {
-    padding:8px; border-radius:6px; border:1px solid #ccc; margin-right:10px;
+.form-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.form-box select,
+.form-box textarea,
+.form-box input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    width: 100%;
 }
 .table-box { max-height:400px; overflow-y:auto; }
 .styled-table { width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
@@ -307,4 +378,74 @@ $totalViolations = count($studentViolations);
 .remarks-input {
     width: 400px; /* or 100% if you want it to take the whole row */
 }
+.two-columns {
+    display: flex;
+    gap: 20px;
+}
+
+.left-box, .right-box {
+    flex: 1; /* half width each */
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.filter-buttons {
+    grid-column: span 3;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+
+
+
+
 </style>
+
+<script>
+function applyRecordFilters() {
+    let search = document.getElementById("recordSearch").value.toLowerCase();
+    let program = document.getElementById("filterProgram").value.toLowerCase();
+    let year = document.getElementById("filterYear").value.toLowerCase();
+    let section = document.getElementById("filterSection").value.toLowerCase();
+    let violation = document.getElementById("filterViolation").value.toLowerCase();
+
+    let rows = document.querySelectorAll(".styled-table tbody tr");
+
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        let rowProgram = row.cells[2]?.innerText.toLowerCase() || "";
+        let rowYear = row.cells[2]?.innerText.toLowerCase() || "";
+        let rowSection = row.cells[2]?.innerText.toLowerCase() || "";
+        let rowViolation = row.cells[3]?.innerText.toLowerCase() || "";
+
+        let match = true;
+
+        if (search && !text.includes(search)) match = false;
+        if (program && !rowProgram.includes(program)) match = false;
+        if (year && !rowYear.includes(year)) match = false;
+        if (section && !rowSection.includes(section)) match = false;
+        if (violation && !rowViolation.includes(violation)) match = false;
+
+        row.style.display = match ? "" : "none";
+    });
+}
+
+function cancelRecordFilters() {
+    document.getElementById("recordSearch").value = "";
+    document.getElementById("filterProgram").value = "";
+    document.getElementById("filterYear").value = "";
+    document.getElementById("filterSection").value = "";
+    document.getElementById("filterViolation").value = "";
+    applyRecordFilters();
+}
+</script>
