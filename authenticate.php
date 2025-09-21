@@ -46,7 +46,7 @@ try {
             case 'guidance':
                 header("Location: guidance.php");
                 break;
-            case 'SAO':
+            case 'sao':
                 header("Location: sao.php");
                 break;
             case 'registrar':
