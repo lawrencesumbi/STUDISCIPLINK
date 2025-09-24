@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2025 at 05:22 PM
+-- Generation Time: Sep 24, 2025 at 06:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -691,7 +691,47 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (625, 9, 'Logged in', '2025-09-24 23:02:43'),
 (626, 9, 'Updated account info', '2025-09-24 23:21:04'),
 (627, 9, 'Logged out', '2025-09-24 23:21:23'),
-(628, 9, 'Logged in', '2025-09-24 23:21:29');
+(628, 9, 'Logged in', '2025-09-24 23:21:29'),
+(629, 9, 'Logged out', '2025-09-24 23:27:04'),
+(630, 3, 'Logged in', '2025-09-24 23:27:08'),
+(631, 3, 'Logged out', '2025-09-24 23:28:11'),
+(632, 9, 'Logged in', '2025-09-24 23:28:14'),
+(633, 9, 'Logged out', '2025-09-24 23:31:24'),
+(634, 1, 'Logged in', '2025-09-24 23:33:11'),
+(635, 1, 'Logged out', '2025-09-24 23:36:26'),
+(636, 6, 'Logged in', '2025-09-24 23:36:31'),
+(637, 6, 'Logged out', '2025-09-24 23:37:49'),
+(638, 3, 'Logged in', '2025-09-24 23:37:53'),
+(639, 3, 'Logged out', '2025-09-24 23:37:57'),
+(640, 6, 'Logged in', '2025-09-24 23:38:05'),
+(641, 6, 'Logged out', '2025-09-24 23:39:51'),
+(642, 1, 'Logged in', '2025-09-24 23:39:54'),
+(643, 1, 'Logged out', '2025-09-24 23:40:31'),
+(644, 6, 'Logged in', '2025-09-24 23:40:35'),
+(645, 6, 'Logged out', '2025-09-24 23:48:50'),
+(646, 4, 'Logged in', '2025-09-24 23:50:46'),
+(647, 4, 'Logged out', '2025-09-24 23:51:10'),
+(648, 1, 'Logged in', '2025-09-24 23:51:13'),
+(649, 1, 'Logged out', '2025-09-24 23:51:22'),
+(650, 8, 'Logged in', '2025-09-24 23:52:07'),
+(651, 8, 'Logged out', '2025-09-24 23:53:31'),
+(652, 4, 'Logged in', '2025-09-24 23:53:35'),
+(653, 4, 'Logged out', '2025-09-24 23:56:21'),
+(654, 6, 'Logged in', '2025-09-24 23:56:28'),
+(655, 6, 'Logged out', '2025-09-24 23:56:57'),
+(656, 4, 'Logged in', '2025-09-24 23:57:05'),
+(657, 4, 'Logged out', '2025-09-24 23:57:30'),
+(658, 6, 'Logged in', '2025-09-24 23:57:35'),
+(659, 6, 'Logged out', '2025-09-24 23:57:52'),
+(660, 4, 'Logged in', '2025-09-24 23:57:58'),
+(661, 4, 'Logged out', '2025-09-24 23:59:30'),
+(662, 6, 'Logged in', '2025-09-24 23:59:38'),
+(663, 6, 'Logged out', '2025-09-24 23:59:44'),
+(664, 4, 'Logged in', '2025-09-24 23:59:51'),
+(665, 4, 'Logged out', '2025-09-25 00:27:03'),
+(666, 8, 'Logged in', '2025-09-25 00:27:09'),
+(667, 8, 'Logged out', '2025-09-25 00:28:27'),
+(668, 4, 'Logged in', '2025-09-25 00:28:37');
 
 -- --------------------------------------------------------
 
@@ -778,9 +818,9 @@ CREATE TABLE `school_years` (
 --
 
 INSERT INTO `school_years` (`id`, `school_year`, `is_current`) VALUES
-(1, '2024-2025', 0),
-(2, '2025-2026', 1),
-(3, '2026-2027', 0);
+(1, '2024-2025 1st Sem', 0),
+(2, '2024-2025 2nd Sem', 1),
+(3, '2025-2026 1st Sem', 0);
 
 -- --------------------------------------------------------
 
@@ -886,7 +926,8 @@ CREATE TABLE `student_violations` (
 
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
-(37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2);
+(37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2),
+(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Pending', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -911,13 +952,13 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
 (1, 'admin', '$2y$10$ov6ePzMX3b96jDzNgEXGFuuHHAvKRJ6E7BPyhb6505aYKbHkmsZAW', 'admin', 'administrator@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
-(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
+(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'active', ''),
 (3, 'guidance', '$2y$10$ql2NM0Hd3kZXf.5ML.Ch7ute/nGm9qDckx0PJ5P2Xqjj/iCs0KE7y', 'guidance', 'guidance@gmail.com', '09987654321', 'active', '../studisciplink/userUploads/92700584-e219-4775-b0b1-1b75cd3ee529.jpg'),
 (4, 'faculty', '$2y$10$GToR8dPdBzjm9mnaZGx9peH7R10B6lF7pUVZpjSBa8FmK5.yqCEDy', 'faculty', 'faculty@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/f56486c5427dc5a7ed81252862d87c96.jpg'),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
-(8, 'johndoe', '$2y$10$Z3V1iXmOxKJT6DAOFksm3.IkZuJXHYJ77uDR3tU1HOWzJ44UDPD7W', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
+(8, 'johndoe', '$2y$10$Ug7uQl3SC3kMUHXdMRt8xekqV2yvu0n8jKMaWLaxliX87L3jnk3.S', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
 (9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg');
 
 -- --------------------------------------------------------
@@ -958,10 +999,10 @@ CREATE TABLE `year_levels` (
 --
 
 INSERT INTO `year_levels` (`id`, `year_level`, `year_code`) VALUES
-(1, 'First Year', '1'),
-(2, 'Second Year', '2'),
-(3, 'Third Year', '3'),
-(4, 'Fourth Year', '4');
+(1, '1st Year', '1'),
+(2, '2nd Year', '2'),
+(3, '3rd Year', '3'),
+(4, '4th Year', '4');
 
 --
 -- Indexes for dumped tables
@@ -1083,7 +1124,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=629;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=669;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1131,7 +1172,7 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `users`

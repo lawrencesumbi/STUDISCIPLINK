@@ -70,11 +70,15 @@ $resolved_stmt->execute([$current_sy_id]);
 $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
+<div class="container">
+    <h3>Current School Year: 
+            <span style="color:#b30000;"><?= htmlspecialchars($current_school_year) ?></span>
+    </h3>
+</div>
 <div class="container">
     <?= $message; ?>
 
-
+    
     <!-- Ongoing Cases -->
     <h3>Ongoing Cases</h3>
     <table class="styled-table">

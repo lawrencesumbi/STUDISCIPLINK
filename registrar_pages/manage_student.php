@@ -141,7 +141,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h3>School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
+    <h3>Current School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
     <?= $message; ?>
 </div>
 
@@ -164,7 +164,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                     echo 'selected';
                 }
             ?>>
-            <?= htmlspecialchars($p['program_name']) ?>
+            <?= htmlspecialchars($p['program_code']) ?>
         </option>
     <?php endforeach; ?>
 </select>
@@ -236,7 +236,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                 <option value="">Select Programs</option>
                 <?php foreach ($programs as $p): ?>
                     <option value="<?= $p['id'] ?>" <?= $filter_program == $p['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($p['program_name']) ?>
+                        <?= htmlspecialchars($p['program_code']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -277,10 +277,10 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <th>ID</th>
                     <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Section</th>
-                    <th>Year</th>
+                    <th>Lastname</th>       
                     <th>Program</th>
+                    <th>Year Level</th>
+                    <th>Section</th>
                     <th>Address</th>
                     <th>Contact</th>
                     <th>Actions</th>
@@ -293,9 +293,9 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= $stu['id'] ?></td>
                         <td><?= htmlspecialchars($stu['first_name']) ?></td>
                         <td><?= htmlspecialchars($stu['last_name']) ?></td>
-                        <td><?= htmlspecialchars($stu['section_name']) ?></td>
-                        <td><?= htmlspecialchars($stu['year_level']) ?></td>
                         <td><?= htmlspecialchars($stu['program_code']) ?></td>
+                        <td><?= htmlspecialchars($stu['year_level']) ?></td>
+                        <td><?= htmlspecialchars($stu['section_name']) ?></td>
                         <td><?= htmlspecialchars($stu['address']) ?></td>
                         <td><?= htmlspecialchars($stu['contact']) ?></td>
                         <td>

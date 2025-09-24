@@ -20,7 +20,7 @@ $allowed_pages = [
     'dashboard',
     'manage_school_year',
     'manage_records',
-    'reports_analytics',
+    'print_reports',
     'my_account'
 ];
 
@@ -77,7 +77,7 @@ if (!in_array($page, $allowed_pages)) {
     <a href="?page=dashboard">Dashboard</a>
     <a href="?page=manage_school_year">School Year</a>
     <a href="?page=manage_records">Manage Records</a>
-    <a href="?page=reports_analytics">Reports and Analytics</a>
+    <a href="?page=print_reports">Print Reports</a>
     <a href="?page=my_account">My Account</a>
     <a href="logout.php">Logout</a>
 </div>

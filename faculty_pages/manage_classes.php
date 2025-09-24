@@ -97,7 +97,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h3>School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
+    <h3>Current School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
     <?= $message; ?>
 </div>
 
@@ -158,16 +158,16 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
             <input type="hidden" name="page" value="manage_classes">
 
             <select name="filter_program">
-                <option value="">All Programs</option>
+                <option value="">Select Program</option>
                 <?php foreach ($programs as $p): ?>
                     <option value="<?= $p['id'] ?>" <?= $filter_program == $p['id'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($p['program_name']) ?>
+                        <?= htmlspecialchars($p['program_code']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
 
             <select name="filter_year">
-                <option value="">All Years</option>
+                <option value="">Select Year</option>
                 <?php foreach ($year_levels as $yl): ?>
                     <option value="<?= $yl['id'] ?>" <?= $filter_year == $yl['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($yl['year_level']) ?>
@@ -176,7 +176,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
             </select>
 
             <select name="filter_section">
-                <option value="">All Sections</option>
+                <option value="">Select Section</option>
                 <?php foreach ($sections as $sec): ?>
                     <option value="<?= $sec['id'] ?>" <?= $filter_section == $sec['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($sec['section_name']) ?>
@@ -201,8 +201,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
         <table class="styled-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Student ID</th>
+                    <th>No.</th>
                     <th>Full Name</th>
                     <th>Program</th>
                     <th>Year</th>
@@ -214,8 +213,7 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($enrolled_students as $i => $stu): ?>
                 <tr>
                     <td><?= $i+1 ?></td>
-                    <td><?= $stu['student_id'] ?></td>
-                    <td><?= htmlspecialchars($stu['last_name'].", ".$stu['first_name']) ?></td>
+                    <td><?= htmlspecialchars($stu['first_name']." ".$stu['last_name']) ?></td>
                     <td><?= htmlspecialchars($stu['program_name']) ?></td>
                     <td><?= htmlspecialchars($stu['year_level']) ?></td>
                     <td><?= htmlspecialchars($stu['section_name']) ?></td>

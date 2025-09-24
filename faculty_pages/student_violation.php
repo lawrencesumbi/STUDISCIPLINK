@@ -194,42 +194,42 @@ $totalViolations = count($studentViolations);
             <input type="text" id="violationSearch" placeholder="Search student or violations...">
 
             <select id="filterProgram">
-                <option value="">All Programs</option>
+                <option value="">Select Program</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'program_code')) as $program): ?>
                     <option value="<?= htmlspecialchars($program) ?>"><?= htmlspecialchars($program) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select id="filterYear">
-                <option value="">All Year Levels</option>
+                <option value="">Select Year Level</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'year_level')) as $year): ?>
                     <option value="<?= htmlspecialchars($year) ?>"><?= htmlspecialchars($year) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select id="filterSection">
-                <option value="">All Sections</option>
+                <option value="">Select Section</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'section_name')) as $sec): ?>
                     <option value="<?= htmlspecialchars($sec) ?>"><?= htmlspecialchars($sec) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select id="filterViolation">
-                <option value="">All Violations</option>
+                <option value="">Select Violation</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'violation')) as $vio): ?>
                     <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select id="filterLocation">
-                <option value="">All Locations</option>
+                <option value="">Select Location</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'location')) as $loc): ?>
                     <option value="<?= htmlspecialchars($loc) ?>"><?= htmlspecialchars($loc) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select id="filterStatus">
-                <option value="">All Status</option>
+                <option value="">Select Status</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'status')) as $status): ?>
                     <option value="<?= htmlspecialchars($status) ?>"><?= htmlspecialchars($status) ?></option>
                 <?php endforeach; ?>
@@ -246,54 +246,56 @@ $totalViolations = count($studentViolations);
 </div>
 
 <div class="container">
-    <h4>My Recorded Violations (Total: <?= $totalViolations ?>)</h4>
+    <h4>My Reported Violations (Total: <?= $totalViolations ?>)</h4>
 
     <table class="styled-table" id="violationTable">
-    <thead>
-        <tr>
-            <th>Student</th>
-            <th>Program</th>
-            <th>Year</th>
-            <th>Section</th>
-            <th>Violation</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Date Reported</th>
-            <th>Status</th>
-            <th>Actions</th> <!-- ✅ NEW -->
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($totalViolations > 0): ?>
-            <?php foreach ($studentViolations as $v): ?>
-                <tr>
-                    <td><?= htmlspecialchars($v['last_name'] . ", " . $v['first_name']); ?></td>
-                    <td><?= htmlspecialchars($v['program_code']); ?></td>
-                    <td><?= htmlspecialchars($v['year_level']); ?></td>
-                    <td><?= htmlspecialchars($v['section_name']); ?></td>
-                    <td><?= htmlspecialchars($v['violation']); ?></td>
-                    <td><?= htmlspecialchars($v['description']); ?></td>
-                    <td><?= htmlspecialchars($v['location']); ?></td>
-                    <td><?= htmlspecialchars($v['date_time']); ?></td>
-                    <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
-                    <td>
-                        <?php if ($v['status'] === 'Pending'): ?>
-                            <a href="faculty.php?page=student_violation&edit_id=<?= $v['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
-                            <a href="faculty.php?page=student_violation&delete_id=<?= $v['id'] ?>" 
-                               onclick="return confirm('Are you sure you want to delete this violation?');"
-                               class="btn btn-sm btn-secondary">Delete</a>
-                        <?php else: ?>
-                            <em>N/A</em>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr><td colspan="10" style="text-align:center;">No violations recorded yet.</td></tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        <thead>
+            <tr>
+                <th>No.</th> <!-- ✅ Added -->
+                <th>Student</th>
+                <th>Class</th> <!-- ✅ Combined -->
+                <th>Violation</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Date Reported</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($totalViolations > 0): ?>
+                <?php foreach ($studentViolations as $i => $v): ?> <!-- ✅ Added $i -->
+                    <tr>
+                        <td><?= $i + 1 ?></td> <!-- ✅ Auto-number -->
+                        <td><?= htmlspecialchars($v['first_name'] . " " . $v['last_name']); ?></td>
+                        <td>
+                            <?= htmlspecialchars($v['program_code']) ?> - 
+                            <?= htmlspecialchars($v['year_level']) ?><?= htmlspecialchars($v['section_name']) ?>
+                        </td> <!-- ✅ Combined -->
+                        <td><?= htmlspecialchars($v['violation']); ?></td>
+                        <td><?= htmlspecialchars($v['description']); ?></td>
+                        <td><?= htmlspecialchars($v['location']); ?></td>
+                        <td><?= htmlspecialchars($v['date_time']); ?></td>
+                        <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
+                        <td>
+                            <?php if ($v['status'] === 'Pending'): ?>
+                                <a href="faculty.php?page=student_violation&edit_id=<?= $v['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="faculty.php?page=student_violation&delete_id=<?= $v['id'] ?>" 
+                                   onclick="return confirm('Are you sure you want to delete this violation?');"
+                                   class="btn btn-sm btn-secondary">Delete</a>
+                            <?php else: ?>
+                                <em>N/A</em>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="8" style="text-align:center;">No violations recorded yet.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+
 
 <script>
 // APPLY FILTERS
@@ -310,24 +312,26 @@ function applyFilters() {
     let matchCount = 0;
 
     rows.forEach(row => {
-        // Skip the "no record" row if it exists
         if (row.classList.contains("no-record")) return;
 
-        let text = row.textContent.toLowerCase();
-        let rowProgram = row.cells[1].textContent.toLowerCase();
-        let rowYear = row.cells[2].textContent.toLowerCase();
-        let rowSection = row.cells[3].textContent.toLowerCase();
-        let rowViolation = row.cells[4].textContent.toLowerCase();
-        let rowLocation = row.cells[6].textContent.toLowerCase();
-        let rowStatus = row.cells[8].textContent.toLowerCase();
+        let student = row.cells[1].textContent.toLowerCase();
+        let classCol = row.cells[2].textContent.toLowerCase(); // ✅ Program+Year+Section
+        let rowViolation = row.cells[3].textContent.toLowerCase();
+        let rowDescription = row.cells[4].textContent.toLowerCase();
+        let rowLocation = row.cells[5].textContent.toLowerCase();
+        let rowStatus = row.cells[7].textContent.toLowerCase();
 
-        let matches = text.includes(search) &&
-                      (program === "" || rowProgram === program) &&
-                      (year === "" || rowYear === year) &&
-                      (section === "" || rowSection === section) &&
-                      (violation === "" || rowViolation === violation) &&
-                      (location === "" || rowLocation === location) &&
-                      (status === "" || rowStatus === status);
+        let matches = student.includes(search) ||
+                      rowViolation.includes(search) ||
+                      rowDescription.includes(search);
+
+        matches = matches &&
+                  (program === "" || classCol.includes(program)) &&
+                  (year === "" || classCol.includes(year)) &&
+                  (section === "" || classCol.includes(section)) &&
+                  (violation === "" || rowViolation === violation) &&
+                  (location === "" || rowLocation === location) &&
+                  (status === "" || rowStatus === status);
 
         row.style.display = matches ? "" : "none";
         if (matches) matchCount++;
@@ -338,18 +342,18 @@ function applyFilters() {
     let noRecordRow = tbody.querySelector(".no-record");
     if (noRecordRow) noRecordRow.remove();
 
-    // If nothing matched, add "no record found"
     if (matchCount === 0) {
         let tr = document.createElement("tr");
         tr.classList.add("no-record");
         let td = document.createElement("td");
-        td.colSpan = 9; // match number of columns in your table
+        td.colSpan = 9;
         td.style.textAlign = "center";
         td.textContent = "No record found";
         tr.appendChild(td);
         tbody.appendChild(tr);
     }
 }
+
 
 
 // CANCEL FILTERS → refresh page

@@ -228,10 +228,10 @@
             <select name="role" required>
                 <option value="" disabled selected>Select Role</option>
                 <option value="admin">Admin</option>
-                <option value="guidance">Guidance</option>
-                <option value="sao">SAO</option>
                 <option value="registrar">Registrar</option>
                 <option value="faculty">Faculty</option>
+                <option value="guidance">Guidance</option>
+                <option value="sao">SAO</option>  
             </select>
 
             <button type="submit">Register</button>
