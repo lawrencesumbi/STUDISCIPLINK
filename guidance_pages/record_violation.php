@@ -31,12 +31,17 @@ if (isset($_POST['add_record'])) {
     $remarks = trim($_POST['remarks']);
 
     if ($student_violation_id && $action_taken && $current_sy_id) {
-        $stmt = $pdo->prepare("INSERT INTO record_violations (student_violations_id, action_taken, remarks, user_id, school_year_id) VALUES (?, ?, ?, ?, ?)");
+        // Insert with status "Ongoing"
+        $stmt = $pdo->prepare("INSERT INTO record_violations 
+            (student_violations_id, action_taken, remarks, user_id, school_year_id, status) 
+            VALUES (?, ?, ?, ?, ?, 'Ongoing')");
         $stmt->execute([$student_violation_id, $action_taken, $remarks, $user_id, $current_sy_id]);
-        // ✅ Update student_violations status to "Recorded"
+
+        // Update student_violations status
         $stmt = $pdo->prepare("UPDATE student_violations SET status='Recorded' WHERE id=?");
         $stmt->execute([$student_violation_id]);
-        $message = "<p class='success-msg'>Record added successfully!</p>";
+
+        $message = "<p class='success-msg'>Record added successfully! (Status: Ongoing)</p>";
     } else {
         $message = "<p class='error-msg'>Please complete the form.</p>";
     }
@@ -99,7 +104,6 @@ $query = "
     JOIN school_years sy ON rv.school_year_id = sy.id
     WHERE rv.school_year_id = ?
 ";
-
 
 $params = [$current_sy_id];
 
@@ -232,14 +236,11 @@ $totalViolations = count($studentViolations);
     <h4>Search & Filter</h4>
 
     <div class="form-box">
-
         <!-- Search input -->
         <input type="text" id="recordSearch" class="search-input" placeholder="Search student or violations...">
-
     </div>
 
     <div class="form-box filter-grid">
-
         <!-- Program Filter -->
         <select id="filterProgram">
             <option value="">All Programs</option>
@@ -271,11 +272,6 @@ $totalViolations = count($studentViolations);
                 <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
             <?php endforeach; ?>
         </select>
-
-        
-
-        
-        
     </div>
 
     <div class="filter-buttons">
@@ -283,9 +279,7 @@ $totalViolations = count($studentViolations);
             <button type="button" class="btn btn-secondary" onclick="cancelRecordFilters()">Cancel</button>
     </div>
 </div>
-
 </div>
-
 
 <div class="container">           
     <!-- Records Table -->
@@ -301,6 +295,7 @@ $totalViolations = count($studentViolations);
             <th>Violation</th>
             <th>Action Taken</th>
             <th>Remarks</th>
+            <th>Status</th>
             <th>Date Recorded</th>
             <th>Actions</th>
         </tr>
@@ -315,32 +310,35 @@ $totalViolations = count($studentViolations);
                 <td><?= htmlspecialchars($r['violation_description']); ?></td>
                 <td><?= htmlspecialchars($r['action_taken']); ?></td>
                 <td><?= htmlspecialchars($r['remarks']); ?></td>
+                <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
                 <td><?= $r['date_recorded']; ?></td>
                 <td>
-                    <!-- Edit -->
-                    <form method="POST" class="inline-form">
-                        <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                        <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
-                    </form>
+                    <?php if ($r['status'] === 'Resolved'): ?>
+                        <em>N/A</em>
+                    <?php else: ?>
+                        <!-- Edit -->
+                        <form method="POST" class="inline-form">
+                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                            <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
+                        </form>
 
-                    <!-- Delete -->
-                    <form method="POST" class="inline-form">
-                        <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                        <button type="submit" name="delete_record" class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to delete this record?')">
-                            Delete
-                        </button>
-                    </form>
+                        <!-- Delete -->
+                        <form method="POST" class="inline-form">
+                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                            <button type="submit" name="delete_record" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this record?')">
+                                Delete
+                            </button>
+                        </form>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
     <?php else: ?>
-        <tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>
+        <tr><td colspan="9" style="text-align:center;">No matching records found.</td></tr>
     <?php endif; ?>
     </tbody>
 </table>
-
-
     </div>
 </div>
 
@@ -375,28 +373,20 @@ $totalViolations = count($studentViolations);
 .btn-info { background:#27ae60; }
 .btn-secondary { background:gray; text-decoration:none; }
 .btn:hover { opacity:0.9; }
-.remarks-input {
-    width: 400px; /* or 100% if you want it to take the whole row */
-}
-.two-columns {
-    display: flex;
-    gap: 20px;
-}
-
+.remarks-input { width: 400px; }
+.two-columns { display: flex; gap: 20px; }
 .left-box, .right-box {
-    flex: 1; /* half width each */
+    flex: 1;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-
 .filter-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
 }
-
 .filter-buttons {
     grid-column: span 3;
     display: flex;
@@ -404,11 +394,6 @@ $totalViolations = count($studentViolations);
     margin-top: 10px;
     justify-content: flex-end;
 }
-
-
-
-
-
 </style>
 
 <script>
@@ -446,6 +431,7 @@ function cancelRecordFilters() {
     document.getElementById("filterYear").value = "";
     document.getElementById("filterSection").value = "";
     document.getElementById("filterViolation").value = "";
+
     applyRecordFilters();
 }
 </script>

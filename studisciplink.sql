@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2025 at 04:37 PM
+-- Generation Time: Sep 24, 2025 at 05:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -668,7 +668,30 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (602, 9, 'Changed password', '2025-09-24 22:31:22'),
 (603, 9, 'Changed password', '2025-09-24 22:31:30'),
 (604, 9, 'Logged out', '2025-09-24 22:32:37'),
-(605, 3, 'Logged in', '2025-09-24 22:32:41');
+(605, 3, 'Logged in', '2025-09-24 22:32:41'),
+(606, 3, 'Logged out', '2025-09-24 22:39:35'),
+(607, 9, 'Logged in', '2025-09-24 22:39:38'),
+(608, 9, 'Logged out', '2025-09-24 22:42:52'),
+(609, 3, 'Logged in', '2025-09-24 22:42:56'),
+(610, 3, 'Logged out', '2025-09-24 22:54:46'),
+(611, 9, 'Logged in', '2025-09-24 22:54:51'),
+(612, 9, 'Logged out', '2025-09-24 22:57:44'),
+(613, 3, 'Logged in', '2025-09-24 22:57:48'),
+(614, 3, 'Logged out', '2025-09-24 22:57:56'),
+(615, 9, 'Logged in', '2025-09-24 22:57:59'),
+(616, 9, 'Logged out', '2025-09-24 22:58:07'),
+(617, 3, 'Logged in', '2025-09-24 22:58:14'),
+(618, 3, 'Logged out', '2025-09-24 22:58:29'),
+(619, 4, 'Logged in', '2025-09-24 22:58:34'),
+(620, 4, 'Logged out', '2025-09-24 22:59:01'),
+(621, 9, 'Logged in', '2025-09-24 22:59:04'),
+(622, 9, 'Logged out', '2025-09-24 22:59:10'),
+(623, 3, 'Logged in', '2025-09-24 23:01:59'),
+(624, 3, 'Logged out', '2025-09-24 23:02:41'),
+(625, 9, 'Logged in', '2025-09-24 23:02:43'),
+(626, 9, 'Updated account info', '2025-09-24 23:21:04'),
+(627, 9, 'Logged out', '2025-09-24 23:21:23'),
+(628, 9, 'Logged in', '2025-09-24 23:21:29');
 
 -- --------------------------------------------------------
 
@@ -715,7 +738,7 @@ CREATE TABLE `record_violations` (
 --
 
 INSERT INTO `record_violations` (`id`, `student_violations_id`, `action_taken`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
-(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'ongoing');
+(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'Resolved');
 
 -- --------------------------------------------------------
 
@@ -727,8 +750,16 @@ CREATE TABLE `resolved_cases` (
   `id` int(11) NOT NULL,
   `record_violation_id` int(11) NOT NULL,
   `status` varchar(50) NOT NULL,
-  `date_resolved` timestamp NOT NULL DEFAULT current_timestamp()
+  `date_resolved` timestamp NOT NULL DEFAULT current_timestamp(),
+  `school_year_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `resolved_cases`
+--
+
+INSERT INTO `resolved_cases` (`id`, `record_violation_id`, `status`, `date_resolved`, `school_year_id`) VALUES
+(5, 4, 'Resolved', '2025-09-24 15:16:09', 2);
 
 -- --------------------------------------------------------
 
@@ -887,7 +918,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$Z3V1iXmOxKJT6DAOFksm3.IkZuJXHYJ77uDR3tU1HOWzJ44UDPD7W', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
-(9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '');
+(9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg');
 
 -- --------------------------------------------------------
 
@@ -974,7 +1005,8 @@ ALTER TABLE `record_violations`
 --
 ALTER TABLE `resolved_cases`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `record_violation_id` (`record_violation_id`);
+  ADD KEY `record_violation_id` (`record_violation_id`),
+  ADD KEY `resolved_cases_school_year_id_fr` (`school_year_id`);
 
 --
 -- Indexes for table `school_years`
@@ -1051,7 +1083,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=606;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=629;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1069,7 +1101,7 @@ ALTER TABLE `record_violations`
 -- AUTO_INCREMENT for table `resolved_cases`
 --
 ALTER TABLE `resolved_cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `school_years`
@@ -1151,7 +1183,8 @@ ALTER TABLE `record_violations`
 -- Constraints for table `resolved_cases`
 --
 ALTER TABLE `resolved_cases`
-  ADD CONSTRAINT `resolved_cases_record_violation_id_fr` FOREIGN KEY (`record_violation_id`) REFERENCES `record_violations` (`id`);
+  ADD CONSTRAINT `resolved_cases_record_violation_id_fr` FOREIGN KEY (`record_violation_id`) REFERENCES `record_violations` (`id`),
+  ADD CONSTRAINT `resolved_cases_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`);
 
 --
 -- Constraints for table `students`
