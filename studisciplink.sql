@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2025 at 03:56 PM
+-- Generation Time: Sep 24, 2025 at 04:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -527,7 +527,148 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (461, 4, 'Logged out', '2025-09-17 21:10:38'),
 (462, 6, 'Logged in', '2025-09-17 21:10:42'),
 (463, 6, 'Logged out', '2025-09-17 21:22:06'),
-(464, 4, 'Logged in', '2025-09-17 21:22:12');
+(464, 4, 'Logged in', '2025-09-17 21:22:12'),
+(465, 4, 'Logged out', '2025-09-17 22:28:08'),
+(466, 3, 'Logged in', '2025-09-17 22:28:12'),
+(467, 3, 'Logged out', '2025-09-17 22:42:44'),
+(468, 4, 'Logged in', '2025-09-17 22:42:50'),
+(469, 4, 'Logged out', '2025-09-17 22:43:00'),
+(470, 3, 'Logged in', '2025-09-17 22:43:08'),
+(471, 3, 'Logged out', '2025-09-17 22:53:48'),
+(472, 4, 'Logged in', '2025-09-17 22:54:00'),
+(473, 4, 'Logged out', '2025-09-17 22:54:06'),
+(474, 3, 'Logged in', '2025-09-17 22:54:12'),
+(475, 3, 'Logged out', '2025-09-17 22:54:36'),
+(476, 4, 'Logged in', '2025-09-17 22:54:45'),
+(477, 4, 'Logged out', '2025-09-17 22:56:09'),
+(478, 3, 'Logged in', '2025-09-17 22:56:13'),
+(479, 3, 'Logged out', '2025-09-17 23:03:58'),
+(480, 4, 'Logged in', '2025-09-17 23:04:15'),
+(481, 4, 'Logged out', '2025-09-17 23:07:07'),
+(482, 3, 'Logged in', '2025-09-17 23:07:14'),
+(483, 3, 'Logged out', '2025-09-17 23:14:40'),
+(484, 4, 'Logged in', '2025-09-17 23:14:47'),
+(485, 4, 'Logged out', '2025-09-17 23:15:07'),
+(486, 3, 'Logged in', '2025-09-17 23:15:11'),
+(487, 3, 'Logged out', '2025-09-17 23:32:13'),
+(488, 4, 'Logged in', '2025-09-17 23:32:27'),
+(489, 4, 'Logged out', '2025-09-17 23:32:53'),
+(490, 3, 'Logged in', '2025-09-17 23:33:14'),
+(491, 3, 'Logged out', '2025-09-17 23:54:22'),
+(492, 4, 'Logged in', '2025-09-17 23:54:27'),
+(493, 4, 'Logged out', '2025-09-17 23:54:37'),
+(494, 3, 'Logged in', '2025-09-17 23:54:44'),
+(495, 3, 'Logged out', '2025-09-18 00:01:54'),
+(496, 4, 'Logged in', '2025-09-18 00:02:00'),
+(497, 4, 'Logged out', '2025-09-18 00:02:08'),
+(498, 3, 'Logged in', '2025-09-18 00:02:13'),
+(499, 3, 'Logged out', '2025-09-18 00:26:52'),
+(500, 4, 'Logged in', '2025-09-18 00:26:58'),
+(501, 4, 'Logged out', '2025-09-18 00:27:05'),
+(502, 3, 'Logged in', '2025-09-18 00:27:11'),
+(503, 3, 'Logged out', '2025-09-18 00:28:14'),
+(504, 4, 'Logged in', '2025-09-18 00:28:20'),
+(505, 4, 'Logged out', '2025-09-18 00:28:34'),
+(506, 3, 'Logged in', '2025-09-18 00:28:46'),
+(507, 3, 'Logged out', '2025-09-18 00:45:44'),
+(508, 4, 'Logged in', '2025-09-18 00:45:49'),
+(509, 4, 'Logged out', '2025-09-18 00:46:18'),
+(510, 3, 'Logged in', '2025-09-18 00:46:32'),
+(511, 3, 'Logged out', '2025-09-18 00:58:12'),
+(512, 4, 'Logged in', '2025-09-18 00:58:18'),
+(513, 4, 'Logged out', '2025-09-18 01:00:38'),
+(514, 3, 'Logged in', '2025-09-18 01:00:43'),
+(515, 3, 'Logged in', '2025-09-19 13:12:01'),
+(516, 3, 'Logged out', '2025-09-19 13:34:40'),
+(517, 4, 'Logged in', '2025-09-19 13:56:10'),
+(518, 4, 'Logged out', '2025-09-19 13:56:51'),
+(519, 3, 'Logged in', '2025-09-19 13:56:59'),
+(520, 3, 'Logged out', '2025-09-19 14:56:05'),
+(521, 4, 'Logged in', '2025-09-19 14:56:15'),
+(522, 4, 'Logged out', '2025-09-19 14:57:22'),
+(523, 3, 'Logged in', '2025-09-19 14:57:27'),
+(524, 3, 'Logged out', '2025-09-19 15:15:20'),
+(525, 4, 'Logged in', '2025-09-19 15:15:33'),
+(526, 4, 'Logged out', '2025-09-19 15:17:26'),
+(527, 3, 'Logged in', '2025-09-19 15:17:36'),
+(528, 3, 'Logged out', '2025-09-19 15:52:55'),
+(529, 4, 'Logged in', '2025-09-19 15:52:59'),
+(530, 4, 'Logged out', '2025-09-19 15:53:30'),
+(531, 3, 'Logged in', '2025-09-19 15:53:43'),
+(532, 3, 'Logged out', '2025-09-19 16:05:26'),
+(533, 4, 'Logged in', '2025-09-19 16:05:31'),
+(534, 4, 'Logged out', '2025-09-19 16:05:49'),
+(535, 3, 'Logged in', '2025-09-19 16:05:56'),
+(536, 3, 'Logged out', '2025-09-19 16:07:55'),
+(537, 4, 'Logged in', '2025-09-19 16:08:02'),
+(538, 4, 'Logged out', '2025-09-19 16:10:10'),
+(539, 3, 'Logged in', '2025-09-19 16:10:15'),
+(540, 3, 'Logged out', '2025-09-19 16:27:53'),
+(541, 4, 'Logged in', '2025-09-19 16:27:59'),
+(542, 4, 'Logged out', '2025-09-19 16:29:04'),
+(543, 3, 'Logged in', '2025-09-19 16:29:07'),
+(544, 3, 'Logged out', '2025-09-19 16:49:33'),
+(545, 1, 'Logged in', '2025-09-19 16:52:26'),
+(546, 1, 'Logged out', '2025-09-19 16:53:27'),
+(547, 6, 'Logged in', '2025-09-19 16:53:32'),
+(548, 6, 'Logged out', '2025-09-19 16:54:30'),
+(549, 4, 'Logged in', '2025-09-19 16:54:35'),
+(550, 4, 'Logged out', '2025-09-19 16:55:46'),
+(551, 3, 'Logged in', '2025-09-19 16:55:50'),
+(552, 3, 'Logged out', '2025-09-19 16:57:58'),
+(553, 1, 'Logged in', '2025-09-21 22:01:36'),
+(554, 1, 'Logged out', '2025-09-21 22:01:58'),
+(555, 6, 'Logged in', '2025-09-21 22:02:06'),
+(556, 6, 'Logged out', '2025-09-21 22:03:45'),
+(557, 4, 'Logged in', '2025-09-21 22:03:51'),
+(558, 4, 'Logged out', '2025-09-21 22:07:39'),
+(559, 8, 'Logged in', '2025-09-21 22:08:21'),
+(560, 8, 'Logged out', '2025-09-21 22:08:46'),
+(561, 3, 'Logged in', '2025-09-21 22:08:51'),
+(562, 3, 'Logged out', '2025-09-21 22:14:25'),
+(563, 4, 'Logged in', '2025-09-21 22:14:29'),
+(564, 4, 'Logged out', '2025-09-21 22:14:57'),
+(565, 3, 'Logged in', '2025-09-21 22:15:02'),
+(566, 3, 'Logged out', '2025-09-21 23:04:39'),
+(567, 1, 'Logged in', '2025-09-21 23:05:14'),
+(568, 1, 'Logged out', '2025-09-21 23:05:39'),
+(569, 9, 'Logged in', '2025-09-21 23:05:41'),
+(570, 9, 'Logged in', '2025-09-21 23:05:45'),
+(571, 9, 'Logged in', '2025-09-21 23:06:04'),
+(572, 9, 'Logged in', '2025-09-21 23:06:41'),
+(573, 9, 'Logged out', '2025-09-22 00:03:06'),
+(574, 4, 'Logged in', '2025-09-22 00:03:24'),
+(575, 4, 'Logged out', '2025-09-22 00:03:29'),
+(576, 9, 'Logged in', '2025-09-22 08:22:52'),
+(577, 9, 'Logged out', '2025-09-24 21:23:35'),
+(578, 3, 'Logged in', '2025-09-24 21:25:29'),
+(579, 3, 'Logged out', '2025-09-24 22:00:42'),
+(580, 1, 'Logged in', '2025-09-24 22:00:46'),
+(581, 1, 'Logged out', '2025-09-24 22:01:45'),
+(582, 6, 'Logged in', '2025-09-24 22:01:51'),
+(583, 6, 'Logged out', '2025-09-24 22:03:06'),
+(584, 4, 'Logged in', '2025-09-24 22:03:10'),
+(585, 4, 'Logged out', '2025-09-24 22:05:57'),
+(586, 3, 'Logged in', '2025-09-24 22:06:01'),
+(587, 3, 'Logged out', '2025-09-24 22:07:37'),
+(588, 4, 'Logged in', '2025-09-24 22:07:43'),
+(589, 4, 'Logged out', '2025-09-24 22:08:27'),
+(590, 3, 'Logged in', '2025-09-24 22:08:31'),
+(591, 3, 'Logged out', '2025-09-24 22:09:59'),
+(592, 4, 'Logged in', '2025-09-24 22:10:12'),
+(593, 4, 'Logged out', '2025-09-24 22:10:31'),
+(594, 3, 'Logged in', '2025-09-24 22:10:37'),
+(595, 3, 'Logged out', '2025-09-24 22:27:58'),
+(596, 9, 'Logged in', '2025-09-24 22:28:00'),
+(597, 9, 'Logged out', '2025-09-24 22:28:26'),
+(598, 9, 'Logged in', '2025-09-24 22:28:29'),
+(599, 9, 'Updated account info', '2025-09-24 22:30:06'),
+(600, 9, 'Logged in', '2025-09-24 22:30:46'),
+(601, 9, 'Updated account info', '2025-09-24 22:30:58'),
+(602, 9, 'Changed password', '2025-09-24 22:31:22'),
+(603, 9, 'Changed password', '2025-09-24 22:31:30'),
+(604, 9, 'Logged out', '2025-09-24 22:32:37'),
+(605, 3, 'Logged in', '2025-09-24 22:32:41');
 
 -- --------------------------------------------------------
 
@@ -565,7 +706,28 @@ CREATE TABLE `record_violations` (
   `remarks` text NOT NULL,
   `date_recorded` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
-  `school_year_id` int(11) NOT NULL
+  `school_year_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `record_violations`
+--
+
+INSERT INTO `record_violations` (`id`, `student_violations_id`, `action_taken`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
+(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'ongoing');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `resolved_cases`
+--
+
+CREATE TABLE `resolved_cases` (
+  `id` int(11) NOT NULL,
+  `record_violation_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `date_resolved` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -692,8 +854,8 @@ CREATE TABLE `student_violations` (
 --
 
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
-(20, 8, 2, 'Sample', 'Sample', '2025-09-17 16:01:52', 'Pending', 4, 2),
-(35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1);
+(35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
+(37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -724,7 +886,8 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
-(8, 'johndoe', '$2y$10$Z3V1iXmOxKJT6DAOFksm3.IkZuJXHYJ77uDR3tU1HOWzJ44UDPD7W', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', '');
+(8, 'johndoe', '$2y$10$Z3V1iXmOxKJT6DAOFksm3.IkZuJXHYJ77uDR3tU1HOWzJ44UDPD7W', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
+(9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '');
 
 -- --------------------------------------------------------
 
@@ -807,6 +970,13 @@ ALTER TABLE `record_violations`
   ADD KEY `school_year_id` (`school_year_id`);
 
 --
+-- Indexes for table `resolved_cases`
+--
+ALTER TABLE `resolved_cases`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `record_violation_id` (`record_violation_id`);
+
+--
 -- Indexes for table `school_years`
 --
 ALTER TABLE `school_years`
@@ -881,7 +1051,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=465;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=606;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -893,6 +1063,12 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `record_violations`
 --
 ALTER TABLE `record_violations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `resolved_cases`
+--
+ALTER TABLE `resolved_cases`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -923,13 +1099,13 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `violations`
@@ -970,6 +1146,12 @@ ALTER TABLE `record_violations`
   ADD CONSTRAINT `record_violations_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
   ADD CONSTRAINT `record_violations_student_violations_id_fr` FOREIGN KEY (`student_violations_id`) REFERENCES `student_violations` (`id`),
   ADD CONSTRAINT `record_violations_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `resolved_cases`
+--
+ALTER TABLE `resolved_cases`
+  ADD CONSTRAINT `resolved_cases_record_violation_id_fr` FOREIGN KEY (`record_violation_id`) REFERENCES `record_violations` (`id`);
 
 --
 -- Constraints for table `students`
