@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2025 at 06:31 PM
+-- Generation Time: Sep 25, 2025 at 04:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,8 @@ CREATE TABLE `class_enrollments` (
 INSERT INTO `class_enrollments` (`id`, `user_id`, `program_id`, `year_level_id`, `section_id`, `school_year_id`, `enrolled_at`) VALUES
 (3, 4, 2, 2, 3, 2, 0),
 (6, 4, 2, 1, 2, 1, 0),
-(7, 4, 1, 1, 2, 2, 0);
+(7, 4, 1, 1, 2, 2, 0),
+(8, 8, 1, 2, 2, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -731,7 +732,13 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (665, 4, 'Logged out', '2025-09-25 00:27:03'),
 (666, 8, 'Logged in', '2025-09-25 00:27:09'),
 (667, 8, 'Logged out', '2025-09-25 00:28:27'),
-(668, 4, 'Logged in', '2025-09-25 00:28:37');
+(668, 4, 'Logged in', '2025-09-25 00:28:37'),
+(669, 4, 'Logged out', '2025-09-25 19:01:45'),
+(670, 3, 'Logged in', '2025-09-25 19:01:52'),
+(671, 3, 'Logged out', '2025-09-25 21:59:02'),
+(672, 8, 'Logged in', '2025-09-25 21:59:19'),
+(673, 8, 'Logged out', '2025-09-25 22:01:03'),
+(674, 3, 'Logged in', '2025-09-25 22:01:08');
 
 -- --------------------------------------------------------
 
@@ -900,7 +907,9 @@ INSERT INTO `student_enrollments` (`id`, `class_enrollment_id`, `student_id`, `e
 (8, 6, 20, '2025-09-17 12:03:40'),
 (9, 6, 28, '2025-09-17 12:03:40'),
 (10, 7, 8, '2025-09-17 12:06:01'),
-(11, 7, 9, '2025-09-17 12:06:01');
+(11, 7, 9, '2025-09-17 12:06:01'),
+(12, 8, 5, '2025-09-25 14:00:04'),
+(13, 8, 17, '2025-09-25 14:00:04');
 
 -- --------------------------------------------------------
 
@@ -927,7 +936,8 @@ CREATE TABLE `student_violations` (
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
 (37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2),
-(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Pending', 4, 2);
+(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Pending', 4, 2),
+(39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Pending', 8, 2);
 
 -- --------------------------------------------------------
 
@@ -980,7 +990,7 @@ INSERT INTO `violations` (`id`, `violation`) VALUES
 (1, 'Cheating'),
 (2, 'Vandalism'),
 (3, 'No ID'),
-(4, 'Improper wearing of uniform');
+(4, 'No Uniform');
 
 -- --------------------------------------------------------
 
@@ -1118,13 +1128,13 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `class_enrollments`
 --
 ALTER TABLE `class_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=669;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=675;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1166,13 +1176,13 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `users`

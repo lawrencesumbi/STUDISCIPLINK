@@ -119,16 +119,18 @@ $records = $pdo->prepare($query);
 $records->execute($params);
 $records = $records->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch student violations for dropdown (only current SY + Pending)
-$student_violations = $pdo->prepare("
-    SELECT sv.id, st.first_name, st.last_name, sv.description
+// Fetch student violations with violation name
+$stmt = $pdo->prepare("
+    SELECT sv.id, sv.student_id, s.first_name, s.last_name,
+           v.violation AS violation_name
     FROM student_violations sv
-    JOIN students st ON sv.student_id = st.id
+    JOIN students s ON sv.student_id = s.id
+    JOIN violations v ON sv.violation_id = v.id
     WHERE sv.school_year_id = ? AND sv.status = 'Pending'
     ORDER BY sv.id DESC
 ");
-$student_violations->execute([$current_sy_id]);
-$student_violations = $student_violations->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute([$current_sy_id]);
+$student_violations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ---------------------- FETCH STUDENT VIOLATIONS (Pending only) ----------------------
 $stmt = $pdo->prepare("
@@ -136,61 +138,72 @@ $stmt = $pdo->prepare("
            p.program_code, 
            yl.year_code AS year_level,
            sec.section_name,
-           v.violation, sv.description, sv.location, sv.date_time, sv.status
+           v.violation, sv.description, sv.location, sv.date_time, sv.status,
+           u.username AS reported_by
     FROM student_violations sv
     JOIN students s ON sv.student_id = s.id
     JOIN programs p ON s.program_id = p.id
     JOIN year_levels yl ON s.year_level_id = yl.id
     JOIN sections sec ON s.section_id = sec.id
     JOIN violations v ON sv.violation_id = v.id
+    JOIN users u ON sv.user_id = u.id  -- ✅ Join users table
     WHERE sv.school_year_id = ?
-    AND sv.status = 'Pending'
+      AND sv.status = 'Pending'
     ORDER BY sv.date_time DESC
 ");
 $stmt->execute([$current_sy_id]);
 
 $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalViolations = count($studentViolations);
+
+
+
+
 ?>
 
 <div class="container">
     <h4>Pending Violations (Total: <?= $totalViolations ?>)</h4>
 
     <table class="styled-table" id="violationTable">
-    <thead>
-        <tr>
-            <th>Student</th>
-            <th>Program</th>
-            <th>Year</th>
-            <th>Section</th>
-            <th>Violation</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Date Reported</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($totalViolations > 0): ?>
-            <?php foreach ($studentViolations as $v): ?>
-                <tr>
-                    <td><?= htmlspecialchars($v['last_name'] . ", " . $v['first_name']); ?></td>
-                    <td><?= htmlspecialchars($v['program_code']); ?></td>
-                    <td><?= htmlspecialchars($v['year_level']); ?></td>
-                    <td><?= htmlspecialchars($v['section_name']); ?></td>
-                    <td><?= htmlspecialchars($v['violation']); ?></td>
-                    <td><?= htmlspecialchars($v['description']); ?></td>
-                    <td><?= htmlspecialchars($v['location']); ?></td>
-                    <td><?= htmlspecialchars($v['date_time']); ?></td>
-                    <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr><td colspan="10" style="text-align:center;">No violations recorded yet.</td></tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Violation</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Reported By</th> <!-- ✅ New column -->
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($totalViolations > 0): ?>
+                <?php foreach ($studentViolations as $i => $v): ?>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><?= htmlspecialchars($v['first_name'] . " " . $v['last_name']); ?></td>
+                        <td>
+                            <?= htmlspecialchars($v['program_code']) ?> - 
+                            <?= htmlspecialchars($v['year_level']) ?><?= htmlspecialchars($v['section_name']) ?>
+                        </td>
+                        <td><?= htmlspecialchars($v['violation']); ?></td>
+                        <td><?= htmlspecialchars($v['description']); ?></td>
+                        <td><?= htmlspecialchars($v['location']); ?></td>
+                        <td><?= htmlspecialchars($v['date_time']); ?></td>
+                        <td><?= htmlspecialchars($v['reported_by']); ?></td> <!-- ✅ Show username -->
+                        <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="9" style="text-align:center;">No violations reported yet.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+
+
 
 <div class="container two-columns">
     <!-- LEFT SIDE: Form -->
@@ -205,7 +218,7 @@ $totalViolations = count($studentViolations);
                 <?php foreach ($student_violations as $sv): ?>
                     <option value="<?= $sv['id']; ?>"
                         <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
-                        <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['description']; ?>
+                        <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['violation_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
