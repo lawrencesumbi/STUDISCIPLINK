@@ -89,7 +89,7 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : "";
 
 $query = "
     SELECT rv.*, 
-           sv.description AS violation_description, 
+           v.violation AS violation_name,   -- ✅ Pull violation name instead of description
            st.first_name, st.last_name, 
            p.program_code, 
            yl.year_code AS year_level, 
@@ -102,8 +102,10 @@ $query = "
     JOIN year_levels yl ON st.year_level_id = yl.id
     JOIN sections sec ON st.section_id = sec.id
     JOIN school_years sy ON rv.school_year_id = sy.id
+    JOIN violations v ON sv.violation_id = v.id  -- ✅ Join violations table
     WHERE rv.school_year_id = ?
 ";
+
 
 $params = [$current_sy_id];
 
@@ -209,7 +211,7 @@ $totalViolations = count($studentViolations);
     <!-- LEFT SIDE: Form -->
     <div class="left-box">
         <?= $message; ?>
-        <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
+        <h4>Assign Sanction</h4>
 
         <form method="POST" class="form-box">
             <!-- Student Violation Dropdown -->
@@ -230,8 +232,9 @@ $totalViolations = count($studentViolations);
 
             <input type="text" name="action_taken" placeholder="Enter Sanction"
                 value="<?= htmlspecialchars($edit_action); ?>" required>
-            <input type="text" name="remarks" class="remarks-input" placeholder="Enter Remarks"
-                value="<?= htmlspecialchars($edit_remarks); ?>">
+
+            <!-- ✅ Bigger Remarks Field -->
+            <textarea name="remarks" class="remarks-input" placeholder="Enter Remarks / Notes" rows="5" required><?= htmlspecialchars($edit_remarks); ?></textarea>
 
             <?php if ($edit_mode): ?>
                 <input type="hidden" name="id" value="<?= $edit_id; ?>">
@@ -243,9 +246,11 @@ $totalViolations = count($studentViolations);
         </form>
     </div>
 
+
     <!-- RIGHT SIDE: Search + Filter -->
     <div class="right-box">
-    
+    <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
+    <br>
     <h4>Search & Filter</h4>
 
     <div class="form-box">
@@ -281,7 +286,7 @@ $totalViolations = count($studentViolations);
         <!-- Violation Filter -->
         <select id="filterViolation">
             <option value="">All Violations</option>
-            <?php foreach (array_unique(array_column($records, 'violation_description')) as $vio): ?>
+            <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
                 <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
             <?php endforeach; ?>
         </select>
@@ -300,60 +305,61 @@ $totalViolations = count($studentViolations);
         <h4>RECORDED Student Violations</h4>
 
         <table class="styled-table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Student</th>
-            <th>Class</th>
-            <th>Violation</th>
-            <th>Action Taken</th>
-            <th>Remarks</th>
-            <th>Status</th>
-            <th>Date Recorded</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php if ($records): ?>
-        <?php foreach ($records as $r): ?>
-            <tr>
-                <td><?= $r['id']; ?></td>
-                <td><?= htmlspecialchars($r['last_name'] . ", " . $r['first_name']); ?></td>
-                <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
-                <td><?= htmlspecialchars($r['violation_description']); ?></td>
-                <td><?= htmlspecialchars($r['action_taken']); ?></td>
-                <td><?= htmlspecialchars($r['remarks']); ?></td>
-                <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
-                <td><?= $r['date_recorded']; ?></td>
-                <td>
-                    <?php if ($r['status'] === 'Resolved'): ?>
-                        <em>N/A</em>
-                    <?php else: ?>
-                        <!-- Edit -->
-                        <form method="POST" class="inline-form">
-                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                            <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
-                        </form>
+            <thead>
+                <tr>
+                    <th>No.</th> <!-- ✅ Changed -->
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Violation</th>
+                    <th>Action Taken</th>
+                    <th>Remarks</th>
+                    <th>Status</th>
+                    <th>Date Recorded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($records): ?>
+                <?php foreach ($records as $i => $r): ?> <!-- ✅ Added $i for numbering -->
+                    <tr>
+                        <td><?= $i + 1; ?></td> <!-- ✅ Auto increment -->
+                        <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
+                        <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
+                        <td><?= htmlspecialchars($r['violation_name']); ?></td>
+                        <td><?= htmlspecialchars($r['action_taken']); ?></td>
+                        <td><?= htmlspecialchars($r['remarks']); ?></td>
+                        <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
+                        <td><?= $r['date_recorded']; ?></td>
+                        <td>
+                            <?php if ($r['status'] === 'Resolved'): ?>
+                                <em>N/A</em>
+                            <?php else: ?>
+                                <!-- Edit -->
+                                <form method="POST" class="inline-form">
+                                    <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                    <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
+                                </form>
 
-                        <!-- Delete -->
-                        <form method="POST" class="inline-form">
-                            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                            <button type="submit" name="delete_record" class="btn btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this record?')">
-                                Delete
-                            </button>
-                        </form>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr><td colspan="9" style="text-align:center;">No matching records found.</td></tr>
-    <?php endif; ?>
-    </tbody>
-</table>
+                                <!-- Delete -->
+                                <form method="POST" class="inline-form">
+                                    <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                    <button type="submit" name="delete_record" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this record?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="9" style="text-align:center;">No matching records found.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </div>
+
 
 <style>
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
@@ -407,6 +413,13 @@ $totalViolations = count($studentViolations);
     margin-top: 10px;
     justify-content: flex-end;
 }
+.remarks-input {
+    width: 100%;
+    resize: vertical; /* allows resizing by dragging */
+    padding: 10px;
+    font-size: 14px;
+}
+
 </style>
 
 <script>
@@ -436,6 +449,7 @@ function applyRecordFilters() {
 
         row.style.display = match ? "" : "none";
     });
+    
 }
 
 function cancelRecordFilters() {
