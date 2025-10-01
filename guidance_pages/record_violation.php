@@ -177,8 +177,8 @@ $totalViolations = count($studentViolations);
                 <th>Violation</th>
                 <th>Description</th>
                 <th>Location</th>
-                <th>Date</th>
-                <th>Reported By</th> <!-- ✅ New column -->
+                <th>Date Reported</th>
+                <th>ReportBy</th> <!-- ✅ New column -->
                 <th>Status</th>
             </tr>
         </thead>
@@ -260,38 +260,36 @@ $totalViolations = count($studentViolations);
     </div>
 
     <div class="form-box filter-grid">
-        <!-- Program Filter -->
-        <select id="filterProgram">
-            <option value="">All Programs</option>
-            <?php foreach (array_unique(array_column($records, 'program_code')) as $program): ?>
-                <option value="<?= htmlspecialchars($program) ?>"><?= htmlspecialchars($program) ?></option>
-            <?php endforeach; ?>
-        </select>
+    <!-- Class Filter -->
+    <select id="filterClass">
+        <option value="">Select Class</option>
+        <?php 
+        $classes = [];
+        foreach ($records as $rec) {
+            $className = $rec['program_code'] . " - " . $rec['year_level'] . $rec['section_name'];
+            $classes[] = $className;
+        }
+        foreach (array_unique($classes) as $class): ?>
+            <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
+        <?php endforeach; ?>
+    </select>
 
-        <!-- Year Level Filter -->
-        <select id="filterYear">
-            <option value="">All Year Levels</option>
-            <?php foreach (array_unique(array_column($records, 'year_level')) as $year): ?>
-                <option value="<?= htmlspecialchars($year) ?>"><?= htmlspecialchars($year) ?></option>
-            <?php endforeach; ?>
-        </select>
+    <!-- Violation Filter -->
+    <select id="filterViolation">
+        <option value="">Select Violation</option>
+        <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
+            <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
+        <?php endforeach; ?>
+    </select>
 
-        <!-- Section Filter -->
-        <select id="filterSection">
-            <option value="">All Sections</option>
-            <?php foreach (array_unique(array_column($records, 'section_name')) as $sec): ?>
-                <option value="<?= htmlspecialchars($sec) ?>"><?= htmlspecialchars($sec) ?></option>
-            <?php endforeach; ?>
-        </select>
+    <!-- Status Filter -->
+    <select id="filterStatus">
+        <option value="">Select Status</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Resolved">Resolved</option>
+    </select>
+</div>
 
-        <!-- Violation Filter -->
-        <select id="filterViolation">
-            <option value="">All Violations</option>
-            <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
-                <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
 
     <div class="filter-buttons">
             <button type="button" class="btn btn-info" onclick="applyRecordFilters()">Apply</button>
@@ -305,61 +303,72 @@ $totalViolations = count($studentViolations);
     <div class="table-box">
         <h4>RECORDED Student Violations</h4>
 
-        <table class="styled-table">
+        <table class="styled-table" id="recordedTable"> <!-- ✅ Added ID -->
             <thead>
                 <tr>
-                    <th>No.</th> <!-- ✅ Changed -->
+                    <th>No.</th>
                     <th>Student</th>
                     <th>Class</th>
                     <th>Violation</th>
-                    <th>Action Taken</th>
+                    <th>Sanction</th>
                     <th>Remarks</th>
-                    <th>Status</th>
                     <th>Date Recorded</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            <?php if ($records): ?>
-                <?php foreach ($records as $i => $r): ?> <!-- ✅ Added $i for numbering -->
-                    <tr>
-                        <td><?= $i + 1; ?></td> <!-- ✅ Auto increment -->
-                        <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
-                        <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
-                        <td><?= htmlspecialchars($r['violation_name']); ?></td>
-                        <td><?= htmlspecialchars($r['action_taken']); ?></td>
-                        <td><?= htmlspecialchars($r['remarks']); ?></td>
-                        <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
-                        <td><?= $r['date_recorded']; ?></td>
-                        <td>
-                            <?php if ($r['status'] === 'Resolved'): ?>
-                                <em>N/A</em>
-                            <?php else: ?>
-                                <!-- Edit -->
-                                <form method="POST" class="inline-form">
-                                    <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                                    <button type="submit" name="edit_record" class="btn btn-info">Edit</button>
-                                </form>
+    <?php if ($records): ?>
+        <?php foreach ($records as $i => $r): ?>
+            <tr>
+                <td><?= $i + 1; ?></td>
+                <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
+                <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
+                <td><?= htmlspecialchars($r['violation_name']); ?></td>
+                <td><?= htmlspecialchars($r['action_taken']); ?></td>
+                <td><?= htmlspecialchars($r['remarks']); ?></td>
+                <td><?= $r['date_recorded']; ?></td>
+                <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
+                <td>
+    <?php if ($r['status'] === 'Ongoing'): ?>
+        <!-- ✅ Edit button -->
+        <form method="POST" class="inline-form">
+            <input type="hidden" name="id" value="<?= $r['id']; ?>">
+            <button type="submit" name="edit_record" class="btn btn-warning">Edit</button>
+        </form>
 
-                                <!-- Delete -->
-                                <form method="POST" class="inline-form">
-                                    <input type="hidden" name="id" value="<?= $r['id']; ?>">
-                                    <button type="submit" name="delete_record" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this record?')">
-                                        Delete
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="9" style="text-align:center;">No matching records found.</td></tr>
-            <?php endif; ?>
-            </tbody>
+        <!-- ✅ Delete button -->
+        <form method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this record?');">
+            <input type="hidden" name="id" value="<?= $r['id']; ?>">
+            <button type="submit" name="delete_record" class="btn btn-danger">Delete</button>
+        </form>
+    <?php else: ?>
+        <em>N/A</em>
+    <?php endif; ?>
+</td>
+
+            </tr>
+        <?php endforeach; ?>
+        <!-- ✅ JS-controlled row (hidden by default) -->
+        <tr id="noRecordRow" style="display:none;">
+            <td colspan="9" style="text-align:center; color:red; font-weight:bold;">
+                No matching records found.
+            </td>
+        </tr>
+    <?php else: ?>
+        <!-- ✅ PHP-controlled row (when no records in DB) -->
+        <tr>
+            <td colspan="9" style="text-align:center; color:red; font-weight:bold;">
+                No records found.
+            </td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
         </table>
     </div>
 </div>
+
 
 
 <style>
@@ -386,7 +395,7 @@ $totalViolations = count($studentViolations);
 .form-box input {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 15px;
     margin-bottom: 10px;
     width: 100%;
 }
@@ -420,7 +429,7 @@ $totalViolations = count($studentViolations);
 }
 .filter-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 .filter-buttons {
@@ -442,40 +451,50 @@ $totalViolations = count($studentViolations);
 <script>
 function applyRecordFilters() {
     let search = document.getElementById("recordSearch").value.toLowerCase();
-    let program = document.getElementById("filterProgram").value.toLowerCase();
-    let year = document.getElementById("filterYear").value.toLowerCase();
-    let section = document.getElementById("filterSection").value.toLowerCase();
+    let classFilter = document.getElementById("filterClass").value.toLowerCase();
     let violation = document.getElementById("filterViolation").value.toLowerCase();
+    let status = document.getElementById("filterStatus").value.toLowerCase();
 
-    let rows = document.querySelectorAll(".styled-table tbody tr");
+    // ✅ Exclude the noRecordRow
+    let rows = document.querySelectorAll("#recordedTable tbody tr:not(#noRecordRow)");
+    let noRecordRow = document.getElementById("noRecordRow");
+
+    let visibleCount = 0;
 
     rows.forEach(row => {
         let text = row.innerText.toLowerCase();
-        let rowProgram = row.cells[2]?.innerText.toLowerCase() || "";
-        let rowYear = row.cells[2]?.innerText.toLowerCase() || "";
-        let rowSection = row.cells[2]?.innerText.toLowerCase() || "";
+        let rowClass = row.cells[2]?.innerText.toLowerCase() || "";
         let rowViolation = row.cells[3]?.innerText.toLowerCase() || "";
+        let rowStatus = row.cells[7]?.innerText.toLowerCase() || "";
 
         let match = true;
 
         if (search && !text.includes(search)) match = false;
-        if (program && !rowProgram.includes(program)) match = false;
-        if (year && !rowYear.includes(year)) match = false;
-        if (section && !rowSection.includes(section)) match = false;
-        if (violation && !rowViolation.includes(violation)) match = false;
+        if (classFilter && rowClass.trim() !== classFilter.trim()) match = false;
+        if (violation && rowViolation !== violation) match = false;
+        if (status && rowStatus !== status) match = false;
 
-        row.style.display = match ? "" : "none";
+        if (match) {
+            row.style.display = "";
+            visibleCount++;
+        } else {
+            row.style.display = "none";
+        }
     });
-    
+
+    // ✅ Show/hide the "No record found" row
+    noRecordRow.style.display = (visibleCount === 0) ? "" : "none";
 }
 
 function cancelRecordFilters() {
     document.getElementById("recordSearch").value = "";
-    document.getElementById("filterProgram").value = "";
-    document.getElementById("filterYear").value = "";
-    document.getElementById("filterSection").value = "";
+    document.getElementById("filterClass").value = "";
     document.getElementById("filterViolation").value = "";
+    document.getElementById("filterStatus").value = "";
 
     applyRecordFilters();
 }
+
+
+
 </script>

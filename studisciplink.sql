@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2025 at 04:03 PM
+-- Generation Time: Oct 01, 2025 at 04:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,8 @@ INSERT INTO `class_enrollments` (`id`, `user_id`, `program_id`, `year_level_id`,
 (3, 4, 2, 2, 3, 2, 0),
 (6, 4, 2, 1, 2, 1, 0),
 (7, 4, 1, 1, 2, 2, 0),
-(8, 8, 1, 2, 2, 2, 0);
+(8, 8, 1, 2, 2, 2, 0),
+(9, 4, 5, 1, 2, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -738,7 +739,210 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (671, 3, 'Logged out', '2025-09-25 21:59:02'),
 (672, 8, 'Logged in', '2025-09-25 21:59:19'),
 (673, 8, 'Logged out', '2025-09-25 22:01:03'),
-(674, 3, 'Logged in', '2025-09-25 22:01:08');
+(674, 3, 'Logged in', '2025-09-25 22:01:08'),
+(675, 3, 'Logged out', '2025-09-25 22:07:49'),
+(676, 4, 'Logged in', '2025-09-25 22:07:54'),
+(677, 4, 'Logged out', '2025-09-25 22:08:07'),
+(678, 3, 'Logged in', '2025-09-25 22:08:13'),
+(679, 3, 'Logged out', '2025-09-25 22:46:12'),
+(680, 4, 'Logged in', '2025-09-25 22:46:16'),
+(681, 4, 'Logged out', '2025-09-25 22:47:16'),
+(682, 3, 'Logged in', '2025-09-25 22:47:20'),
+(683, 3, 'Logged out', '2025-09-26 17:42:08'),
+(684, 1, 'Logged in', '2025-09-26 17:43:32'),
+(685, 1, 'Logged out', '2025-09-26 17:44:46'),
+(686, 6, 'Logged in', '2025-09-26 17:44:51'),
+(687, 6, 'Logged out', '2025-09-26 17:47:46'),
+(688, 4, 'Logged in', '2025-09-26 17:47:50'),
+(689, 4, 'Logged out', '2025-09-26 17:51:28'),
+(690, 3, 'Logged in', '2025-09-26 17:51:33'),
+(691, 3, 'Logged out', '2025-09-26 17:53:15'),
+(692, 9, 'Logged in', '2025-09-26 17:53:18'),
+(693, 1, 'Logged in', '2025-09-29 12:19:15'),
+(694, 1, 'Logged in', '2025-09-29 13:04:47'),
+(695, 1, 'Logged out', '2025-09-29 13:05:30'),
+(696, 6, 'Logged in', '2025-09-29 13:06:15'),
+(697, 6, 'Logged out', '2025-09-29 13:06:29'),
+(698, 4, 'Logged in', '2025-09-29 13:06:54'),
+(699, 4, 'Logged out', '2025-09-29 13:09:56'),
+(700, 3, 'Logged in', '2025-09-29 13:10:00'),
+(701, 3, 'Logged out', '2025-09-29 13:12:11'),
+(702, 9, 'Logged in', '2025-09-29 13:12:14'),
+(703, 9, 'Logged out', '2025-09-29 13:54:06'),
+(704, 1, 'Logged in', '2025-09-29 13:54:09'),
+(705, 1, 'Logged out', '2025-09-29 14:02:23'),
+(706, 1, 'Logged in', '2025-09-29 14:04:53'),
+(707, 1, 'Logged out', '2025-09-29 14:08:01'),
+(708, 4, 'Logged in', '2025-09-29 14:08:09'),
+(709, 4, 'Logged out', '2025-09-29 14:08:32'),
+(710, 1, 'Logged in', '2025-09-29 14:08:35'),
+(711, 1, 'Logged out', '2025-09-29 14:29:14'),
+(712, 6, 'Logged in', '2025-09-29 14:29:25'),
+(713, 6, 'Logged out', '2025-09-29 14:34:38'),
+(714, 4, 'Logged in', '2025-09-29 14:34:43'),
+(715, 4, 'Logged out', '2025-09-29 15:07:43'),
+(716, 3, 'Logged in', '2025-09-29 15:07:47'),
+(717, 3, 'Logged out', '2025-09-29 15:09:12'),
+(718, 4, 'Logged in', '2025-09-29 15:09:18'),
+(719, 4, 'Logged out', '2025-09-29 15:10:32'),
+(720, 3, 'Logged in', '2025-09-29 15:10:36'),
+(721, 3, 'Logged out', '2025-09-29 15:14:13'),
+(722, 9, 'Logged in', '2025-09-29 15:14:16'),
+(723, 9, 'Logged out', '2025-09-29 16:07:56'),
+(724, 1, 'Logged in', '2025-10-01 08:11:02'),
+(725, 1, 'Logged out', '2025-10-01 08:23:26'),
+(726, 6, 'Logged in', '2025-10-01 08:23:32'),
+(727, 6, 'Logged out', '2025-10-01 08:23:36'),
+(728, 1, 'Logged in', '2025-10-01 08:25:12'),
+(729, 1, 'Logged out', '2025-10-01 08:36:30'),
+(730, 4, 'Logged in', '2025-10-01 08:36:37'),
+(731, 4, 'Logged out', '2025-10-01 08:41:18'),
+(732, 1, 'Logged in', '2025-10-01 08:41:22'),
+(733, 1, 'Logged out', '2025-10-01 08:41:25'),
+(734, 4, 'Logged in', '2025-10-01 08:41:30'),
+(735, 4, 'Logged out', '2025-10-01 08:42:56'),
+(736, 1, 'Logged in', '2025-10-01 08:43:01'),
+(737, 1, 'Logged in', '2025-10-01 08:43:55'),
+(738, 1, 'Logged in', '2025-10-01 08:44:14'),
+(739, 1, 'Logged in', '2025-10-01 08:44:27'),
+(740, 1, 'Added student: Sample Sample', '2025-10-01 08:45:38'),
+(741, 1, 'Deleted student ID 29: Sample Sample', '2025-10-01 08:46:06'),
+(742, 1, 'Logged in', '2025-10-01 08:46:17'),
+(743, 1, 'Logged out', '2025-10-01 08:48:07'),
+(744, 4, 'Logged in', '2025-10-01 08:48:13'),
+(745, 4, 'Logged out', '2025-10-01 08:52:58'),
+(746, 1, 'Logged in', '2025-10-01 08:53:01'),
+(747, 1, 'Logged out', '2025-10-01 08:58:06'),
+(748, 4, 'Logged in', '2025-10-01 08:58:10'),
+(749, 4, 'Logged out', '2025-10-01 09:05:57'),
+(750, 3, 'Logged in', '2025-10-01 09:06:01'),
+(751, 3, 'Logged out', '2025-10-01 09:08:47'),
+(752, 9, 'Logged in', '2025-10-01 09:08:52'),
+(753, 9, 'Logged out', '2025-10-01 09:34:24'),
+(754, 3, 'Logged in', '2025-10-01 09:34:29'),
+(755, 3, 'Logged out', '2025-10-01 09:39:15'),
+(756, 9, 'Logged in', '2025-10-01 09:39:41'),
+(757, 9, 'Logged out', '2025-10-01 10:04:31'),
+(758, 4, 'Logged in', '2025-10-01 10:04:35'),
+(759, 4, 'Logged out', '2025-10-01 10:04:53'),
+(760, 9, 'Logged in', '2025-10-01 10:04:59'),
+(761, 9, 'Logged out', '2025-10-01 10:07:05'),
+(762, 4, 'Logged in', '2025-10-01 10:07:09'),
+(763, 4, 'Logged out', '2025-10-01 10:09:25'),
+(764, 3, 'Logged in', '2025-10-01 10:09:30'),
+(765, 3, 'Logged out', '2025-10-01 10:13:31'),
+(766, 9, 'Logged in', '2025-10-01 10:13:34'),
+(767, 9, 'Logged out', '2025-10-01 10:16:14'),
+(768, 1, 'Logged in', '2025-10-01 10:16:19'),
+(769, 1, 'Logged out', '2025-10-01 10:16:57'),
+(770, 1, 'Logged in', '2025-10-01 10:17:06'),
+(771, 1, 'Logged out', '2025-10-01 10:24:00'),
+(772, 9, 'Logged in', '2025-10-01 10:24:03'),
+(773, 9, 'Logged out', '2025-10-01 10:27:40'),
+(774, 1, 'Logged in', '2025-10-01 10:27:43'),
+(775, 1, 'Logged out', '2025-10-01 10:31:55'),
+(776, 4, 'Logged in', '2025-10-01 10:32:13'),
+(777, 4, 'Logged out', '2025-10-01 10:45:09'),
+(778, 3, 'Logged in', '2025-10-01 10:45:20'),
+(779, 3, 'Logged out', '2025-10-01 10:47:32'),
+(780, 9, 'Logged in', '2025-10-01 10:47:34'),
+(781, 9, 'Logged out', '2025-10-01 10:56:42'),
+(782, 1, 'Logged in', '2025-10-01 10:56:45'),
+(783, 1, 'Logged out', '2025-10-01 10:56:57'),
+(784, 9, 'Logged in', '2025-10-01 10:57:26'),
+(785, 9, 'Logged out', '2025-10-01 11:15:38'),
+(786, 4, 'Logged in', '2025-10-01 11:15:46'),
+(787, 4, 'Logged out', '2025-10-01 11:16:14'),
+(788, 9, 'Logged in', '2025-10-01 11:16:19'),
+(789, 9, 'Logged out', '2025-10-01 11:18:27'),
+(790, 1, 'Logged in', '2025-10-01 11:18:31'),
+(791, 1, 'Logged out', '2025-10-01 11:21:18'),
+(792, 9, 'Logged in', '2025-10-01 11:21:23'),
+(793, 9, 'Logged out', '2025-10-01 11:37:50'),
+(794, 1, 'Logged in', '2025-10-01 11:37:54'),
+(795, 1, 'Logged out', '2025-10-01 11:38:14'),
+(796, 9, 'Logged in', '2025-10-01 11:38:20'),
+(797, 9, 'Logged out', '2025-10-01 12:39:22'),
+(798, 1, 'Logged in', '2025-10-01 12:39:26'),
+(799, 1, 'Logged out', '2025-10-01 12:40:38'),
+(800, 4, 'Logged in', '2025-10-01 12:40:43'),
+(801, 4, 'Logged out', '2025-10-01 12:41:52'),
+(802, 1, 'Logged in', '2025-10-01 12:41:56'),
+(803, 1, 'Logged out', '2025-10-01 12:42:12'),
+(804, 4, 'Logged in', '2025-10-01 12:42:16'),
+(805, 4, 'Logged out', '2025-10-01 13:00:35'),
+(806, 1, 'Logged in', '2025-10-01 13:00:38'),
+(807, 1, 'Added student: Mary Divine Grace Obaob', '2025-10-01 13:01:20'),
+(808, 1, 'Logged out', '2025-10-01 13:02:19'),
+(809, 4, 'Logged in', '2025-10-01 13:02:23'),
+(810, 4, 'Logged out', '2025-10-01 13:25:23'),
+(811, 9, 'Logged in', '2025-10-01 13:25:25'),
+(812, 9, 'Logged out', '2025-10-01 13:25:52'),
+(813, 3, 'Logged in', '2025-10-01 13:25:56'),
+(814, 3, 'Logged out', '2025-10-01 13:26:22'),
+(815, 4, 'Logged in', '2025-10-01 13:26:27'),
+(816, 4, 'Logged out', '2025-10-01 13:31:21'),
+(817, 1, 'Logged in', '2025-10-01 13:31:25'),
+(818, 1, 'Logged out', '2025-10-01 13:31:33'),
+(819, 4, 'Logged in', '2025-10-01 13:31:40'),
+(820, 4, 'Logged out', '2025-10-01 13:43:22'),
+(821, 1, 'Logged in', '2025-10-01 13:43:26'),
+(822, 1, 'Logged out', '2025-10-01 13:44:09'),
+(823, 4, 'Logged in', '2025-10-01 13:44:14'),
+(824, 4, 'Logged out', '2025-10-01 13:55:40'),
+(825, 1, 'Logged in', '2025-10-01 13:55:44'),
+(826, 1, 'Updated student ID 5', '2025-10-01 13:57:01'),
+(827, 1, 'Logged out', '2025-10-01 13:57:30'),
+(828, 4, 'Logged in', '2025-10-01 13:57:39'),
+(829, 4, 'Logged out', '2025-10-01 13:59:36'),
+(830, 3, 'Logged in', '2025-10-01 13:59:46'),
+(831, 3, 'Logged out', '2025-10-01 13:59:54'),
+(832, 9, 'Logged in', '2025-10-01 13:59:57'),
+(833, 9, 'Logged out', '2025-10-01 14:00:28'),
+(834, 4, 'Logged in', '2025-10-01 14:00:34'),
+(835, 4, 'Logged out', '2025-10-01 14:11:35'),
+(836, 3, 'Logged in', '2025-10-01 14:11:39'),
+(837, 3, 'Logged out', '2025-10-01 14:11:58'),
+(838, 4, 'Logged in', '2025-10-01 14:12:07'),
+(839, 4, 'Logged out', '2025-10-01 14:17:00'),
+(840, 4, 'Logged in', '2025-10-01 14:24:21'),
+(841, 4, 'Logged out', '2025-10-01 14:24:40'),
+(842, 3, 'Logged in', '2025-10-01 14:24:44'),
+(843, 3, 'Logged out', '2025-10-01 20:50:00'),
+(844, 1, 'Logged in', '2025-10-01 20:50:04'),
+(845, 1, 'Logged out', '2025-10-01 20:51:39'),
+(846, 4, 'Logged in', '2025-10-01 20:51:44'),
+(847, 4, 'Logged out', '2025-10-01 20:57:27'),
+(848, 8, 'Logged in', '2025-10-01 20:57:44'),
+(849, 8, 'Logged out', '2025-10-01 20:58:10'),
+(850, 4, 'Logged in', '2025-10-01 20:58:20'),
+(851, 4, 'Logged out', '2025-10-01 20:59:06'),
+(852, 3, 'Logged in', '2025-10-01 20:59:10'),
+(853, 3, 'Logged out', '2025-10-01 21:27:23'),
+(854, 4, 'Logged in', '2025-10-01 21:27:38'),
+(855, 4, 'Logged out', '2025-10-01 21:28:05'),
+(856, 3, 'Logged in', '2025-10-01 21:28:09'),
+(857, 3, 'Logged out', '2025-10-01 21:40:21'),
+(858, 1, 'Logged in', '2025-10-01 21:40:25'),
+(859, 1, 'Logged out', '2025-10-01 21:40:52'),
+(860, 10, 'Logged in', '2025-10-01 21:40:55'),
+(861, 10, 'Logged out', '2025-10-01 21:44:13'),
+(862, 1, 'Logged in', '2025-10-01 21:45:15'),
+(863, 1, 'Logged out', '2025-10-01 21:45:23'),
+(864, 3, 'Logged in', '2025-10-01 21:45:26'),
+(865, 3, 'Logged out', '2025-10-01 21:46:22'),
+(866, 4, 'Logged in', '2025-10-01 21:46:26'),
+(867, 4, 'Logged out', '2025-10-01 21:47:05'),
+(868, 3, 'Logged in', '2025-10-01 21:47:14'),
+(869, 3, 'Logged out', '2025-10-01 21:52:22'),
+(870, 4, 'Logged in', '2025-10-01 21:52:26'),
+(871, 4, 'Logged out', '2025-10-01 21:52:39'),
+(872, 3, 'Logged in', '2025-10-01 21:52:46'),
+(873, 3, 'Logged out', '2025-10-01 22:01:28'),
+(874, 4, 'Logged in', '2025-10-01 22:01:38'),
+(875, 4, 'Logged out', '2025-10-01 22:02:32'),
+(876, 3, 'Logged in', '2025-10-01 22:02:36'),
+(877, 3, 'Logged out', '2025-10-01 22:12:22');
 
 -- --------------------------------------------------------
 
@@ -785,7 +989,8 @@ CREATE TABLE `record_violations` (
 --
 
 INSERT INTO `record_violations` (`id`, `student_violations_id`, `action_taken`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
-(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'Resolved');
+(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'Resolved'),
+(6, 38, 'Warning', 'Zero in Examination', '2025-10-01 14:03:12', 3, 2, 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -875,7 +1080,7 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `program_id`, `year_level_id`, `section_id`, `address`, `contact`, `img`, `user_id`) VALUES
-(5, 'Hello', 'World', 2, 1, 2, 2, 'Manila Philippines', '09303172724', '', 6),
+(5, 'Hello', 'Worlds', 2, 1, 2, 2, 'Manila Philippines', '09303172724', '', 1),
 (6, 'Daniel', 'Padilla', 2, 2, 1, 3, 'Quezon City', '09123456789', '', 6),
 (8, 'Ronald', 'Rosales', 2, 1, 1, 2, 'Toledo Cebu', '09123456789', '', 6),
 (9, 'Mark', 'Saragosa', 2, 1, 1, 2, 'Naga Cebu', '09123456789', '', 6),
@@ -883,7 +1088,8 @@ INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `prog
 (20, 'Robin', 'Padilla', 1, 2, 1, 2, 'Manila Philippines', '09123456789', '', 6),
 (21, 'John', 'Doe', 2, 2, 2, 3, 'Naga Cebu', '09123456789', '', 6),
 (23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6),
-(28, 'Roxy', 'Roller', 1, 2, 1, 2, 'Cebu Philippines', '09123456789', '', 6);
+(28, 'Roxy', 'Roller', 1, 2, 1, 2, 'Cebu Philippines', '09123456789', '', 6),
+(30, 'Mary Divine Grace', 'Obaob', 2, 5, 1, 2, 'Pitalo San Fernando Cebu', '09123456789', '', 1);
 
 -- --------------------------------------------------------
 
@@ -909,7 +1115,8 @@ INSERT INTO `student_enrollments` (`id`, `class_enrollment_id`, `student_id`, `e
 (10, 7, 8, '2025-09-17 12:06:01'),
 (11, 7, 9, '2025-09-17 12:06:01'),
 (12, 8, 5, '2025-09-25 14:00:04'),
-(13, 8, 17, '2025-09-25 14:00:04');
+(13, 8, 17, '2025-09-25 14:00:04'),
+(14, 9, 30, '2025-10-01 05:02:42');
 
 -- --------------------------------------------------------
 
@@ -936,8 +1143,9 @@ CREATE TABLE `student_violations` (
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
 (37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2),
-(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Pending', 4, 2),
-(39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Pending', 8, 2);
+(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Recorded', 4, 2),
+(39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Pending', 8, 2),
+(40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Pending', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -969,7 +1177,8 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$Ug7uQl3SC3kMUHXdMRt8xekqV2yvu0n8jKMaWLaxliX87L3jnk3.S', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
-(9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg');
+(9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg'),
+(10, 'dally', '$2y$10$cyMnmcgQddw5xlv0ZUHaGONtsvoOQi5BK7DEG.C8bJlLFIh2lGdg.', 'guidance', 'dally@gmail.com', '09123456789', 'active', '');
 
 -- --------------------------------------------------------
 
@@ -1128,13 +1337,13 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `class_enrollments`
 --
 ALTER TABLE `class_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=675;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=878;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1146,7 +1355,7 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `record_violations`
 --
 ALTER TABLE `record_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `resolved_cases`
@@ -1170,25 +1379,25 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `violations`

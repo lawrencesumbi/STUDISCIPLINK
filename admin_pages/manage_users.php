@@ -240,10 +240,9 @@ try {
         <select name="role" id="role" required>
             <option value="">Select Role</option>
             <option value="admin">Admin</option>
+            <option value="faculty">Faculty</option>
             <option value="guidance">Guidance</option>
             <option value="sao">SAO</option>
-            <option value="registrar">Registrar</option>
-            <option value="faculty">Faculty</option>
         </select>
         <select name="status" id="status" required>
             <option value="">Select Status</option>
