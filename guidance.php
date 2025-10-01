@@ -84,7 +84,7 @@ if (!in_array($page, $allowed_pages)) {
 
 <div class="main-content">
     <div class="header">
-        <h2><?php echo ucfirst(str_replace('_',' ', $page)); ?></h2>
+        <h2><?php echo ucwords(str_replace('_',' ', $page)); ?></h2>
         <span>Welcome, <?php echo $_SESSION['username']; ?></span>
     </div>
 

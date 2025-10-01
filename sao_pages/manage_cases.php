@@ -43,35 +43,74 @@ if (isset($_POST['resolve_case'])) {
     $message = "<p class='success-msg'>Case ID $record_id marked as Resolved.</p>";
 }
 
+// ✅ Search filter
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// ✅ Fetch Ongoing Records (filtered by school year)
-$ongoing_stmt = $pdo->prepare("
-    SELECT rv.*, st.first_name, st.last_name, v.violation AS violation
-    FROM record_violations rv
-    JOIN student_violations sv ON rv.student_violations_id = sv.id
-    JOIN students st ON sv.student_id = st.id
-    JOIN violations v ON sv.violation_id = v.id
-    WHERE rv.status='Ongoing' AND rv.school_year_id = ?
-    ORDER BY rv.date_recorded DESC
-");
-$ongoing_stmt->execute([$current_sy_id]);
+// ✅ Fetch Ongoing Records (filtered by school year + search)
+if ($search) {
+    $ongoing_stmt = $pdo->prepare("
+        SELECT rv.*, st.first_name, st.last_name, v.violation AS violation
+        FROM record_violations rv
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE rv.status='Ongoing' AND rv.school_year_id = ?
+        AND (
+            CONCAT(st.first_name, ' ', st.last_name) LIKE ? 
+            OR v.violation LIKE ? 
+            OR rv.action_taken LIKE ? 
+            OR rv.status LIKE ?
+        )
+        ORDER BY rv.date_recorded DESC
+    ");
+    $ongoing_stmt->execute([$current_sy_id, "%$search%", "%$search%", "%$search%", "%$search%"]);
+} else {
+    $ongoing_stmt = $pdo->prepare("
+        SELECT rv.*, st.first_name, st.last_name, v.violation AS violation
+        FROM record_violations rv
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE rv.status='Ongoing' AND rv.school_year_id = ?
+        ORDER BY rv.date_recorded DESC
+    ");
+    $ongoing_stmt->execute([$current_sy_id]);
+}
 $ongoing = $ongoing_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-// ✅ Fetch Resolved Records (filtered by school year)
-$resolved_stmt = $pdo->prepare("
-    SELECT rc.*, rv.action_taken, rv.remarks, st.first_name, st.last_name, v.violation AS violation
-    FROM resolved_cases rc
-    JOIN record_violations rv ON rc.record_violation_id = rv.id
-    JOIN student_violations sv ON rv.student_violations_id = sv.id
-    JOIN students st ON sv.student_id = st.id
-    JOIN violations v ON sv.violation_id = v.id
-    WHERE rv.school_year_id = ?
-    ORDER BY rc.date_resolved DESC
-");
-$resolved_stmt->execute([$current_sy_id]);
+// ✅ Fetch Resolved Records (filtered by school year + search)
+if ($search) {
+    $resolved_stmt = $pdo->prepare("
+        SELECT rc.*, rv.action_taken, rv.remarks, st.first_name, st.last_name, v.violation AS violation
+        FROM resolved_cases rc
+        JOIN record_violations rv ON rc.record_violation_id = rv.id
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE rv.school_year_id = ?
+        AND (
+            CONCAT(st.first_name, ' ', st.last_name) LIKE ? 
+            OR v.violation LIKE ? 
+            OR rv.action_taken LIKE ? 
+            OR rc.status LIKE ?
+        )
+        ORDER BY rc.date_resolved DESC
+    ");
+    $resolved_stmt->execute([$current_sy_id, "%$search%", "%$search%", "%$search%", "%$search%"]);
+} else {
+    $resolved_stmt = $pdo->prepare("
+        SELECT rc.*, rv.action_taken, rv.remarks, st.first_name, st.last_name, v.violation AS violation
+        FROM resolved_cases rc
+        JOIN record_violations rv ON rc.record_violation_id = rv.id
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE rv.school_year_id = ?
+        ORDER BY rc.date_resolved DESC
+    ");
+    $resolved_stmt->execute([$current_sy_id]);
+}
 $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 ?>
 <div class="container small-container">
@@ -79,6 +118,19 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
             <span style="color:#b30000;"><?= htmlspecialchars($current_school_year) ?></span>
     </h3>
 </div>
+
+<!-- ✅ Search Form -->
+
+    <form method="GET" class="search-form">
+        <input type="hidden" name="page" value="manage_cases">
+        <input type="text" name="search" placeholder="Search by student, violation, action taken, or status" value="<?= htmlspecialchars($search); ?>">
+        <button type="submit">Search</button>
+        <?php if ($search): ?>
+            <a href="?page=manage_cases">Clear</a>
+        <?php endif; ?>
+    </form>
+
+
 <div class="container">
     <?= $message; ?>
 
@@ -151,7 +203,7 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($r['action_taken']); ?></td>
                         <td><?= htmlspecialchars($r['remarks']); ?></td>
                         <td><?= $r['date_resolved']; ?></td>
-                                                <td><span style="color:green;font-weight:bold;"><?= $r['status']; ?></span></td>
+                        <td><span style="color:green;font-weight:bold;"><?= $r['status']; ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -164,12 +216,12 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <style>
 .small-container {
-    padding: 8px 15px;   /* less padding */
-    display: inline-block; /* shrink to fit content */
+    padding: 8px 15px;   
+    display: inline-block; 
     width: auto;
 }
 .small-container h3 {
-    font-size: 16px;  /* smaller font if you want */
+    font-size: 16px;  
     margin: 0;
 }
 .container { background:#fff; padding:20px; border-radius:10px; margin-top:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
@@ -180,4 +232,33 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
 .btn { padding:6px 12px; border:none; border-radius:5px; cursor:pointer; }
 .btn-success { background:green; color:white; }
 .inline-form { display:inline; }
+
+/* Search form */
+.search-form {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.search-form button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: #c41e1e;
+    color: white;
+    cursor: pointer;
+}
+.search-form a {
+    padding: 8px 12px;
+    border-radius: 5px;
+    background: #555;
+    color: white;
+    text-decoration: none;
+}
 </style>

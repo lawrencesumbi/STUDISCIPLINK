@@ -19,8 +19,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 $allowed_pages = [
     'dashboard',
     'manage_school_year',
-    'manage_records',
-    'print_reports',
+    'manage_cases',
+    'generate_reports',
     'my_account'
 ];
 
@@ -81,8 +81,8 @@ if (!in_array($page, $allowed_pages)) {
     <h2>SAO</h2>
     <a href="?page=dashboard" class="<?= ($page == 'dashboard') ? 'active' : '' ?>">Dashboard</a>
     <a href="?page=manage_school_year" class="<?= ($page == 'manage_school_year') ? 'active' : '' ?>">School Year</a>
-    <a href="?page=manage_records" class="<?= ($page == 'manage_records') ? 'active' : '' ?>">Manage Records</a>
-    <a href="?page=print_reports" class="<?= ($page == 'print_reports') ? 'active' : '' ?>">Print Reports</a>
+    <a href="?page=manage_cases" class="<?= ($page == 'manage_cases') ? 'active' : '' ?>">Manage Cases</a>
+    <a href="?page=generate_reports" class="<?= ($page == 'generate_reports') ? 'active' : '' ?>">Generate Reports</a>
     <a href="?page=my_account" class="<?= ($page == 'my_account') ? 'active' : '' ?>">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
@@ -90,7 +90,7 @@ if (!in_array($page, $allowed_pages)) {
 
 <div class="main-content">
     <div class="header">
-        <h2><?php echo ucfirst(str_replace('_',' ', $page)); ?></h2>
+        <h2><?php echo ucwords(str_replace('_',' ', $page)); ?></h2>
         <span>Welcome, <?php echo $_SESSION['username']; ?></span>
     </div>
 
