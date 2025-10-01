@@ -16,7 +16,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Determine which page to load
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
-$allowed_pages = ['dashboard', 'manage_users', 'activity_logs', 'my_account'];
+$allowed_pages = ['dashboard', 'manage_users', 'activity_logs', 'manage_school_year', 'manage_program', 'manage_year_level', 'manage_section', 'manage_student', 'my_account'];
 if(!in_array($page, $allowed_pages)) {
     $page = 'dashboard';
 }
@@ -124,6 +124,11 @@ if(!in_array($page, $allowed_pages)) {
     <a href="?page=dashboard" class="<?php echo $page=='dashboard' ? 'active' : ''; ?>">Dashboard</a>
     <a href="?page=manage_users" class="<?php echo $page=='manage_users' ? 'active' : ''; ?>">Manage Users</a>
     <a href="?page=activity_logs" class="<?php echo $page=='activity_logs' ? 'active' : ''; ?>">Activity Logs</a>
+    <a href="?page=manage_school_year" class="<?php echo $page=='manage_school_year' ? 'active' : ''; ?>">Manage School Year</a>
+    <a href="?page=manage_program" class="<?php echo $page=='manage_program' ? 'active' : ''; ?>">Manage Program</a>
+    <a href="?page=manage_year_level" class="<?php echo $page=='manage_year_level' ? 'active' : ''; ?>">Manage Year Level</a>
+    <a href="?page=manage_section" class="<?php echo $page=='manage_section' ? 'active' : ''; ?>">Manage Section</a>
+    <a href="?page=manage_student" class="<?php echo $page=='manage_student' ? 'active' : ''; ?>">Manage Student</a>
     <a href="?page=my_account" class="<?php echo $page=='my_account' ? 'active' : ''; ?>">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
