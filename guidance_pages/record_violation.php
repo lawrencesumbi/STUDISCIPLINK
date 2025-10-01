@@ -67,20 +67,30 @@ if (isset($_POST['delete_record'])) {
 if (isset($_POST['edit_record'])) {
     $edit_id = $_POST['id'];
     $stmt = $pdo->prepare("
-        SELECT rv.*, sv.id AS violation_id
+        SELECT rv.*, 
+               sv.id AS student_violation_id,
+               s.first_name, s.last_name,
+               v.violation AS violation_name
         FROM record_violations rv
         JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students s ON sv.student_id = s.id
+        JOIN violations v ON sv.violation_id = v.id
         WHERE rv.id=?
     ");
     $stmt->execute([$edit_id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if ($row) {
         $edit_mode = true;
+        $edit_id = $row['id'];
         $edit_sanction_id = $row['sanction_id'];
         $edit_remarks = $row['remarks'];
-        $edit_violation_id = $row['violation_id'];
+        $edit_violation_id = $row['student_violation_id']; // important
+        $edit_student_name = $row['first_name'] . " " . $row['last_name'];
+        $edit_violation_name = $row['violation_name'];
     }
 }
+
 
 // ✅ Handle Search
 $search = isset($_GET['search']) ? trim($_GET['search']) : "";
@@ -214,18 +224,22 @@ $totalViolations = count($studentViolations);
 
         <form method="POST" class="form-box">
             <!-- Student Violation Dropdown -->
-            <select name="student_violations_id" required <?= $edit_mode ? "disabled" : "" ?>>
-                <option value="">-- Select Student Violation --</option>
-                <?php foreach ($student_violations as $sv): ?>
-                    <option value="<?= $sv['id']; ?>" <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
-                        <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['violation_name']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
             <?php if ($edit_mode): ?>
-                <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
-            <?php endif; ?>
+    <!-- Show student + violation (not editable) -->
+    <input type="text" value="<?= htmlspecialchars($edit_student_name . " - " . $edit_violation_name) ?>" disabled>
+    <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
+<?php else: ?>
+    <!-- Normal dropdown when adding -->
+    <select name="student_violations_id" required>
+        <option value="">-- Select Student Violation --</option>
+        <?php foreach ($student_violations as $sv): ?>
+            <option value="<?= $sv['id']; ?>">
+                <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['violation_name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+<?php endif; ?>
+
 
             <!-- ✅ Sanction Dropdown -->
             <select name="sanction_id" required>
@@ -259,32 +273,41 @@ $totalViolations = count($studentViolations);
         </div>
 
         <div class="form-box filter-grid">
-            <select id="filterClass">
-                <option value="">Select Class</option>
-                <?php 
-                $classes = [];
-                foreach ($records as $rec) {
-                    $className = $rec['program_code'] . " - " . $rec['year_level'] . $rec['section_name'];
-                    $classes[] = $className;
-                }
-                foreach (array_unique($classes) as $class): ?>
-                    <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
-                <?php endforeach; ?>
-            </select>
+    <select id="filterClass">
+        <option value="">Select Class</option>
+        <?php 
+        $classes = [];
+        foreach ($records as $rec) {
+            $className = $rec['program_code'] . " - " . $rec['year_level'] . $rec['section_name'];
+            $classes[] = $className;
+        }
+        foreach (array_unique($classes) as $class): ?>
+            <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
+        <?php endforeach; ?>
+    </select>
 
-            <select id="filterViolation">
-                <option value="">Select Violation</option>
-                <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
-                    <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
-                <?php endforeach; ?>
-            </select>
+    <select id="filterViolation">
+        <option value="">Select Violation</option>
+        <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
+            <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
+        <?php endforeach; ?>
+    </select>
 
-            <select id="filterStatus">
-                <option value="">Select Status</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Resolved">Resolved</option>
-            </select>
-        </div>
+    <!-- ✅ NEW: Sanction Filter -->
+    <select id="filterSanction">
+        <option value="">Select Sanction</option>
+        <?php foreach (array_unique(array_column($records, 'sanction_name')) as $san): ?>
+            <option value="<?= htmlspecialchars($san) ?>"><?= htmlspecialchars($san) ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <select id="filterStatus">
+        <option value="">Select Status</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Resolved">Resolved</option>
+    </select>
+</div>
+
 
         <div class="filter-buttons">
             <button type="button" class="btn btn-info" onclick="applyRecordFilters()">Apply</button>
@@ -377,7 +400,7 @@ $totalViolations = count($studentViolations);
 .remarks-input { width: 100%; resize: vertical; padding: 10px; font-size: 14px; }
 .two-columns { display: flex; gap: 20px; align-items: stretch; margin-top: 15px; margin-bottom: 15px; }
 .left-box, .right-box { flex: 1; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.filter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.filter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .filter-buttons { grid-column: span 3; display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
 </style>
 
@@ -386,6 +409,7 @@ function applyRecordFilters() {
     let search = document.getElementById("recordSearch").value.toLowerCase();
     let classFilter = document.getElementById("filterClass").value.toLowerCase();
     let violationFilter = document.getElementById("filterViolation").value.toLowerCase();
+    let sanctionFilter = document.getElementById("filterSanction").value.toLowerCase(); // ✅ new
     let statusFilter = document.getElementById("filterStatus").value.toLowerCase();
 
     let table = document.getElementById("recordedTable").getElementsByTagName("tbody")[0];
@@ -406,9 +430,10 @@ function applyRecordFilters() {
             let matchesSearch = search === "" || student.includes(search) || violation.includes(search) || sanction.includes(search) || remarks.includes(search);
             let matchesClass = classFilter === "" || className.includes(classFilter);
             let matchesViolation = violationFilter === "" || violation.includes(violationFilter);
+            let matchesSanction = sanctionFilter === "" || sanction.includes(sanctionFilter); // ✅ new
             let matchesStatus = statusFilter === "" || status.includes(statusFilter);
 
-            if (matchesSearch && matchesClass && matchesViolation && matchesStatus) {
+            if (matchesSearch && matchesClass && matchesViolation && matchesSanction && matchesStatus) {
                 rows[i].style.display = "";
                 found = true;
             } else {
@@ -424,8 +449,10 @@ function cancelRecordFilters() {
     document.getElementById("recordSearch").value = "";
     document.getElementById("filterClass").value = "";
     document.getElementById("filterViolation").value = "";
+    document.getElementById("filterSanction").value = ""; // ✅ reset
     document.getElementById("filterStatus").value = "";
 
     applyRecordFilters();
 }
+
 </script>
