@@ -20,24 +20,22 @@ $message = "";
 // Edit mode vars
 $edit_mode = false;
 $edit_id = null;
-$edit_action = "";
+$edit_sanction_id = null;
 $edit_remarks = "";
 $edit_violation_id = null;
 
 // ✅ Handle Add Record
 if (isset($_POST['add_record'])) {
     $student_violation_id = $_POST['student_violations_id'];
-    $action_taken = trim($_POST['action_taken']);
+    $sanction_id = $_POST['sanction_id'];
     $remarks = trim($_POST['remarks']);
 
-    if ($student_violation_id && $action_taken && $current_sy_id) {
-        // Insert with status "Ongoing"
+    if ($student_violation_id && $sanction_id && $current_sy_id) {
         $stmt = $pdo->prepare("INSERT INTO record_violations 
-            (student_violations_id, action_taken, remarks, user_id, school_year_id, status) 
+            (student_violations_id, sanction_id, remarks, user_id, school_year_id, status) 
             VALUES (?, ?, ?, ?, ?, 'Ongoing')");
-        $stmt->execute([$student_violation_id, $action_taken, $remarks, $user_id, $current_sy_id]);
+        $stmt->execute([$student_violation_id, $sanction_id, $remarks, $user_id, $current_sy_id]);
 
-        // Update student_violations status
         $stmt = $pdo->prepare("UPDATE student_violations SET status='Recorded' WHERE id=?");
         $stmt->execute([$student_violation_id]);
 
@@ -50,10 +48,10 @@ if (isset($_POST['add_record'])) {
 // ✅ Handle Update Record
 if (isset($_POST['update_record'])) {
     $id = $_POST['id'];
-    $action_taken = trim($_POST['action_taken']);
+    $sanction_id = $_POST['sanction_id'];
     $remarks = trim($_POST['remarks']);
-    $stmt = $pdo->prepare("UPDATE record_violations SET action_taken=?, remarks=? WHERE id=?");
-    $stmt->execute([$action_taken, $remarks, $id]);
+    $stmt = $pdo->prepare("UPDATE record_violations SET sanction_id=?, remarks=? WHERE id=?");
+    $stmt->execute([$sanction_id, $remarks, $id]);
     $message = "<p class='success-msg'>Record updated successfully!</p>";
 }
 
@@ -78,7 +76,7 @@ if (isset($_POST['edit_record'])) {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($row) {
         $edit_mode = true;
-        $edit_action = $row['action_taken'];
+        $edit_sanction_id = $row['sanction_id'];
         $edit_remarks = $row['remarks'];
         $edit_violation_id = $row['violation_id'];
     }
@@ -89,7 +87,8 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : "";
 
 $query = "
     SELECT rv.*, 
-           v.violation AS violation_name,   -- ✅ Pull violation name instead of description
+           v.violation AS violation_name,
+           s.sanction AS sanction_name,
            st.first_name, st.last_name, 
            p.program_code, 
            yl.year_code AS year_level, 
@@ -102,15 +101,14 @@ $query = "
     JOIN year_levels yl ON st.year_level_id = yl.id
     JOIN sections sec ON st.section_id = sec.id
     JOIN school_years sy ON rv.school_year_id = sy.id
-    JOIN violations v ON sv.violation_id = v.id  -- ✅ Join violations table
+    JOIN violations v ON sv.violation_id = v.id
+    JOIN sanctions s ON rv.sanction_id = s.id
     WHERE rv.school_year_id = ?
 ";
-
-
 $params = [$current_sy_id];
 
 if ($search !== "") {
-    $query .= " AND (st.first_name LIKE ? OR st.last_name LIKE ? OR sv.description LIKE ? OR rv.action_taken LIKE ? OR rv.remarks LIKE ?)";
+    $query .= " AND (st.first_name LIKE ? OR st.last_name LIKE ? OR sv.description LIKE ? OR s.sanction LIKE ? OR rv.remarks LIKE ?)";
     $like = "%" . $search . "%";
     $params = [$current_sy_id, $like, $like, $like, $like, $like];
 }
@@ -121,7 +119,7 @@ $records = $pdo->prepare($query);
 $records->execute($params);
 $records = $records->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch student violations with violation name
+// ✅ Fetch student violations with violation name (pending only)
 $stmt = $pdo->prepare("
     SELECT sv.id, sv.student_id, s.first_name, s.last_name,
            v.violation AS violation_name
@@ -133,6 +131,11 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$current_sy_id]);
 $student_violations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ✅ Fetch sanctions
+$stmt = $pdo->prepare("SELECT id, sanction FROM sanctions ORDER BY sanction ASC");
+$stmt->execute();
+$sanctions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ---------------------- FETCH STUDENT VIOLATIONS (Pending only) ----------------------
 $stmt = $pdo->prepare("
@@ -148,7 +151,7 @@ $stmt = $pdo->prepare("
     JOIN year_levels yl ON s.year_level_id = yl.id
     JOIN sections sec ON s.section_id = sec.id
     JOIN violations v ON sv.violation_id = v.id
-    JOIN users u ON sv.user_id = u.id  -- ✅ Join users table
+    JOIN users u ON sv.user_id = u.id
     WHERE sv.school_year_id = ?
       AND sv.status = 'Pending'
     ORDER BY sv.date_time DESC
@@ -178,7 +181,7 @@ $totalViolations = count($studentViolations);
                 <th>Description</th>
                 <th>Location</th>
                 <th>Date Reported</th>
-                <th>ReportBy</th> <!-- ✅ New column -->
+                <th>ReportBy</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -188,15 +191,12 @@ $totalViolations = count($studentViolations);
                     <tr>
                         <td><?= $i + 1 ?></td>
                         <td><?= htmlspecialchars($v['first_name'] . " " . $v['last_name']); ?></td>
-                        <td>
-                            <?= htmlspecialchars($v['program_code']) ?> - 
-                            <?= htmlspecialchars($v['year_level']) ?><?= htmlspecialchars($v['section_name']) ?>
-                        </td>
+                        <td><?= htmlspecialchars($v['program_code']) ?> - <?= htmlspecialchars($v['year_level']) ?><?= htmlspecialchars($v['section_name']) ?></td>
                         <td><?= htmlspecialchars($v['violation']); ?></td>
                         <td><?= htmlspecialchars($v['description']); ?></td>
                         <td><?= htmlspecialchars($v['location']); ?></td>
                         <td><?= htmlspecialchars($v['date_time']); ?></td>
-                        <td><?= htmlspecialchars($v['reported_by']); ?></td> <!-- ✅ Show username -->
+                        <td><?= htmlspecialchars($v['reported_by']); ?></td>
                         <td><strong><?= htmlspecialchars($v['status']); ?></strong></td>
                     </tr>
                 <?php endforeach; ?>
@@ -206,8 +206,6 @@ $totalViolations = count($studentViolations);
         </tbody>
     </table>
 </div>
-
-
 
 <div class="two-columns">
     <!-- LEFT SIDE: Form -->
@@ -219,20 +217,25 @@ $totalViolations = count($studentViolations);
             <select name="student_violations_id" required <?= $edit_mode ? "disabled" : "" ?>>
                 <option value="">-- Select Student Violation --</option>
                 <?php foreach ($student_violations as $sv): ?>
-                    <option value="<?= $sv['id']; ?>"
-                        <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
+                    <option value="<?= $sv['id']; ?>" <?= ($edit_mode && $edit_violation_id == $sv['id']) ? "selected" : "" ?>>
                         <?= $sv['first_name'] . " " . $sv['last_name'] . " - " . $sv['violation_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
 
             <?php if ($edit_mode): ?>
-                <!-- Keep violation ID in form even if disabled -->
                 <input type="hidden" name="student_violations_id" value="<?= $edit_violation_id ?>">
             <?php endif; ?>
 
-            <input type="text" name="action_taken" placeholder="Enter Sanction"
-                value="<?= htmlspecialchars($edit_action); ?>" required>
+            <!-- ✅ Sanction Dropdown -->
+            <select name="sanction_id" required>
+                <option value="">-- Select Sanction --</option>
+                <?php foreach ($sanctions as $s): ?>
+                    <option value="<?= $s['id']; ?>" <?= ($edit_mode && $edit_sanction_id == $s['id']) ? "selected" : "" ?>>
+                        <?= htmlspecialchars($s['sanction']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
             <!-- ✅ Bigger Remarks Field -->
             <textarea name="remarks" class="remarks-input" placeholder="Enter Remarks / Notes" rows="5" required><?= htmlspecialchars($edit_remarks); ?></textarea>
@@ -247,55 +250,47 @@ $totalViolations = count($studentViolations);
         </form>
     </div>
 
-
     <!-- RIGHT SIDE: Search + Filter -->
     <div class="right-box">
-    
-   
-    <h4>Search & Filter</h4>
+        <h4>Search & Filter</h4>
 
-    <div class="form-box">
-        <!-- Search input -->
-        <input type="text" id="recordSearch" class="search-input" placeholder="Search student or violations...">
-    </div>
+        <div class="form-box">
+            <input type="text" id="recordSearch" class="search-input" placeholder="Search student, violations or sanctions...">
+        </div>
 
-    <div class="form-box filter-grid">
-    <!-- Class Filter -->
-    <select id="filterClass">
-        <option value="">Select Class</option>
-        <?php 
-        $classes = [];
-        foreach ($records as $rec) {
-            $className = $rec['program_code'] . " - " . $rec['year_level'] . $rec['section_name'];
-            $classes[] = $className;
-        }
-        foreach (array_unique($classes) as $class): ?>
-            <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
-        <?php endforeach; ?>
-    </select>
+        <div class="form-box filter-grid">
+            <select id="filterClass">
+                <option value="">Select Class</option>
+                <?php 
+                $classes = [];
+                foreach ($records as $rec) {
+                    $className = $rec['program_code'] . " - " . $rec['year_level'] . $rec['section_name'];
+                    $classes[] = $className;
+                }
+                foreach (array_unique($classes) as $class): ?>
+                    <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
+                <?php endforeach; ?>
+            </select>
 
-    <!-- Violation Filter -->
-    <select id="filterViolation">
-        <option value="">Select Violation</option>
-        <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
-            <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
-        <?php endforeach; ?>
-    </select>
+            <select id="filterViolation">
+                <option value="">Select Violation</option>
+                <?php foreach (array_unique(array_column($records, 'violation_name')) as $vio): ?>
+                    <option value="<?= htmlspecialchars($vio) ?>"><?= htmlspecialchars($vio) ?></option>
+                <?php endforeach; ?>
+            </select>
 
-    <!-- Status Filter -->
-    <select id="filterStatus">
-        <option value="">Select Status</option>
-        <option value="Ongoing">Ongoing</option>
-        <option value="Resolved">Resolved</option>
-    </select>
-</div>
+            <select id="filterStatus">
+                <option value="">Select Status</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+        </div>
 
-
-    <div class="filter-buttons">
+        <div class="filter-buttons">
             <button type="button" class="btn btn-info" onclick="applyRecordFilters()">Apply</button>
             <button type="button" class="btn btn-secondary" onclick="cancelRecordFilters()">Cancel</button>
+        </div>
     </div>
-</div>
 </div>
 
 <div class="container">           
@@ -303,7 +298,7 @@ $totalViolations = count($studentViolations);
     <div class="table-box">
         <h4>RECORDED Student Violations</h4>
 
-        <table class="styled-table" id="recordedTable"> <!-- ✅ Added ID -->
+        <table class="styled-table" id="recordedTable">
             <thead>
                 <tr>
                     <th>No.</th>
@@ -318,87 +313,54 @@ $totalViolations = count($studentViolations);
                 </tr>
             </thead>
             <tbody>
-    <?php if ($records): ?>
-        <?php foreach ($records as $i => $r): ?>
-            <tr>
-                <td><?= $i + 1; ?></td>
-                <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
-                <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
-                <td><?= htmlspecialchars($r['violation_name']); ?></td>
-                <td><?= htmlspecialchars($r['action_taken']); ?></td>
-                <td><?= htmlspecialchars($r['remarks']); ?></td>
-                <td><?= $r['date_recorded']; ?></td>
-                <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
-                <td>
-    <?php if ($r['status'] === 'Ongoing'): ?>
-        <!-- ✅ Edit button -->
-        <form method="POST" class="inline-form">
-            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-            <button type="submit" name="edit_record" class="btn btn-warning">Edit</button>
-        </form>
-
-        <!-- ✅ Delete button -->
-        <form method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this record?');">
-            <input type="hidden" name="id" value="<?= $r['id']; ?>">
-            <button type="submit" name="delete_record" class="btn btn-danger">Delete</button>
-        </form>
-    <?php else: ?>
-        <em>N/A</em>
-    <?php endif; ?>
-</td>
-
-            </tr>
-        <?php endforeach; ?>
-        <!-- ✅ JS-controlled row (hidden by default) -->
-        <tr id="noRecordRow" style="display:none;">
-            <td colspan="9" style="text-align:center; color:red; font-weight:bold;">
-                No matching records found.
-            </td>
-        </tr>
-    <?php else: ?>
-        <!-- ✅ PHP-controlled row (when no records in DB) -->
-        <tr>
-            <td colspan="9" style="text-align:center; color:red; font-weight:bold;">
-                No records found.
-            </td>
-        </tr>
-    <?php endif; ?>
-</tbody>
-
+            <?php if ($records): ?>
+                <?php foreach ($records as $i => $r): ?>
+                    <tr>
+                        <td><?= $i + 1; ?></td>
+                        <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
+                        <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
+                        <td><?= htmlspecialchars($r['violation_name']); ?></td>
+                        <td><?= htmlspecialchars($r['sanction_name']); ?></td>
+                        <td><?= htmlspecialchars($r['remarks']); ?></td>
+                        <td><?= $r['date_recorded']; ?></td>
+                        <td><strong><?= htmlspecialchars($r['status']); ?></strong></td>
+                        <td>
+                        <?php if ($r['status'] === 'Ongoing'): ?>
+                            <form method="POST" class="inline-form">
+                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                <button type="submit" name="edit_record" class="btn btn-warning">Edit</button>
+                            </form>
+                            <form method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                <input type="hidden" name="id" value="<?= $r['id']; ?>">
+                                <button type="submit" name="delete_record" class="btn btn-danger">Delete</button>
+                            </form>
+                        <?php else: ?>
+                            <em>N/A</em>
+                        <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr id="noRecordRow" style="display:none;">
+                    <td colspan="9" style="text-align:center; color:red; font-weight:bold;">No matching records found.</td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td colspan="9" style="text-align:center; color:red; font-weight:bold;">No records found.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
         </table>
     </div>
 </div>
 
-
-
 <style>
-.small-container {
-    padding: 8px 15px;
-    flex: 1;          /* ✅ same flex behavior as .container */
-    display: block;   /* ✅ not inline-block */
-    max-width: 100%; 
-}
-.small-container h3 {
-    font-size: 16px;
-    margin: 0;
-}
+.small-container { padding: 8px 15px; flex: 1; display: block; max-width: 100%; }
+.small-container h3 { font-size: 16px; margin: 0; }
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
 .success-msg { color:green; font-weight:bold; margin-bottom:10px; }
 .error-msg { color:red; font-weight:bold; margin-bottom:10px; }
-.form-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-.form-box select,
-.form-box textarea,
-.form-box input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    width: 100%;
-}
+.form-box { display: flex; flex-wrap: wrap; gap: 5px; }
+.form-box select, .form-box textarea, .form-box input { padding: 8px; border: 1px solid #ccc; border-radius: 15px; margin-bottom: 10px; width: 100%; }
 .table-box { max-height:400px; overflow-y:auto; }
 .styled-table { width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 1px 5px rgba(0,0,0,0.1); }
 .styled-table th, .styled-table td { padding:12px; text-align:left; border:1px solid #ddd; }
@@ -412,78 +374,50 @@ $totalViolations = count($studentViolations);
 .btn-info { background:#27ae60; }
 .btn-secondary { background:gray; text-decoration:none; }
 .btn:hover { opacity:0.9; }
-.remarks-input { width: 400px; }
-.two-columns {
-    display: flex;
-    gap: 20px;
-    align-items: stretch; /* makes both containers same height */
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-.left-box, .right-box {
-    flex: 1;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.filter-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-.filter-buttons {
-    grid-column: span 3;
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    justify-content: flex-end;
-}
-.remarks-input {
-    width: 100%;
-    resize: vertical; /* allows resizing by dragging */
-    padding: 10px;
-    font-size: 14px;
-}
-
+.remarks-input { width: 100%; resize: vertical; padding: 10px; font-size: 14px; }
+.two-columns { display: flex; gap: 20px; align-items: stretch; margin-top: 15px; margin-bottom: 15px; }
+.left-box, .right-box { flex: 1; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.filter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.filter-buttons { grid-column: span 3; display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
 </style>
 
 <script>
 function applyRecordFilters() {
     let search = document.getElementById("recordSearch").value.toLowerCase();
     let classFilter = document.getElementById("filterClass").value.toLowerCase();
-    let violation = document.getElementById("filterViolation").value.toLowerCase();
-    let status = document.getElementById("filterStatus").value.toLowerCase();
+    let violationFilter = document.getElementById("filterViolation").value.toLowerCase();
+    let statusFilter = document.getElementById("filterStatus").value.toLowerCase();
 
-    // ✅ Exclude the noRecordRow
-    let rows = document.querySelectorAll("#recordedTable tbody tr:not(#noRecordRow)");
+    let table = document.getElementById("recordedTable").getElementsByTagName("tbody")[0];
+    let rows = table.getElementsByTagName("tr");
     let noRecordRow = document.getElementById("noRecordRow");
+    let found = false;
 
-    let visibleCount = 0;
+    for (let i = 0; i < rows.length; i++) {
+        let cols = rows[i].getElementsByTagName("td");
+        if (cols.length > 0) {
+            let student = cols[1].innerText.toLowerCase();
+            let className = cols[2].innerText.toLowerCase();
+            let violation = cols[3].innerText.toLowerCase();
+            let sanction = cols[4].innerText.toLowerCase();
+            let remarks = cols[5].innerText.toLowerCase();
+            let status = cols[7].innerText.toLowerCase();
 
-    rows.forEach(row => {
-        let text = row.innerText.toLowerCase();
-        let rowClass = row.cells[2]?.innerText.toLowerCase() || "";
-        let rowViolation = row.cells[3]?.innerText.toLowerCase() || "";
-        let rowStatus = row.cells[7]?.innerText.toLowerCase() || "";
+            let matchesSearch = search === "" || student.includes(search) || violation.includes(search) || sanction.includes(search) || remarks.includes(search);
+            let matchesClass = classFilter === "" || className.includes(classFilter);
+            let matchesViolation = violationFilter === "" || violation.includes(violationFilter);
+            let matchesStatus = statusFilter === "" || status.includes(statusFilter);
 
-        let match = true;
-
-        if (search && !text.includes(search)) match = false;
-        if (classFilter && rowClass.trim() !== classFilter.trim()) match = false;
-        if (violation && rowViolation !== violation) match = false;
-        if (status && rowStatus !== status) match = false;
-
-        if (match) {
-            row.style.display = "";
-            visibleCount++;
-        } else {
-            row.style.display = "none";
+            if (matchesSearch && matchesClass && matchesViolation && matchesStatus) {
+                rows[i].style.display = "";
+                found = true;
+            } else {
+                rows[i].style.display = "none";
+            }
         }
-    });
+    }
 
-    // ✅ Show/hide the "No record found" row
-    noRecordRow.style.display = (visibleCount === 0) ? "" : "none";
+    noRecordRow.style.display = found ? "none" : "";
 }
 
 function cancelRecordFilters() {
@@ -494,7 +428,4 @@ function cancelRecordFilters() {
 
     applyRecordFilters();
 }
-
-
-
 </script>

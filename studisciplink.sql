@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2025 at 04:12 PM
+-- Generation Time: Oct 01, 2025 at 06:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -942,7 +942,62 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (874, 4, 'Logged in', '2025-10-01 22:01:38'),
 (875, 4, 'Logged out', '2025-10-01 22:02:32'),
 (876, 3, 'Logged in', '2025-10-01 22:02:36'),
-(877, 3, 'Logged out', '2025-10-01 22:12:22');
+(877, 3, 'Logged out', '2025-10-01 22:12:22'),
+(878, 3, 'Logged in', '2025-10-01 22:13:17'),
+(879, 3, 'Logged out', '2025-10-01 22:19:22'),
+(880, 9, 'Logged in', '2025-10-01 22:19:25'),
+(881, 9, 'Logged out', '2025-10-01 22:22:43'),
+(882, 3, 'Logged in', '2025-10-01 22:22:47'),
+(883, 3, 'Logged out', '2025-10-01 22:23:28'),
+(884, 9, 'Logged in', '2025-10-01 22:23:31'),
+(885, 9, 'Logged out', '2025-10-01 22:49:55'),
+(886, 3, 'Logged in', '2025-10-01 22:50:00'),
+(887, 3, 'Logged out', '2025-10-01 22:53:23'),
+(888, 9, 'Logged in', '2025-10-01 22:53:26'),
+(889, 9, 'Logged out', '2025-10-01 22:58:31'),
+(890, 3, 'Logged in', '2025-10-01 22:58:36'),
+(891, 3, 'Logged out', '2025-10-01 22:59:16'),
+(892, 4, 'Logged in', '2025-10-01 22:59:24'),
+(893, 4, 'Logged out', '2025-10-01 22:59:55'),
+(894, 3, 'Logged in', '2025-10-01 23:00:30'),
+(895, 3, 'Logged out', '2025-10-01 23:05:15'),
+(896, 9, 'Logged in', '2025-10-01 23:05:18'),
+(897, 9, 'Logged out', '2025-10-01 23:05:26'),
+(898, 3, 'Logged in', '2025-10-01 23:05:35'),
+(899, 3, 'Logged out', '2025-10-01 23:15:39'),
+(900, 9, 'Logged in', '2025-10-01 23:15:42'),
+(901, 9, 'Logged out', '2025-10-01 23:15:54'),
+(902, 3, 'Logged in', '2025-10-01 23:15:58'),
+(903, 3, 'Logged out', '2025-10-01 23:16:21'),
+(904, 4, 'Logged in', '2025-10-01 23:16:26'),
+(905, 4, 'Logged out', '2025-10-01 23:16:57'),
+(906, 3, 'Logged in', '2025-10-01 23:17:01'),
+(907, 3, 'Logged out', '2025-10-01 23:23:45'),
+(908, 1, 'Logged in', '2025-10-01 23:23:48'),
+(909, 1, 'Logged out', '2025-10-01 23:23:55'),
+(910, 4, 'Logged in', '2025-10-01 23:24:04'),
+(911, 4, 'Logged out', '2025-10-01 23:24:08'),
+(912, 3, 'Logged in', '2025-10-01 23:24:15'),
+(913, 3, 'Logged out', '2025-10-01 23:59:19'),
+(914, 4, 'Logged in', '2025-10-01 23:59:24'),
+(915, 4, 'Logged out', '2025-10-02 00:06:41'),
+(916, 3, 'Logged in', '2025-10-02 00:06:46'),
+(917, 3, 'Logged out', '2025-10-02 00:07:18'),
+(918, 4, 'Logged in', '2025-10-02 00:07:27'),
+(919, 4, 'Logged out', '2025-10-02 00:08:46'),
+(920, 8, 'Logged in', '2025-10-02 00:08:51'),
+(921, 8, 'Logged out', '2025-10-02 00:09:21'),
+(922, 3, 'Logged in', '2025-10-02 00:09:26'),
+(923, 3, 'Logged out', '2025-10-02 00:09:55'),
+(924, 4, 'Logged in', '2025-10-02 00:10:00'),
+(925, 4, 'Logged out', '2025-10-02 00:10:13'),
+(926, 4, 'Logged in', '2025-10-02 00:10:52'),
+(927, 4, 'Logged out', '2025-10-02 00:11:43'),
+(928, 3, 'Logged in', '2025-10-02 00:11:46'),
+(929, 3, 'Logged out', '2025-10-02 00:12:11'),
+(930, 8, 'Logged in', '2025-10-02 00:12:16'),
+(931, 8, 'Logged out', '2025-10-02 00:12:36'),
+(932, 3, 'Logged in', '2025-10-02 00:12:39');
 
 -- --------------------------------------------------------
 
@@ -976,7 +1031,7 @@ INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
 CREATE TABLE `record_violations` (
   `id` int(11) NOT NULL,
   `student_violations_id` int(11) NOT NULL,
-  `action_taken` varchar(255) NOT NULL,
+  `sanction_id` int(11) NOT NULL,
   `remarks` text NOT NULL,
   `date_recorded` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
@@ -988,9 +1043,9 @@ CREATE TABLE `record_violations` (
 -- Dumping data for table `record_violations`
 --
 
-INSERT INTO `record_violations` (`id`, `student_violations_id`, `action_taken`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
-(4, 37, 'Suspension', '1 day only', '2025-09-24 14:11:02', 3, 2, 'Resolved'),
-(6, 38, 'Warning', 'Zero in Examination', '2025-10-01 14:03:12', 3, 2, 'Ongoing');
+INSERT INTO `record_violations` (`id`, `student_violations_id`, `sanction_id`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
+(7, 39, 3, 'Kapoya uy', '2025-10-01 15:58:39', 3, 2, 'Ongoing'),
+(8, 40, 3, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -1006,12 +1061,27 @@ CREATE TABLE `resolved_cases` (
   `school_year_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `resolved_cases`
+-- Table structure for table `sanctions`
 --
 
-INSERT INTO `resolved_cases` (`id`, `record_violation_id`, `status`, `date_resolved`, `school_year_id`) VALUES
-(5, 4, 'Resolved', '2025-09-24 15:16:09', 2);
+CREATE TABLE `sanctions` (
+  `id` int(11) NOT NULL,
+  `sanction` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sanctions`
+--
+
+INSERT INTO `sanctions` (`id`, `sanction`) VALUES
+(2, 'Suspension'),
+(3, 'Warning'),
+(4, 'Detention'),
+(5, 'Make-up Assignment'),
+(6, 'Community Service');
 
 -- --------------------------------------------------------
 
@@ -1142,10 +1212,9 @@ CREATE TABLE `student_violations` (
 
 INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `description`, `location`, `date_time`, `status`, `user_id`, `school_year_id`) VALUES
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
-(37, 9, 4, 'No uniform on Monday', 'Campus', '2025-09-19 15:53:22', 'Recorded', 4, 2),
-(38, 8, 1, 'Brought a sheetsheet and put in his pocket.', 'Computer Laboratory Indigo', '2025-09-25 00:23:59', 'Recorded', 4, 2),
-(39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Pending', 8, 2),
-(40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Pending', 4, 2);
+(39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Recorded', 8, 2),
+(40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Recorded', 4, 2),
+(41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Pending', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -1258,7 +1327,8 @@ ALTER TABLE `record_violations`
   ADD PRIMARY KEY (`id`),
   ADD KEY `student_violations_id` (`student_violations_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `school_year_id` (`school_year_id`);
+  ADD KEY `school_year_id` (`school_year_id`),
+  ADD KEY `sanction_id` (`sanction_id`);
 
 --
 -- Indexes for table `resolved_cases`
@@ -1267,6 +1337,12 @@ ALTER TABLE `resolved_cases`
   ADD PRIMARY KEY (`id`),
   ADD KEY `record_violation_id` (`record_violation_id`),
   ADD KEY `resolved_cases_school_year_id_fr` (`school_year_id`);
+
+--
+-- Indexes for table `sanctions`
+--
+ALTER TABLE `sanctions`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `school_years`
@@ -1343,7 +1419,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=878;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=933;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1355,13 +1431,19 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `record_violations`
 --
 ALTER TABLE `record_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `resolved_cases`
 --
 ALTER TABLE `resolved_cases`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `sanctions`
+--
+ALTER TABLE `sanctions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `school_years`
@@ -1391,7 +1473,7 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1435,6 +1517,7 @@ ALTER TABLE `logs`
 -- Constraints for table `record_violations`
 --
 ALTER TABLE `record_violations`
+  ADD CONSTRAINT `record_violations_sanction_id_fr` FOREIGN KEY (`sanction_id`) REFERENCES `sanctions` (`id`),
   ADD CONSTRAINT `record_violations_school_year_id_fr` FOREIGN KEY (`school_year_id`) REFERENCES `school_years` (`id`),
   ADD CONSTRAINT `record_violations_student_violations_id_fr` FOREIGN KEY (`student_violations_id`) REFERENCES `student_violations` (`id`),
   ADD CONSTRAINT `record_violations_user_id_fr` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
