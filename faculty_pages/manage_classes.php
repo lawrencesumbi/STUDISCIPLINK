@@ -96,8 +96,8 @@ $enrolled_students->execute($params);
 $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="container">
-    <h3>Current School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
+<div class="container small-container">
+    <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>
     <?= $message; ?>
 </div>
 
@@ -228,6 +228,15 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <style>
+.small-container {
+    padding: 8px 15px;   /* less padding */
+    display: inline-block; /* shrink to fit content */
+    width: auto;
+}
+.small-container h3 {
+    font-size: 16px;  /* smaller font if you want */
+    margin: 0;
+}
 .flex-container { display:flex; gap:5px; margin-top:5px; }
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:5px; }
 .half { flex:1; max-width:50%; }

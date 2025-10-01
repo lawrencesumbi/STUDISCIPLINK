@@ -24,7 +24,7 @@ if(!in_array($page, $allowed_pages)) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
+    <title>Admin</title>
     <style>
         body {
             margin: 0;
@@ -64,7 +64,7 @@ if(!in_array($page, $allowed_pages)) {
 
         .sidebar a:hover {
             background-color: #a01b1b;
-            border-left: 4px solid #fff;
+            
         }
 
         .sidebar a.active {
@@ -120,7 +120,7 @@ if(!in_array($page, $allowed_pages)) {
             <img src="default.png" alt="Profile Image">
         <?php endif; ?>
     </div>
-    <h2>Admin Panel</h2>
+    <h2>Admin</h2>
     <a href="?page=dashboard" class="<?php echo $page=='dashboard' ? 'active' : ''; ?>">Dashboard</a>
     <a href="?page=manage_users" class="<?php echo $page=='manage_users' ? 'active' : ''; ?>">Manage Users</a>
     <a href="?page=activity_logs" class="<?php echo $page=='activity_logs' ? 'active' : ''; ?>">Activity Logs</a>

@@ -63,37 +63,37 @@ try {
 ?>
 
 <!-- User Stats -->
-<div style="display:flex; gap:20px; flex-wrap:wrap;">
-    <div style="background:#c41e1e; color:white; padding:30px; border-radius:12px; flex:1; min-width:200px; text-align:center; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+<div class="stats-container">
+    <div class="stat-box box-red">
         <h3>Total Users</h3>
-        <p style="font-size:32px; font-weight:bold;"><?= $totalUsers ?></p>
+        <p class="stat-value"><?= $totalUsers ?></p>
     </div>
 
-    <div style="background:#e67e22; color:white; padding:30px; border-radius:12px; flex:1; min-width:200px; text-align:center; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+    <div class="stat-box box-orange">
         <h3>Pending Users</h3>
-        <p style="font-size:32px; font-weight:bold;"><?= $pendingUsers ?></p>
+        <p class="stat-value"><?= $pendingUsers ?></p>
     </div>
 
-    <div style="background:#27ae60; color:white; padding:30px; border-radius:12px; flex:1; min-width:200px; text-align:center; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+    <div class="stat-box box-green">
         <h3>Active Users</h3>
-        <p style="font-size:32px; font-weight:bold;"><?= $activeUsers ?></p>
+        <p class="stat-value"><?= $activeUsers ?></p>
     </div>
 </div>
 
 <!-- Dashboard Stats -->
 <div class="stats-container">
-    <div class="stat-box box-red">
-        <h4>Current School Year</h4>
+    <div class="stat-box box-red-dark">
+        <h3>Current School Year</h3>
         <p class="stat-value"><?= htmlspecialchars($current_school_year) ?></p>
     </div>
 
-    <div class="stat-box box-dark-red">
-        <h4>Total Students</h4>
+    <div class="stat-box box-red">
+        <h3>Total Students</h3>
         <p class="stat-value"><?= $total_students ?></p>
     </div>
 
-    <div class="stat-box box-light-red">
-        <h4>Total Programs</h4>
+    <div class="stat-box box-red-light">
+        <h3>Total Programs</h3>
         <p class="stat-value"><?= $total_programs ?></p>
     </div>
 </div>
@@ -108,28 +108,39 @@ try {
 
 .stat-box {
     flex: 1;
+    min-width: 200px;
+    min-height: 150px; /* ✅ same height */
     padding: 20px;
     color: white;
-    border-radius: 8px;
-    min-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+    /* ✅ Center everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.stat-box h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .stat-value {
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
     margin: 0;
 }
 
 /* Colors */
-.box-red {
-    background: #ff0000ff;
-}
+.box-red { background: #c41e1e; }
+.box-orange { background: #e67e22; }
+.box-green { background: #27ae60; }
 
-.box-dark-red {
-    background: #c41616ff;
-}
-
-.box-light-red {
-    background: #8d2525ff;
-}
+.box-red-dark { background: #8d2525; }
+.box-red-light { background: #c41616; }
 </style>

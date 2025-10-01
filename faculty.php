@@ -25,7 +25,7 @@ if (!in_array($page, $allowed_pages)) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Faculty Dashboard</title>
+    <title>Faculty</title>
     <style>
         body { margin:0; font-family:'Roboto', sans-serif; background:#f4f4f4; }
 
@@ -38,6 +38,10 @@ if (!in_array($page, $allowed_pages)) {
         .sidebar h2 { text-align:center; margin-bottom:30px; font-size:22px; }
         .sidebar a { padding:12px 20px; text-decoration:none; color:white; display:block; transition:0.3s; }
         .sidebar a:hover { background-color:#a81a1a; }
+        .sidebar a.active {
+            background-color: #900f0f;
+            border-left: 4px solid #fff;
+        }
 
         /* Main content */
         .main-content { margin-left:220px; padding:20px; }
@@ -67,14 +71,15 @@ if (!in_array($page, $allowed_pages)) {
             <img src="default.png" alt="Profile Image">
         <?php endif; ?>
     </div>
-    <h2>Faculty Panel</h2>
-    <a href="?page=dashboard">Dashboard</a>
-    <a href="?page=manage_school_year">School Year</a>
-    <a href="?page=manage_classes">Manage Classes</a>
-    <a href="?page=student_violation">Student Violation</a>
-    <a href="?page=my_account">My Account</a>
+    <h2>Faculty</h2>
+    <a href="?page=dashboard" class="<?= $page == 'dashboard' ? 'active' : '' ?>">Dashboard</a>
+    <a href="?page=manage_school_year" class="<?= $page == 'manage_school_year' ? 'active' : '' ?>">School Year</a>
+    <a href="?page=manage_classes" class="<?= $page == 'manage_classes' ? 'active' : '' ?>">Manage Classes</a>
+    <a href="?page=student_violation" class="<?= $page == 'student_violation' ? 'active' : '' ?>">Student Violation</a>
+    <a href="?page=my_account" class="<?= $page == 'my_account' ? 'active' : '' ?>">My Account</a>
     <a href="logout.php">Logout</a>
 </div>
+
 
 <div class="main-content">
     <div class="header">

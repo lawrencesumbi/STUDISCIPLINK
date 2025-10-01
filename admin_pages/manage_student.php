@@ -140,8 +140,8 @@ $students->execute($params);
 $students = $students->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="container">
-    <h3>Current School Year: <?= htmlspecialchars($current_sy['school_year']); ?></h3>
+<div class="container small-container">
+    <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>
     <?= $message; ?>
 </div>
 
@@ -227,7 +227,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
     <!-- Search & Filter Container -->
     <div class="container half">
         <h4>Search & Filter</h4>
-        <form method="GET" action="registrar.php" class="form-box">
+        <form method="GET" action="admin.php" class="form-box">
             <input type="hidden" name="page" value="manage_student">
             
             
@@ -263,7 +263,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 
             <button type="submit" class="btn btn-info">Apply</button>
             <?php if (!empty($search) || $filter_program || $filter_year || $filter_section): ?>
-                <a href="registrar.php?page=manage_student" class="btn btn-secondary">Clear</a>
+                <a href="admin.php?page=manage_student" class="btn btn-secondary">Clear</a>
             <?php endif; ?>
         </form>
     </div>
@@ -320,6 +320,16 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <style>
+.small-container {
+    padding: 8px 15px;   /* less padding */
+    display: inline-block; /* shrink to fit content */
+    width: auto;
+}
+.small-container h3 {
+    font-size: 16px;  /* smaller font if you want */
+    margin: 0;
+}
+
 .flex-container {
     display: flex;
     gap: 5px;
