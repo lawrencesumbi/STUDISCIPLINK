@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2025 at 06:14 PM
+-- Generation Time: Oct 01, 2025 at 06:50 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -997,7 +997,21 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (929, 3, 'Logged out', '2025-10-02 00:12:11'),
 (930, 8, 'Logged in', '2025-10-02 00:12:16'),
 (931, 8, 'Logged out', '2025-10-02 00:12:36'),
-(932, 3, 'Logged in', '2025-10-02 00:12:39');
+(932, 3, 'Logged in', '2025-10-02 00:12:39'),
+(933, 3, 'Logged out', '2025-10-02 00:22:48'),
+(934, 4, 'Logged in', '2025-10-02 00:22:53'),
+(935, 4, 'Logged out', '2025-10-02 00:24:26'),
+(936, 3, 'Logged in', '2025-10-02 00:24:30'),
+(937, 3, 'Logged out', '2025-10-02 00:30:40'),
+(938, 4, 'Logged in', '2025-10-02 00:30:44'),
+(939, 4, 'Logged out', '2025-10-02 00:33:53'),
+(940, 3, 'Logged in', '2025-10-02 00:33:57'),
+(941, 3, 'Logged out', '2025-10-02 00:34:13'),
+(942, 9, 'Logged in', '2025-10-02 00:34:15'),
+(943, 9, 'Logged out', '2025-10-02 00:34:39'),
+(944, 3, 'Logged in', '2025-10-02 00:34:44'),
+(945, 3, 'Logged out', '2025-10-02 00:40:24'),
+(946, 9, 'Logged in', '2025-10-02 00:40:26');
 
 -- --------------------------------------------------------
 
@@ -1044,8 +1058,8 @@ CREATE TABLE `record_violations` (
 --
 
 INSERT INTO `record_violations` (`id`, `student_violations_id`, `sanction_id`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
-(7, 39, 3, 'Kapoya uy', '2025-10-01 15:58:39', 3, 2, 'Ongoing'),
-(8, 40, 3, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing');
+(7, 39, 3, 'Kapoya uy', '2025-10-01 15:58:39', 3, 2, 'Resolved'),
+(8, 40, 2, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -1060,6 +1074,13 @@ CREATE TABLE `resolved_cases` (
   `date_resolved` timestamp NOT NULL DEFAULT current_timestamp(),
   `school_year_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `resolved_cases`
+--
+
+INSERT INTO `resolved_cases` (`id`, `record_violation_id`, `status`, `date_resolved`, `school_year_id`) VALUES
+(6, 7, 'Resolved', '2025-10-01 16:48:40', 2);
 
 -- --------------------------------------------------------
 
@@ -1419,7 +1440,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=933;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=947;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1437,7 +1458,7 @@ ALTER TABLE `record_violations`
 -- AUTO_INCREMENT for table `resolved_cases`
 --
 ALTER TABLE `resolved_cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `sanctions`

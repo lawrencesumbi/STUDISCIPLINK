@@ -33,7 +33,7 @@ if (isset($_POST['resolve_case'])) {
     $stmt = $pdo->prepare("UPDATE record_violations SET status='Resolved' WHERE id=?");
     $stmt->execute([$record_id]);
 
-    // Insert into resolved_cases (now includes school_year_id)
+    // Insert into resolved_cases (includes school_year_id)
     $stmt = $pdo->prepare("
         INSERT INTO resolved_cases (record_violation_id, status, date_resolved, school_year_id) 
         VALUES (?, 'Resolved', NOW(), ?)
@@ -51,7 +51,7 @@ if ($search) {
     $ongoing_stmt = $pdo->prepare("
         SELECT rv.*, st.first_name, st.last_name, 
                p.program_code, yl.year_code AS year_level, sec.section_name,
-               v.violation AS violation
+               v.violation AS violation, sa.sanction, sv.description
         FROM record_violations rv
         JOIN student_violations sv ON rv.student_violations_id = sv.id
         JOIN students st ON sv.student_id = st.id
@@ -59,21 +59,24 @@ if ($search) {
         JOIN year_levels yl ON st.year_level_id = yl.id
         JOIN sections sec ON st.section_id = sec.id
         JOIN violations v ON sv.violation_id = v.id
+        JOIN sanctions sa ON rv.sanction_id = sa.id
         WHERE rv.status='Ongoing' AND rv.school_year_id = ?
         AND (
             CONCAT(st.first_name, ' ', st.last_name) LIKE ? 
             OR v.violation LIKE ? 
-            OR rv.action_taken LIKE ? 
+            OR sa.sanction LIKE ? 
             OR rv.status LIKE ?
+            OR sv.description LIKE ?
         )
         ORDER BY rv.date_recorded DESC
     ");
-    $ongoing_stmt->execute([$current_sy_id, "%$search%", "%$search%", "%$search%", "%$search%"]);
+    $like = "%$search%";
+    $ongoing_stmt->execute([$current_sy_id, $like, $like, $like, $like, $like]);
 } else {
     $ongoing_stmt = $pdo->prepare("
         SELECT rv.*, st.first_name, st.last_name, 
                p.program_code, yl.year_code AS year_level, sec.section_name,
-               v.violation AS violation
+               v.violation AS violation, sa.sanction, sv.description
         FROM record_violations rv
         JOIN student_violations sv ON rv.student_violations_id = sv.id
         JOIN students st ON sv.student_id = st.id
@@ -81,6 +84,7 @@ if ($search) {
         JOIN year_levels yl ON st.year_level_id = yl.id
         JOIN sections sec ON st.section_id = sec.id
         JOIN violations v ON sv.violation_id = v.id
+        JOIN sanctions sa ON rv.sanction_id = sa.id
         WHERE rv.status='Ongoing' AND rv.school_year_id = ?
         ORDER BY rv.date_recorded DESC
     ");
@@ -88,15 +92,16 @@ if ($search) {
 }
 $ongoing = $ongoing_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 // ✅ Resolved Records
 if ($search) {
     $resolved_stmt = $pdo->prepare("
-        SELECT rc.*, rv.action_taken, rv.remarks, st.first_name, st.last_name, 
+        SELECT rc.*, rv.sanction_id, sa.sanction, rv.remarks, 
+               st.first_name, st.last_name, 
                p.program_code, yl.year_code AS year_level, sec.section_name,
-               v.violation AS violation
+               v.violation AS violation, sv.description
         FROM resolved_cases rc
         JOIN record_violations rv ON rc.record_violation_id = rv.id
+        JOIN sanctions sa ON rv.sanction_id = sa.id
         JOIN student_violations sv ON rv.student_violations_id = sv.id
         JOIN students st ON sv.student_id = st.id
         JOIN programs p ON st.program_id = p.id
@@ -107,19 +112,23 @@ if ($search) {
         AND (
             CONCAT(st.first_name, ' ', st.last_name) LIKE ? 
             OR v.violation LIKE ? 
-            OR rv.action_taken LIKE ? 
+            OR sa.sanction LIKE ? 
             OR rc.status LIKE ?
+            OR sv.description LIKE ?
         )
         ORDER BY rc.date_resolved DESC
     ");
-    $resolved_stmt->execute([$current_sy_id, "%$search%", "%$search%", "%$search%", "%$search%"]);
+    $like = "%$search%";
+    $resolved_stmt->execute([$current_sy_id, $like, $like, $like, $like, $like]);
 } else {
     $resolved_stmt = $pdo->prepare("
-        SELECT rc.*, rv.action_taken, rv.remarks, st.first_name, st.last_name, 
+        SELECT rc.*, rv.sanction_id, sa.sanction, rv.remarks, 
+               st.first_name, st.last_name, 
                p.program_code, yl.year_code AS year_level, sec.section_name,
-               v.violation AS violation
+               v.violation AS violation, sv.description
         FROM resolved_cases rc
         JOIN record_violations rv ON rc.record_violation_id = rv.id
+        JOIN sanctions sa ON rv.sanction_id = sa.id
         JOIN student_violations sv ON rv.student_violations_id = sv.id
         JOIN students st ON sv.student_id = st.id
         JOIN programs p ON st.program_id = p.id
@@ -132,24 +141,23 @@ if ($search) {
     $resolved_stmt->execute([$current_sy_id]);
 }
 $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
+
 <div class="container small-container">
     <h3>Current School Year: 
-            <span style="color:#b30000;"><?= htmlspecialchars($current_school_year) ?></span>
+        <span style="color:#b30000;"><?= htmlspecialchars($current_school_year) ?></span>
     </h3>
 </div>
 
 <!-- ✅ Search Form -->
 <form method="GET" class="search-form">
     <input type="hidden" name="page" value="manage_cases">
-    <input type="text" name="search" placeholder="Search by student, violation, action taken, or status" value="<?= htmlspecialchars($search); ?>">
+    <input type="text" name="search" placeholder="Search by student, violation, sanction, description, or status" value="<?= htmlspecialchars($search); ?>">
     <button type="submit">Search</button>
     <?php if ($search): ?>
         <a href="?page=manage_cases">Clear</a>
     <?php endif; ?>
 </form>
-
 
 <div class="container">
     <?= $message; ?>
@@ -163,6 +171,7 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Student</th>
                 <th>Class</th>
                 <th>Violation</th>
+                <th>Description</th>
                 <th>Sanction</th>
                 <th>Remarks</th>
                 <th>Date Recorded</th>
@@ -178,7 +187,8 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($o['first_name'] . " " . $o['last_name']); ?></td>
                         <td><?= htmlspecialchars($o['program_code'] . " - " . $o['year_level'] . $o['section_name']); ?></td>
                         <td><?= htmlspecialchars($o['violation']); ?></td>
-                        <td><?= htmlspecialchars($o['action_taken']); ?></td>
+                        <td><?= htmlspecialchars($o['description']); ?></td>
+                        <td><?= htmlspecialchars($o['sanction']); ?></td>
                         <td><?= htmlspecialchars($o['remarks']); ?></td>
                         <td><?= $o['date_recorded']; ?></td>
                         <td><span style="color:orange;font-weight:bold;"><?= $o['status']; ?></span></td>
@@ -194,7 +204,7 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="9" style="text-align:center;">No ongoing cases.</td></tr>
+                <tr><td colspan="10" style="text-align:center;">No ongoing cases.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -210,6 +220,7 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Student</th>
                 <th>Class</th>
                 <th>Violation</th>
+                <th>Description</th>
                 <th>Sanction</th>
                 <th>Remarks</th>
                 <th>Date Resolved</th>
@@ -224,19 +235,19 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($r['first_name'] . " " . $r['last_name']); ?></td>
                         <td><?= htmlspecialchars($r['program_code'] . " - " . $r['year_level'] . $r['section_name']); ?></td>
                         <td><?= htmlspecialchars($r['violation']); ?></td>
-                        <td><?= htmlspecialchars($r['action_taken']); ?></td>
+                        <td><?= htmlspecialchars($r['description']); ?></td>
+                        <td><?= htmlspecialchars($r['sanction']); ?></td>
                         <td><?= htmlspecialchars($r['remarks']); ?></td>
                         <td><?= $r['date_resolved']; ?></td>
                         <td><span style="color:green;font-weight:bold;"><?= $r['status']; ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="8" style="text-align:center;">No resolved cases yet.</td></tr>
+                <tr><td colspan="9" style="text-align:center;">No resolved cases yet.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
 </div>
-
 
 <style>
 .small-container {
