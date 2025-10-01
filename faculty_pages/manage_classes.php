@@ -16,10 +16,47 @@ if (!$current_sy) {
 }
 $current_sy_id = $current_sy['id'];
 
-// Dropdown data
-$year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
-$programs = $pdo->query("SELECT * FROM programs ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
-$sections = $pdo->query("SELECT * FROM sections ORDER BY section_name ASC")->fetchAll(PDO::FETCH_ASSOC);
+// ✅ For Enroll Class (all available options)
+$all_year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+$all_programs   = $pdo->query("SELECT * FROM programs ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+$all_sections   = $pdo->query("SELECT * FROM sections ORDER BY section_name ASC")->fetchAll(PDO::FETCH_ASSOC);
+
+// ✅ For Search & Filter (only enrolled data)
+$programs = $pdo->prepare("
+    SELECT DISTINCT p.id, p.program_code, p.program_name
+    FROM student_enrollments se
+    INNER JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
+    INNER JOIN students s ON se.student_id = s.id
+    INNER JOIN programs p ON s.program_id = p.id
+    WHERE ce.user_id = ? AND ce.school_year_id = ?
+    ORDER BY p.program_code
+");
+$programs->execute([$user_id, $current_sy_id]);
+$programs = $programs->fetchAll(PDO::FETCH_ASSOC);
+
+$year_levels = $pdo->prepare("
+    SELECT DISTINCT yl.id, yl.year_level
+    FROM student_enrollments se
+    INNER JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
+    INNER JOIN students s ON se.student_id = s.id
+    INNER JOIN year_levels yl ON s.year_level_id = yl.id
+    WHERE ce.user_id = ? AND ce.school_year_id = ?
+    ORDER BY yl.id
+");
+$year_levels->execute([$user_id, $current_sy_id]);
+$year_levels = $year_levels->fetchAll(PDO::FETCH_ASSOC);
+
+$sections = $pdo->prepare("
+    SELECT DISTINCT sec.id, sec.section_name
+    FROM student_enrollments se
+    INNER JOIN class_enrollments ce ON se.class_enrollment_id = ce.id
+    INNER JOIN students s ON se.student_id = s.id
+    INNER JOIN sections sec ON s.section_id = sec.id
+    WHERE ce.user_id = ? AND ce.school_year_id = ?
+    ORDER BY sec.section_name
+");
+$sections->execute([$user_id, $current_sy_id]);
+$sections = $sections->fetchAll(PDO::FETCH_ASSOC);
 
 $message = "";
 
@@ -52,7 +89,6 @@ if (isset($_POST['enroll_class'])) {
         $message = "<p class='error-msg'>No students found.</p>";
     }
 }
-
 
 // Delete class (removes all its student_enrollments too)
 if (isset($_POST['delete_class'])) {
@@ -109,21 +145,21 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
         <form method="POST" class="form-box">
             <select name="program_id" required>
                 <option value="">Select Program</option>
-                <?php foreach ($programs as $p): ?>
+                <?php foreach ($all_programs as $p): ?>
                     <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['program_code']) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select name="year_level_id" required>
                 <option value="">Select Year Level</option>
-                <?php foreach ($year_levels as $yl): ?>
+                <?php foreach ($all_year_levels as $yl): ?>
                     <option value="<?= $yl['id'] ?>"><?= htmlspecialchars($yl['year_level']) ?></option>
                 <?php endforeach; ?>
             </select>
 
             <select name="section_id" required>
                 <option value="">Select Section</option>
-                <?php foreach ($sections as $sec): ?>
+                <?php foreach ($all_sections as $sec): ?>
                     <option value="<?= $sec['id'] ?>"><?= htmlspecialchars($sec['section_name']) ?></option>
                 <?php endforeach; ?>
             </select>
@@ -229,12 +265,13 @@ $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
 
 <style>
 .small-container {
-    padding: 8px 15px;   /* less padding */
-    display: inline-block; /* shrink to fit content */
-    width: auto;
+    padding: 8px 15px;
+    flex: 1;          /* ✅ same flex behavior as .container */
+    display: block;   /* ✅ not inline-block */
+    max-width: 100%; 
 }
 .small-container h3 {
-    font-size: 16px;  /* smaller font if you want */
+    font-size: 16px;
     margin: 0;
 }
 .flex-container { display:flex; gap:5px; margin-top:5px; }

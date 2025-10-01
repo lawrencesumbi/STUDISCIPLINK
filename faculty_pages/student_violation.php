@@ -131,11 +131,16 @@ $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalViolations = count($studentViolations);
 ?>
 
+<div class="container small-container">
+    <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>
+    <?= $message; ?>
+</div>
+
 <div class="two-column">
     <!-- Left: Record Violation -->
     <div class="container">
         <h3>Report Student</h3>
-        <?= $message; ?>
+        
 <!-- Report Student Form -->
 <form method="POST" class="form-box">
     <input type="hidden" name="hidden_id" value="<?= $edit_data['id'] ?? '' ?>">
@@ -188,32 +193,27 @@ $totalViolations = count($studentViolations);
 
     <!-- Right: Filters -->
     <div class="container">
-        <h3>(School Year: <?= htmlspecialchars($current_sy['school_year']); ?>)</h3>
+        
         <h4>Search & Filter</h4>
         <div class="form-box filter-grid">
             <input type="text" id="violationSearch" placeholder="Search student or violations...">
 
-            <select id="filterProgram">
-                <option value="">Select Program</option>
-                <?php foreach (array_unique(array_column($studentViolations, 'program_code')) as $program): ?>
-                    <option value="<?= htmlspecialchars($program) ?>"><?= htmlspecialchars($program) ?></option>
+            <!-- ✅ Select Class -->
+            <select id="filterClass">
+                <option value="">Select Class</option>
+                <?php 
+                $classes = [];
+                foreach ($studentViolations as $row) {
+                    $className = $row['program_code'] . " - " . $row['year_level'] . $row['section_name']; // EXACT same format as table
+                    $classes[] = trim($className);
+                }
+                foreach (array_unique($classes) as $class): ?>
+                    <option value="<?= htmlspecialchars($class) ?>"><?= htmlspecialchars($class) ?></option>
                 <?php endforeach; ?>
+
             </select>
 
-            <select id="filterYear">
-                <option value="">Select Year Level</option>
-                <?php foreach (array_unique(array_column($studentViolations, 'year_level')) as $year): ?>
-                    <option value="<?= htmlspecialchars($year) ?>"><?= htmlspecialchars($year) ?></option>
-                <?php endforeach; ?>
-            </select>
-
-            <select id="filterSection">
-                <option value="">Select Section</option>
-                <?php foreach (array_unique(array_column($studentViolations, 'section_name')) as $sec): ?>
-                    <option value="<?= htmlspecialchars($sec) ?>"><?= htmlspecialchars($sec) ?></option>
-                <?php endforeach; ?>
-            </select>
-
+            <!-- ✅ Select Violation -->
             <select id="filterViolation">
                 <option value="">Select Violation</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'violation')) as $vio): ?>
@@ -221,13 +221,7 @@ $totalViolations = count($studentViolations);
                 <?php endforeach; ?>
             </select>
 
-            <select id="filterLocation">
-                <option value="">Select Location</option>
-                <?php foreach (array_unique(array_column($studentViolations, 'location')) as $loc): ?>
-                    <option value="<?= htmlspecialchars($loc) ?>"><?= htmlspecialchars($loc) ?></option>
-                <?php endforeach; ?>
-            </select>
-
+            <!-- ✅ Select Status -->
             <select id="filterStatus">
                 <option value="">Select Status</option>
                 <?php foreach (array_unique(array_column($studentViolations, 'status')) as $status): ?>
@@ -236,13 +230,13 @@ $totalViolations = count($studentViolations);
             </select>
             
             <!-- Apply + Cancel Buttons -->
-        <div class="filter-buttons">
-            <button type="button" class="btn" onclick="applyFilters()">Apply</button>
-            <button type="button" class="btn btn-secondary" onclick="cancelFilters()">Cancel</button>
-        </div>
-
+            <div class="filter-buttons">
+                <button type="button" class="btn" onclick="applyFilters()">Apply</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelFilters()">Cancel</button>
+            </div>
         </div>
     </div>
+
 </div>
 
 <div class="container">
@@ -271,7 +265,8 @@ $totalViolations = count($studentViolations);
                         <td>
                             <?= htmlspecialchars($v['program_code']) ?> - 
                             <?= htmlspecialchars($v['year_level']) ?><?= htmlspecialchars($v['section_name']) ?>
-                        </td> <!-- ✅ Combined -->
+                        </td>
+                        <!-- ✅ Combined -->
                         <td><?= htmlspecialchars($v['violation']); ?></td>
                         <td><?= htmlspecialchars($v['description']); ?></td>
                         <td><?= htmlspecialchars($v['location']); ?></td>
@@ -298,14 +293,10 @@ $totalViolations = count($studentViolations);
 
 
 <script>
-// APPLY FILTERS
 function applyFilters() {
     let search = document.getElementById("violationSearch").value.toLowerCase();
-    let program = document.getElementById("filterProgram").value.toLowerCase();
-    let year = document.getElementById("filterYear").value.toLowerCase();
-    let section = document.getElementById("filterSection").value.toLowerCase();
+    let classFilter = document.getElementById("filterClass").value.toLowerCase();
     let violation = document.getElementById("filterViolation").value.toLowerCase();
-    let location = document.getElementById("filterLocation").value.toLowerCase();
     let status = document.getElementById("filterStatus").value.toLowerCase();
 
     let rows = document.querySelectorAll("#violationTable tbody tr");
@@ -315,10 +306,9 @@ function applyFilters() {
         if (row.classList.contains("no-record")) return;
 
         let student = row.cells[1].textContent.toLowerCase();
-        let classCol = row.cells[2].textContent.toLowerCase(); // ✅ Program+Year+Section
+        let classCol = row.cells[2].textContent.toLowerCase(); // ✅ Class column
         let rowViolation = row.cells[3].textContent.toLowerCase();
         let rowDescription = row.cells[4].textContent.toLowerCase();
-        let rowLocation = row.cells[5].textContent.toLowerCase();
         let rowStatus = row.cells[7].textContent.toLowerCase();
 
         let matches = student.includes(search) ||
@@ -326,12 +316,11 @@ function applyFilters() {
                       rowDescription.includes(search);
 
         matches = matches &&
-                  (program === "" || classCol.includes(program)) &&
-                  (year === "" || classCol.includes(year)) &&
-                  (section === "" || classCol.includes(section)) &&
-                  (violation === "" || rowViolation === violation) &&
-                  (location === "" || rowLocation === location) &&
-                  (status === "" || rowStatus === status);
+                (classFilter === "" || classCol.replace(/\s+/g, "").trim() === classFilter.replace(/\s+/g, "").trim()) &&
+                (violation === "" || rowViolation === violation) &&
+                (status === "" || rowStatus === status);
+
+
 
         row.style.display = matches ? "" : "none";
         if (matches) matchCount++;
@@ -354,16 +343,24 @@ function applyFilters() {
     }
 }
 
-
-
-// CANCEL FILTERS → refresh page
 function cancelFilters() {
     window.location.href = "faculty.php?page=student_violation";
 }
 </script>
 
 
+
 <style>
+.small-container {
+    padding: 8px 15px;   /* less padding */
+    display: inline-block; /* shrink to fit content */
+    width: auto;
+}
+.small-container h3 {
+    font-size: 16px;  /* smaller
+     font if you want */
+    margin: 0;
+}
 /* === Layout for the two top containers === */
 .two-column {
     display: flex;
@@ -400,7 +397,7 @@ function cancelFilters() {
 .form-box input {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 15px;
     margin-bottom: 10px;
     width: 96%;
 }

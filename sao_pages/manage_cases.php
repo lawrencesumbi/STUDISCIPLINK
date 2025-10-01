@@ -217,8 +217,9 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
 <style>
 .small-container {
     padding: 8px 15px;   
-    display: inline-block; 
-    width: auto;
+    flex: 1;          /* ✅ same flex behavior as .container */
+    display: block;   /* ✅ not inline-block */
+    max-width: 100%; 
 }
 .small-container h3 {
     font-size: 16px;  

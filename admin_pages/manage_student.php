@@ -322,8 +322,9 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
 <style>
 .small-container {
     padding: 8px 15px;   /* less padding */
-    display: inline-block; /* shrink to fit content */
-    width: auto;
+    flex: 1;          /* ✅ same flex behavior as .container */
+    display: block;   /* ✅ not inline-block */
+    max-width: 100%; 
 }
 .small-container h3 {
     font-size: 16px;  /* smaller font if you want */

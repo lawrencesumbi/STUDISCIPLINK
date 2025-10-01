@@ -158,10 +158,12 @@ $stmt->execute([$current_sy_id]);
 $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalViolations = count($studentViolations);
 
-
-
-
 ?>
+
+<div class="container small-container">
+    <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy) ?></span></h3>
+    <?= $message; ?>
+</div>
 
 <div class="container">
     <h4>Pending Violations (Total: <?= $totalViolations ?>)</h4>
@@ -207,10 +209,9 @@ $totalViolations = count($studentViolations);
 
 
 
-<div class="container two-columns">
+<div class="two-columns">
     <!-- LEFT SIDE: Form -->
     <div class="left-box">
-        <?= $message; ?>
         <h4>Assign Sanction</h4>
 
         <form method="POST" class="form-box">
@@ -249,8 +250,8 @@ $totalViolations = count($studentViolations);
 
     <!-- RIGHT SIDE: Search + Filter -->
     <div class="right-box">
-    <h3>Current School Year: <?= htmlspecialchars($current_sy) ?></h3>
-    <br>
+    
+   
     <h4>Search & Filter</h4>
 
     <div class="form-box">
@@ -362,6 +363,16 @@ $totalViolations = count($studentViolations);
 
 
 <style>
+.small-container {
+    padding: 8px 15px;
+    flex: 1;          /* ✅ same flex behavior as .container */
+    display: block;   /* ✅ not inline-block */
+    max-width: 100%; 
+}
+.small-container h3 {
+    font-size: 16px;
+    margin: 0;
+}
 .container { background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-top:20px; }
 .success-msg { color:green; font-weight:bold; margin-bottom:10px; }
 .error-msg { color:red; font-weight:bold; margin-bottom:10px; }
@@ -380,7 +391,7 @@ $totalViolations = count($studentViolations);
     width: 100%;
 }
 .table-box { max-height:400px; overflow-y:auto; }
-.styled-table { width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+.styled-table { width:100%; border-collapse:collapse; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 1px 5px rgba(0,0,0,0.1); }
 .styled-table th, .styled-table td { padding:12px; text-align:left; border:1px solid #ddd; }
 .styled-table thead { background:#c41e1e; color:white; }
 .styled-table tr:nth-child(even) { background:#f9f9f9; }
@@ -393,7 +404,13 @@ $totalViolations = count($studentViolations);
 .btn-secondary { background:gray; text-decoration:none; }
 .btn:hover { opacity:0.9; }
 .remarks-input { width: 400px; }
-.two-columns { display: flex; gap: 20px; }
+.two-columns {
+    display: flex;
+    gap: 20px;
+    align-items: stretch; /* makes both containers same height */
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 .left-box, .right-box {
     flex: 1;
     background: #fff;
