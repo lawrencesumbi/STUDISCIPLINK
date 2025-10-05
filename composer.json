@@ -12,6 +12,7 @@
         }
     ],
     "require": {
-        "phpoffice/phpspreadsheet": "^5.1"
+        "phpoffice/phpspreadsheet": "1.28",
+        "phpoffice/phpword": "0.18"
     }
 }

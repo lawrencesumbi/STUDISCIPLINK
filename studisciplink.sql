@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2025 at 06:50 PM
+-- Generation Time: Oct 05, 2025 at 05:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1011,7 +1011,33 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (943, 9, 'Logged out', '2025-10-02 00:34:39'),
 (944, 3, 'Logged in', '2025-10-02 00:34:44'),
 (945, 3, 'Logged out', '2025-10-02 00:40:24'),
-(946, 9, 'Logged in', '2025-10-02 00:40:26');
+(946, 9, 'Logged in', '2025-10-02 00:40:26'),
+(947, 1, 'Logged in', '2025-10-05 21:31:43'),
+(948, 1, 'Logged out', '2025-10-05 21:32:21'),
+(949, 4, 'Logged in', '2025-10-05 21:32:26'),
+(950, 4, 'Logged out', '2025-10-05 21:32:53'),
+(951, 3, 'Logged in', '2025-10-05 21:32:57'),
+(952, 3, 'Logged out', '2025-10-05 21:34:15'),
+(953, 9, 'Logged in', '2025-10-05 21:34:18'),
+(954, 9, 'Logged in', '2025-10-05 21:42:41'),
+(955, 9, 'Logged in', '2025-10-05 21:42:52'),
+(956, 9, 'Logged out', '2025-10-05 22:16:09'),
+(957, 3, 'Logged in', '2025-10-05 22:16:16'),
+(958, 3, 'Logged out', '2025-10-05 22:16:52'),
+(959, 9, 'Logged in', '2025-10-05 22:16:55'),
+(960, 9, 'Logged in', '2025-10-05 22:19:25'),
+(961, 9, 'Logged out', '2025-10-05 23:02:12'),
+(962, 9, 'Logged in', '2025-10-05 23:02:17'),
+(963, 9, 'Logged out', '2025-10-05 23:02:48'),
+(964, 3, 'Logged in', '2025-10-05 23:02:52'),
+(965, 3, 'Logged out', '2025-10-05 23:07:36'),
+(966, 9, 'Logged in', '2025-10-05 23:07:39'),
+(967, 9, 'Logged out', '2025-10-05 23:07:47'),
+(968, 9, 'Logged in', '2025-10-05 23:07:50'),
+(969, 9, 'Logged out', '2025-10-05 23:16:16'),
+(970, 1, 'Logged in', '2025-10-05 23:16:19'),
+(971, 1, 'Logged out', '2025-10-05 23:19:59'),
+(972, 9, 'Logged in', '2025-10-05 23:20:01');
 
 -- --------------------------------------------------------
 
@@ -1059,7 +1085,8 @@ CREATE TABLE `record_violations` (
 
 INSERT INTO `record_violations` (`id`, `student_violations_id`, `sanction_id`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
 (7, 39, 3, 'Kapoya uy', '2025-10-01 15:58:39', 3, 2, 'Resolved'),
-(8, 40, 2, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing');
+(8, 40, 2, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing'),
+(9, 41, 5, 'give her another assignment', '2025-10-05 14:16:44', 3, 2, 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -1235,7 +1262,7 @@ INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `descripti
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
 (39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Recorded', 8, 2),
 (40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Recorded', 4, 2),
-(41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Pending', 4, 2);
+(41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Recorded', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -1440,7 +1467,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=947;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=973;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1452,7 +1479,7 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `record_violations`
 --
 ALTER TABLE `record_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `resolved_cases`

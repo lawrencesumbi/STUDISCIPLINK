@@ -44,16 +44,19 @@ SELECT
     sv.description,
     sv.location,
     sv.date_time,
-    u.username AS reported_by,
+    u_report.username AS reported_by,
     rv.remarks,
     rv.date_recorded,
     sa.sanction,
-    u.username AS recorded_by
+    u_record.username AS recorded_by
 FROM record_violations rv
 LEFT JOIN student_violations sv ON rv.student_violations_id = sv.id
 LEFT JOIN violations v ON sv.violation_id = v.id
 LEFT JOIN sanctions sa ON rv.sanction_id = sa.id
-LEFT JOIN users u ON rv.user_id = u.id
+-- 👇 reported_by comes from student_violations.user_id
+LEFT JOIN users u_report ON sv.user_id = u_report.id
+-- 👇 recorded_by comes from record_violations.user_id
+LEFT JOIN users u_record ON rv.user_id = u_record.id
 WHERE sv.student_id = ?
 ORDER BY rv.date_recorded DESC
 ";
@@ -127,12 +130,13 @@ foreach (range('A', 'J') as $col) {
 }
 
 // ✅ Title formatting
+$sheet->getStyle('A:J')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 $sheet->getStyle('A1:B1')->getFont()->setBold(true);
 $sheet->getStyle('A3:I3')->getFont()->setBold(true);
 $sheet->getStyle('A6:J6')->getFont()->setBold(true);
 
 // ✅ File name
-$fileName = "Student_Summary_{$student['last_name']}.xlsx";
+$fileName = "Violations_Summary_{$student['last_name']}_{$student['first_name']}.xlsx";
 
 // ✅ Output to browser (download)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

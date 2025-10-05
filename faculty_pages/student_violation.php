@@ -276,12 +276,15 @@ $totalViolations = count($studentViolations);
                             <?php if ($v['status'] === 'Pending'): ?>
                                 <a href="faculty.php?page=student_violation&edit_id=<?= $v['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
                                 <a href="faculty.php?page=student_violation&delete_id=<?= $v['id'] ?>" 
-                                   onclick="return confirm('Are you sure you want to delete this violation?');"
-                                   class="btn btn-sm btn-secondary">Delete</a>
+                                onclick="return confirm('Are you sure you want to delete this violation?');"
+                                class="btn btn-sm btn-secondary">Delete</a>
+                            <?php elseif ($v['status'] === 'Recorded'): ?>
+                                <a href="printindividual.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-primary">View</a>
                             <?php else: ?>
                                 <em>N/A</em>
                             <?php endif; ?>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
