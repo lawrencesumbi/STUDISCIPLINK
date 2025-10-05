@@ -1,0 +1,17 @@
+{
+    "name": "admin/studisciplink",
+    "autoload": {
+        "psr-4": {
+            "Admin\\Studisciplink\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lawrencesumbi",
+            "email": "guiansumbi@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^5.1"
+    }
+}

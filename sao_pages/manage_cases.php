@@ -152,7 +152,7 @@ $resolved = $resolved_stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- ✅ Search Form -->
 <form method="GET" class="search-form">
     <input type="hidden" name="page" value="manage_cases">
-    <input type="text" name="search" placeholder="Search by student, violation, sanction, description, or status" value="<?= htmlspecialchars($search); ?>">
+    <input type="text" name="search" placeholder="Search by student, violation, sanction, or status" value="<?= htmlspecialchars($search); ?>">
     <button type="submit">Search</button>
     <?php if ($search): ?>
         <a href="?page=manage_cases">Clear</a>
