@@ -7,6 +7,8 @@ $dbname = "studisciplink";
 $user = "root"; // change if needed
 $pass = "";
 
+$programData = [];
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -60,6 +62,40 @@ try {
     $total_students = 0;
     $total_programs = 0;
 }
+
+try {
+    if ($current_sy_id) {
+        // ✅ Always show all programs, even if 0 students in current SY
+        $stmt = $pdo->prepare("
+            SELECT 
+                p.program_code, 
+                COUNT(s.id) AS student_count
+            FROM programs p
+            LEFT JOIN students s 
+                ON s.program_id = p.id 
+                AND s.school_year_id = :school_year_id
+            GROUP BY p.id, p.program_code
+            ORDER BY student_count DESC
+        ");
+        $stmt->execute(['school_year_id' => $current_sy_id]);
+    } else {
+        // Fallback: show all programs (any school year)
+        $stmt = $pdo->query("
+            SELECT 
+                p.program_code, 
+                COUNT(s.id) AS student_count
+            FROM programs p
+            LEFT JOIN students s 
+                ON s.program_id = p.id
+            GROUP BY p.id, p.program_code
+            ORDER BY student_count DESC
+        ");
+    }
+
+    $programData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "<p style='color:red;'>Error fetching program data: " . $e->getMessage() . "</p>";
+}
 ?>
 
 <!-- User Stats -->
@@ -98,6 +134,58 @@ try {
     </div>
 </div>
 
+<!-- Chart Container -->
+<div style="margin-top: 40px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h3 style="text-align:center; margin-bottom: 20px; color:#333;">Number of Students per Program</h3>
+    <canvas id="programChart" height="50"></canvas>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('programChart').getContext('2d');
+    const programNames = <?= json_encode(array_column($programData, 'program_code')) ?>;
+    const studentCounts = <?= json_encode(array_column($programData, 'student_count')) ?>;
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: programNames,
+            datasets: [{
+                label: 'Number of Students',
+                data: studentCounts,
+                backgroundColor: '#c41e1e',
+                borderRadius: 8,
+                hoverBackgroundColor: '#e74c3c',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#333',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    padding: 10
+                }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Programs', color: '#555', font: { weight: 'bold' } },
+                    ticks: { color: '#333' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Number of Students', color: '#555', font: { weight: 'bold' } },
+                    ticks: { stepSize: 1, color: '#333' }
+                }
+            }
+        }
+    });
+</script>
+
+
 <style>
 .stats-container {
     display: flex;
@@ -109,7 +197,7 @@ try {
 .stat-box {
     flex: 1;
     min-width: 200px;
-    min-height: 150px; /* ✅ same height */
+    min-height: 100px; /* ✅ same height */
     padding: 20px;
     color: white;
     border-radius: 12px;
@@ -142,5 +230,6 @@ try {
 .box-green { background: #27ae60; }
 
 .box-red-dark { background: #8d2525; }
-.box-red-light { background: #c41616; }
+.box-red-light { background: #ff5555ff; }
 </style>
+

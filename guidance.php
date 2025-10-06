@@ -25,7 +25,7 @@ if (!in_array($page, $allowed_pages)) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Guidance</title>
+    <title>Guidance/POD</title>
     <style>
         body { margin:0; font-family:'Roboto', sans-serif; background:#f4f4f4; }
 
