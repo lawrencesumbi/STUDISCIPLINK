@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2025 at 05:38 PM
+-- Generation Time: Oct 06, 2025 at 11:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1037,7 +1037,107 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (969, 9, 'Logged out', '2025-10-05 23:16:16'),
 (970, 1, 'Logged in', '2025-10-05 23:16:19'),
 (971, 1, 'Logged out', '2025-10-05 23:19:59'),
-(972, 9, 'Logged in', '2025-10-05 23:20:01');
+(972, 9, 'Logged in', '2025-10-05 23:20:01'),
+(973, 9, 'Logged out', '2025-10-05 23:39:06'),
+(974, 3, 'Logged in', '2025-10-05 23:39:11'),
+(975, 3, 'Logged out', '2025-10-05 23:42:48'),
+(976, 3, 'Logged in', '2025-10-05 23:42:52'),
+(977, 3, 'Logged out', '2025-10-05 23:42:57'),
+(978, 4, 'Logged in', '2025-10-05 23:43:06'),
+(979, 4, 'Logged out', '2025-10-05 23:51:20'),
+(980, 9, 'Logged in', '2025-10-05 23:51:22'),
+(981, 9, 'Logged out', '2025-10-05 23:52:05'),
+(982, 3, 'Logged in', '2025-10-05 23:52:09'),
+(983, 3, 'Logged out', '2025-10-05 23:52:25'),
+(984, 4, 'Logged in', '2025-10-05 23:52:29'),
+(985, 4, 'Logged out', '2025-10-05 23:53:18'),
+(986, 3, 'Logged in', '2025-10-05 23:53:24'),
+(987, 3, 'Logged out', '2025-10-06 00:10:51'),
+(988, 4, 'Logged in', '2025-10-06 00:10:59'),
+(989, 4, 'Logged out', '2025-10-06 00:29:49'),
+(990, 9, 'Logged in', '2025-10-06 00:29:52'),
+(991, 9, 'Logged out', '2025-10-06 00:31:33'),
+(992, 4, 'Logged in', '2025-10-06 00:31:59'),
+(993, 4, 'Logged out', '2025-10-06 00:47:07'),
+(994, 9, 'Logged in', '2025-10-06 00:47:09'),
+(995, 9, 'Logged out', '2025-10-06 00:48:21'),
+(996, 4, 'Logged in', '2025-10-06 00:48:25'),
+(997, 4, 'Logged out', '2025-10-06 00:51:11'),
+(998, 3, 'Logged in', '2025-10-06 00:51:14'),
+(999, 3, 'Logged out', '2025-10-06 10:36:57'),
+(1000, 1, 'Logged in', '2025-10-06 10:37:02'),
+(1001, 1, 'Logged out', '2025-10-06 11:53:13'),
+(1002, 4, 'Logged in', '2025-10-06 11:53:18'),
+(1003, 4, 'Logged out', '2025-10-06 11:57:41'),
+(1004, 3, 'Logged in', '2025-10-06 11:57:45'),
+(1005, 3, 'Logged out', '2025-10-06 11:57:52'),
+(1006, 4, 'Logged in', '2025-10-06 11:58:02'),
+(1007, 4, 'Logged out', '2025-10-06 12:16:01'),
+(1008, 1, 'Logged in', '2025-10-06 12:16:04'),
+(1009, 1, 'Logged out', '2025-10-06 12:16:59'),
+(1010, 4, 'Logged in', '2025-10-06 12:17:04'),
+(1011, 4, 'Logged out', '2025-10-06 12:17:19'),
+(1012, 8, 'Logged in', '2025-10-06 12:17:24'),
+(1013, 8, 'Logged out', '2025-10-06 12:17:38'),
+(1014, 4, 'Logged in', '2025-10-06 12:17:41'),
+(1015, 4, 'Logged out', '2025-10-06 12:24:03'),
+(1016, 3, 'Logged in', '2025-10-06 12:24:06'),
+(1017, 3, 'Logged out', '2025-10-06 12:24:38'),
+(1018, 9, 'Logged in', '2025-10-06 12:24:41'),
+(1019, 3, 'Logged in', '2025-10-06 12:38:13'),
+(1020, 3, 'Logged out', '2025-10-06 12:39:20'),
+(1021, 4, 'Logged in', '2025-10-06 12:39:26'),
+(1022, 4, 'Logged out', '2025-10-06 12:52:26'),
+(1023, 1, 'Logged in', '2025-10-06 12:52:28'),
+(1024, 1, 'Logged out', '2025-10-06 12:52:44'),
+(1025, 4, 'Logged in', '2025-10-06 12:52:49'),
+(1026, 4, 'Logged out', '2025-10-06 12:57:47'),
+(1027, 1, 'Logged in', '2025-10-06 12:57:58'),
+(1028, 1, 'Logged out', '2025-10-06 13:08:42'),
+(1029, 4, 'Logged in', '2025-10-06 13:08:49'),
+(1030, 4, 'Logged out', '2025-10-06 13:13:01'),
+(1031, 3, 'Logged in', '2025-10-06 13:13:05'),
+(1032, 3, 'Logged out', '2025-10-06 13:25:16'),
+(1033, 4, 'Logged in', '2025-10-06 13:25:21'),
+(1034, 4, 'Logged out', '2025-10-06 13:25:35'),
+(1035, 3, 'Logged in', '2025-10-06 13:25:39'),
+(1036, 3, 'Logged out', '2025-10-06 13:26:16'),
+(1037, 1, 'Logged in', '2025-10-06 13:26:31'),
+(1038, 1, 'Logged out', '2025-10-06 13:29:40'),
+(1039, 4, 'Logged in', '2025-10-06 13:29:45'),
+(1040, 4, 'Logged out', '2025-10-06 13:29:53'),
+(1041, 3, 'Logged in', '2025-10-06 13:29:57'),
+(1042, 3, 'Logged out', '2025-10-06 13:36:04'),
+(1043, 9, 'Logged in', '2025-10-06 13:36:07'),
+(1044, 9, 'Logged out', '2025-10-06 16:16:46'),
+(1045, 3, 'Logged in', '2025-10-06 16:16:50'),
+(1046, 3, 'Logged out', '2025-10-06 16:17:13'),
+(1047, 9, 'Logged in', '2025-10-06 16:17:16'),
+(1048, 9, 'Logged out', '2025-10-06 16:29:40'),
+(1049, 3, 'Logged in', '2025-10-06 16:29:44'),
+(1050, 3, 'Logged out', '2025-10-06 16:29:51'),
+(1051, 9, 'Logged in', '2025-10-06 16:29:54'),
+(1052, 9, 'Logged out', '2025-10-06 16:30:01'),
+(1053, 3, 'Logged in', '2025-10-06 16:30:09'),
+(1054, 3, 'Logged out', '2025-10-06 16:40:01'),
+(1055, 1, 'Logged in', '2025-10-06 16:40:05'),
+(1056, 1, 'Logged out', '2025-10-06 16:40:21'),
+(1057, 4, 'Logged in', '2025-10-06 16:40:25'),
+(1058, 4, 'Logged out', '2025-10-06 16:40:45'),
+(1059, 9, 'Logged in', '2025-10-06 16:40:48'),
+(1060, 9, 'Logged out', '2025-10-06 16:43:45'),
+(1061, 3, 'Logged in', '2025-10-06 16:43:49'),
+(1062, 3, 'Logged out', '2025-10-06 16:56:55'),
+(1063, 1, 'Logged in', '2025-10-06 16:57:13'),
+(1064, 1, 'Logged out', '2025-10-06 17:00:12'),
+(1065, 4, 'Logged in', '2025-10-06 17:00:18'),
+(1066, 4, 'Logged out', '2025-10-06 17:04:15'),
+(1067, 4, 'Logged in', '2025-10-06 17:04:29'),
+(1068, 4, 'Logged out', '2025-10-06 17:05:24'),
+(1069, 3, 'Logged in', '2025-10-06 17:05:28'),
+(1070, 3, 'Logged out', '2025-10-06 17:07:54'),
+(1071, 9, 'Logged in', '2025-10-06 17:07:57'),
+(1072, 9, 'Logged out', '2025-10-06 17:13:21');
 
 -- --------------------------------------------------------
 
@@ -1262,7 +1362,8 @@ INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `descripti
 (35, 28, 1, 'Cheating', 'Room 101', '2025-09-17 20:08:19', 'Pending', 4, 1),
 (39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Recorded', 8, 2),
 (40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Recorded', 4, 2),
-(41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Recorded', 4, 2);
+(41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Recorded', 4, 2),
+(42, 8, 2, 'Suwat suwat sa blackboard', 'ROOM 101', '2025-10-06 17:03:27', 'Pending', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -1287,15 +1388,15 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
 (1, 'admin', '$2y$10$ov6ePzMX3b96jDzNgEXGFuuHHAvKRJ6E7BPyhb6505aYKbHkmsZAW', 'admin', 'administrator@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
-(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'active', ''),
+(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
 (3, 'guidance', '$2y$10$ql2NM0Hd3kZXf.5ML.Ch7ute/nGm9qDckx0PJ5P2Xqjj/iCs0KE7y', 'guidance', 'guidance@gmail.com', '09987654321', 'active', '../studisciplink/userUploads/92700584-e219-4775-b0b1-1b75cd3ee529.jpg'),
 (4, 'faculty', '$2y$10$GToR8dPdBzjm9mnaZGx9peH7R10B6lF7pUVZpjSBa8FmK5.yqCEDy', 'faculty', 'faculty@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/f56486c5427dc5a7ed81252862d87c96.jpg'),
-(5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'active', ''),
+(5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'pending', ''),
 (6, 'registrar', '$2y$10$Pej8sUm0a396ljujUBphwuk09/TkrT4Aml42V7HAnqyDb3rxugk9m', 'registrar', 'registrar@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/6843dc0b5e4341f168aac30144c56418.jpg'),
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$Ug7uQl3SC3kMUHXdMRt8xekqV2yvu0n8jKMaWLaxliX87L3jnk3.S', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
 (9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg'),
-(10, 'dally', '$2y$10$cyMnmcgQddw5xlv0ZUHaGONtsvoOQi5BK7DEG.C8bJlLFIh2lGdg.', 'guidance', 'dally@gmail.com', '09123456789', 'active', '');
+(10, 'dally', '$2y$10$cyMnmcgQddw5xlv0ZUHaGONtsvoOQi5BK7DEG.C8bJlLFIh2lGdg.', 'guidance', 'dally@gmail.com', '09123456789', 'pending', '');
 
 -- --------------------------------------------------------
 
@@ -1467,7 +1568,7 @@ ALTER TABLE `class_enrollments`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=973;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1073;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -1521,7 +1622,7 @@ ALTER TABLE `student_enrollments`
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `users`

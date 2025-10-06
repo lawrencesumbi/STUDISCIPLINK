@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . '/../db_connect.php'; // include your database connection
+require __DIR__ . '/../db_connect.php';
+
 
 // Get logged-in user
 if (!isset($_SESSION['user_id'])) {
@@ -9,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 
 // ✅ Get the current school year
 $current_sy_row = $pdo->query("SELECT * FROM school_years WHERE is_current = 1 LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-
 if ($current_sy_row) {
     $current_sy_id = $current_sy_row['id'];
     $current_school_year = $current_sy_row['school_year'];
@@ -23,9 +23,8 @@ if ($current_sy_row) {
 if ($current_sy_id) {
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
-        FROM student_violations sv
-        JOIN students st ON sv.student_id = st.id
-        WHERE sv.status = 'pending' AND st.school_year_id = ?
+        FROM student_violations
+        WHERE status = 'pending' AND school_year_id = ?
     ");
     $stmt->execute([$current_sy_id]);
     $pending_violations = $stmt->fetchColumn();
@@ -37,9 +36,8 @@ if ($current_sy_id) {
 if ($current_sy_id) {
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
-        FROM student_violations sv
-        JOIN students st ON sv.student_id = st.id
-        WHERE sv.status IN ('recorded','resolved') AND st.school_year_id = ?
+        FROM student_violations
+        WHERE status IN ('recorded','resolved') AND school_year_id = ?
     ");
     $stmt->execute([$current_sy_id]);
     $recorded_violations = $stmt->fetchColumn();
@@ -47,29 +45,29 @@ if ($current_sy_id) {
     $recorded_violations = 0;
 }
 
-// ✅ Fetch violations per program
+// ✅ Fetch all violations with counts for current school year
 if ($current_sy_id) {
     $stmt = $pdo->prepare("
-        SELECT p.program_code, COUNT(sv.id) AS violation_count
-        FROM programs p
-        LEFT JOIN students st ON st.program_id = p.id AND st.school_year_id = :sy
-        LEFT JOIN student_violations sv ON sv.student_id = st.id
-        GROUP BY p.id, p.program_code
-        ORDER BY violation_count DESC
+        SELECT v.violation, COUNT(sv.id) AS violation_count
+        FROM violations v
+        LEFT JOIN student_violations sv 
+            ON sv.violation_id = v.id AND sv.school_year_id = :sy
+        GROUP BY v.id, v.violation
+        ORDER BY v.id ASC
     ");
     $stmt->execute(['sy' => $current_sy_id]);
 } else {
     $stmt = $pdo->query("
-        SELECT p.program_code, COUNT(sv.id) AS violation_count
-        FROM programs p
-        LEFT JOIN students st ON st.program_id = p.id
-        LEFT JOIN student_violations sv ON sv.student_id = st.id
-        GROUP BY p.id, p.program_code
-        ORDER BY violation_count DESC
+        SELECT v.violation, COUNT(sv.id) AS violation_count
+        FROM violations v
+        LEFT JOIN student_violations sv 
+            ON sv.violation_id = v.id
+        GROUP BY v.id, v.violation
+        ORDER BY v.id ASC
     ");
 }
 
-$programViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$violationTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Dashboard Stats -->
@@ -90,12 +88,11 @@ $programViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<!-- Charts Container: Side by Side -->
+<!-- Charts Container -->
 <div style="display: flex; gap: 20px; margin-top: 40px; flex-wrap: wrap;">
-
-    <!-- Bar Chart: Violations per Program -->
+    <!-- Bar Chart: All Violations -->
     <div style="flex: 1; min-width: 300px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-        <h3 style="text-align:center; margin-bottom: 20px; color:#333;">Violations per Program</h3>
+        <h3 style="text-align:center; margin-bottom: 20px; color:#333;">Most Committed Violations</h3>
         <div style="height:300px;">
             <canvas id="violationsBarChart"></canvas>
         </div>
@@ -108,23 +105,22 @@ $programViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <canvas id="violationPieChart"></canvas>
         </div>
     </div>
-
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Bar Chart: Violations per Program
+    // Bar Chart: All Violations
     const barCtx = document.getElementById('violationsBarChart').getContext('2d');
-    const barLabels = <?= json_encode(array_column($programViolations, 'program_code')) ?>;
-    const barData = <?= json_encode(array_column($programViolations, 'violation_count')) ?>;
+    const barLabels = <?= json_encode(array_column($violationTypes, 'violation')) ?>;
+    const barData = <?= json_encode(array_column($violationTypes, 'violation_count')) ?>;
 
     new Chart(barCtx, {
         type: 'bar',
         data: {
             labels: barLabels,
             datasets: [{
-                label: 'Violations',
+                label: 'Number of Students',
                 data: barData,
                 backgroundColor: '#c41e1e',
                 borderRadius: 8
@@ -193,7 +189,6 @@ $programViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     flex-wrap: wrap;
     margin-top: 20px;
 }
-
 .stat-box {
     flex: 1;
     padding: 35px;
@@ -203,13 +198,11 @@ $programViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-
 .stat-value {
     font-size: 28px;
     font-weight: bold;
     margin: 0;
 }
-
 /* Colors */
 .box-red { background: #ff0000ff; }
 .box-dark-red { background: #c41616ff; }
