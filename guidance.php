@@ -72,7 +72,7 @@ if (!in_array($page, $allowed_pages)) {
             <img src="default.png" alt="Profile Image">
         <?php endif; ?>
     </div>
-    <h2>Guidance</h2>
+    <h2>Guidance/POD</h2>
     <a href="?page=dashboard" class="<?= ($page == 'dashboard') ? 'active' : '' ?>">Dashboard</a>
     <a href="?page=manage_school_year" class="<?= ($page == 'manage_school_year') ? 'active' : '' ?>">School Year</a>
     <a href="?page=manage_violation" class="<?= ($page == 'manage_violation') ? 'active' : '' ?>">Manage Violation</a>

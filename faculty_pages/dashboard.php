@@ -68,34 +68,204 @@ if ($current_sy_id) {
     $stmt->execute([$user_id]);
     $total_violations = $stmt->fetchColumn();
 }
+
+/// ✅ Fetch per-class students and violations for the chart
+if ($current_sy_id) {
+    $stmt = $pdo->prepare("
+        SELECT 
+            CONCAT(p.program_code, yl.year_code, s.section_name) AS class_name,
+            COUNT(DISTINCT se.student_id) AS total_students,
+            COUNT(DISTINCT sv.id) AS total_violations
+        FROM class_enrollments ce
+        JOIN programs p ON ce.program_id = p.id
+        JOIN year_levels yl ON ce.year_level_id = yl.id
+        JOIN sections s ON ce.section_id = s.id
+        LEFT JOIN student_enrollments se ON ce.id = se.class_enrollment_id
+        LEFT JOIN students st ON se.student_id = st.id
+        LEFT JOIN student_violations sv ON sv.student_id = st.id
+        WHERE ce.user_id = ? AND ce.school_year_id = ?
+        GROUP BY class_name
+        ORDER BY class_name
+    ");
+    $stmt->execute([$user_id, $current_sy_id]);
+} else {
+    $stmt = $pdo->prepare("
+        SELECT 
+            CONCAT(p.program_code, yl.year_code, s.section_name) AS class_name,
+            COUNT(DISTINCT se.student_id) AS total_students,
+            COUNT(DISTINCT sv.id) AS total_violations
+        FROM class_enrollments ce
+        JOIN programs p ON ce.program_id = p.id
+        JOIN year_levels yl ON ce.year_level_id = yl.id
+        JOIN sections s ON ce.section_id = s.id
+        LEFT JOIN student_enrollments se ON ce.id = se.class_enrollment_id
+        LEFT JOIN students st ON se.student_id = st.id
+        LEFT JOIN student_violations sv ON sv.student_id = st.id
+        WHERE ce.user_id = ?
+        GROUP BY class_name
+        ORDER BY class_name
+    ");
+    $stmt->execute([$user_id]);
+}
+
+$chartData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!-- Dashboard Stats -->
 <div class="stats-container">
-    <!-- Current School Year -->
     <div class="stat-box box-red">
         <h4>Current School Year</h4>
         <p class="stat-value"><?= htmlspecialchars($current_school_year) ?></p>
     </div>
 
-    <!-- Total Classes -->
     <div class="stat-box box-dark-red">
         <h4>Total Classes</h4>
         <p class="stat-value"><?= $total_classes ?></p>
     </div>
 
-    <!-- Total Students -->
     <div class="stat-box box-light-red">
         <h4>Total Students</h4>
         <p class="stat-value"><?= $total_students ?></p>
     </div>
 
-    <!-- ✅ Total Violations -->
     <div class="stat-box box-maroon">
         <h4>Total Violations</h4>
         <p class="stat-value"><?= $total_violations ?></p>
     </div>
 </div>
+
+<!-- 📊 Charts Row -->
+<div class="charts-row">
+    <!-- 📋 Grouped Bar Chart -->
+    <div class="chart-box left-chart">
+        <h3>Students and Violations per Class</h3>
+        <div class="chart-wrapper">
+            <canvas id="classChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 🥧 Pie Chart -->
+    <div class="chart-box right-chart">
+        <h3>Violation Percentage per Class</h3>
+        <div class="chart-wrapper">
+            <canvas id="violationPieChart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('classChart').getContext('2d');
+    const classNames = <?= json_encode(array_column($chartData, 'class_name')) ?>;
+    const studentCounts = <?= json_encode(array_column($chartData, 'total_students')) ?>;
+    const violationCounts = <?= json_encode(array_column($chartData, 'total_violations')) ?>;
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: classNames,
+            datasets: [
+                {
+                    label: 'Students',
+                    data: studentCounts,
+                    backgroundColor: '#27ae60',
+                    borderRadius: 8
+                },
+                {
+                    label: 'Violations',
+                    data: violationCounts,
+                    backgroundColor: '#c41e1e',
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: '#333', font: { weight: 'bold' } }
+                },
+                tooltip: {
+                    backgroundColor: '#333',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    padding: 10
+                }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Class', color: '#555', font: { weight: 'bold' } },
+                    ticks: { color: '#333' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Count', color: '#555', font: { weight: 'bold' } },
+                    ticks: { stepSize: 1, color: '#333' }
+                }
+            }
+        }
+    });
+</script>
+
+
+<script>
+    const pieCtx = document.getElementById('violationPieChart').getContext('2d');
+    const pieLabels = <?= json_encode(array_column($chartData, 'class_name')) ?>;
+    const pieData = <?= json_encode(array_column($chartData, 'total_violations')) ?>;
+
+    // ✅ Generate distinct colors for each slice
+    const pieColors = pieLabels.map((_, i) => {
+        const hue = (i * 60) % 360; // spread colors evenly
+        return `hsl(${hue}, 70%, 50%)`;
+    });
+
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: pieLabels,
+            datasets: [{
+                data: pieData,
+                backgroundColor: pieColors,
+                borderWidth: 1,
+                borderColor: '#fff',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#333',
+                        font: { size: 14 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.chart._metasets[context.datasetIndex].total;
+                            const value = context.raw;
+                            const percentage = total ? ((value / total) * 100).toFixed(1) : 0;
+                            return `${context.label}: ${value} violations (${percentage}%)`;
+                        }
+                    }
+                },
+                title: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+
+
 
 <style>
 .stats-container {
@@ -122,16 +292,45 @@ if ($current_sy_id) {
 }
 
 /* Colors */
-.box-red {
-    background: #ff0000ff;
+.box-red { background: #ff0000ff; }
+.box-dark-red { background: #c41616ff; }
+.box-light-red { background: #8d2525ff; }
+.box-maroon { background: #5c0a0a; }
+
+.charts-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: nowrap; /* stay side-by-side */
 }
-.box-dark-red {
-    background: #c41616ff;
+
+.chart-box {
+    width: 50%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
-.box-light-red {
-    background: #8d2525ff;
+
+.chart-box h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
 }
-.box-maroon {
-    background: #5c0a0a;
+
+/* prevent charts from stretching */
+.chart-wrapper {
+    width: 100%;
+    height: 350px;
 }
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
 </style>
