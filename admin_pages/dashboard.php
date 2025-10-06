@@ -134,20 +134,36 @@ try {
     </div>
 </div>
 
-<!-- Chart Container -->
-<div style="margin-top: 40px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <h3 style="text-align:center; margin-bottom: 20px; color:#333;">Number of Students per Program</h3>
-    <canvas id="programChart" height="50"></canvas>
+<!-- Charts Container: Side by Side -->
+<div style="display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;">
+
+    <!-- Bar Chart: Number of Students per Program -->
+    <div style="flex: 1; min-width: 300px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h3 style="text-align:center; margin-bottom: 20px; color:#333;">Number of Students per Program</h3>
+        <div style="height:215px;">
+            <canvas id="programChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Pie Chart: Active vs Pending Users -->
+    <div style="flex: 1; min-width: 300px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h3 style="text-align:center; margin-bottom: 20px; color:#333;">User Status Percentage</h3>
+        <div style="height:215px;">
+            <canvas id="userStatusPieChart"></canvas>
+        </div>
+    </div>
+
 </div>
 
-<!-- Chart.js Script -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('programChart').getContext('2d');
+    // Bar Chart: Students per Program
+    const ctxProgram = document.getElementById('programChart').getContext('2d');
     const programNames = <?= json_encode(array_column($programData, 'program_code')) ?>;
     const studentCounts = <?= json_encode(array_column($programData, 'student_count')) ?>;
 
-    new Chart(ctx, {
+    new Chart(ctxProgram, {
         type: 'bar',
         data: {
             labels: programNames,
@@ -161,6 +177,7 @@ try {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -183,7 +200,47 @@ try {
             }
         }
     });
+
+    // Pie Chart: Active vs Pending Users
+    const ctxUserPie = document.getElementById('userStatusPieChart').getContext('2d');
+    const userStatusData = [<?= $activeUsers ?>, <?= $pendingUsers ?>];
+    const userStatusLabels = ['Active Users', 'Pending Users'];
+    const userColors = ['#27ae60', '#e67e22'];
+
+    new Chart(ctxUserPie, {
+        type: 'pie',
+        data: {
+            labels: userStatusLabels,
+            datasets: [{
+                data: userStatusData,
+                backgroundColor: userColors,
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { color: '#333', font: { size: 14 } }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.raw;
+                            const percent = total ? ((value / total) * 100).toFixed(1) : 0;
+                            return `${context.label}: ${value} (${percent}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
+
 
 
 <style>
