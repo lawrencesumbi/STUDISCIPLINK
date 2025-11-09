@@ -83,7 +83,7 @@ if (isset($_POST['update_student'])) {
     $_SESSION['last_program'] = $_POST['program_id'];
     $_SESSION['last_year'] = $_POST['year_level_id'];
     $_SESSION['last_section'] = $_POST['section_id'];
-    log_activity($pdo, $current_user_id, "Updated student ID $id");
+    log_activity($pdo, $current_user_id, "Updated student ID $id: {$_POST['first_name']} {$_POST['last_name']}");
     $message = "<p class='success-msg'>Student updated successfully!</p>";
 }
 

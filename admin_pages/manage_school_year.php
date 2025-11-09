@@ -3,6 +3,9 @@ require __DIR__ . '/../db_connect.php';
 
 $message = "";
 
+// Get current user ID (default to null if not logged in)
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
 // Variables for edit mode
 $edit_mode = false;
 $edit_id = null;
@@ -13,6 +16,13 @@ if (isset($_POST['add_school_year'])) {
     $school_year = trim($_POST['school_year']);
     $stmt = $pdo->prepare("INSERT INTO school_years (school_year, is_current) VALUES (?, 0)");
     $stmt->execute([$school_year]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Added new school year: $school_year"]);
+    }
+
     $message = "<p class='success-msg'>School Year added successfully!</p>";
 }
 
@@ -22,23 +32,56 @@ if (isset($_POST['update_school_year'])) {
     $school_year = trim($_POST['school_year']);
     $stmt = $pdo->prepare("UPDATE school_years SET school_year=? WHERE id=?");
     $stmt->execute([$school_year, $id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Updated school year (ID: $id) to: $school_year"]);
+    }
+
     $message = "<p class='success-msg'>School Year updated successfully!</p>";
 }
 
 // Handle delete
 if (isset($_POST['delete_school_year'])) {
     $id = $_POST['id'];
+
+    // Fetch deleted SY name before deletion for log
+    $getSY = $pdo->prepare("SELECT school_year FROM school_years WHERE id=?");
+    $getSY->execute([$id]);
+    $deleted_sy = $getSY->fetchColumn();
+
     $stmt = $pdo->prepare("DELETE FROM school_years WHERE id=?");
     $stmt->execute([$id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Deleted school year: $deleted_sy"]);
+    }
+
     $message = "<p class='error-msg'>School Year deleted successfully!</p>";
 }
 
 // Handle set current school year (persistent)
 if (isset($_POST['select_sy'])) {
     $id = $_POST['id'];
+
+    // Fetch selected SY for log
+    $getSY = $pdo->prepare("SELECT school_year FROM school_years WHERE id=?");
+    $getSY->execute([$id]);
+    $selected_sy = $getSY->fetchColumn();
+
     $pdo->query("UPDATE school_years SET is_current = 0");
     $stmt = $pdo->prepare("UPDATE school_years SET is_current = 1 WHERE id=?");
     $stmt->execute([$id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Set current school year to: $selected_sy"]);
+    }
+
     $message = "<p class='success-msg'>School Year set as current successfully!</p>";
 }
 
@@ -62,7 +105,6 @@ $current_sy_row = $pdo->query("SELECT * FROM school_years WHERE is_current = 1 L
 $current_sy = $current_sy_row ? $current_sy_row['school_year'] : "None";
 $current_sy_id = $current_sy_row ? $current_sy_row['id'] : null;
 ?>
-
 <div class="container">
     <?= $message; ?>
 

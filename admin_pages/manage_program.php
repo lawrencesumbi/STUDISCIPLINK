@@ -4,6 +4,9 @@ require __DIR__ . '/../db_connect.php'; // include DB connection
 // Messages
 $message = "";
 
+// Get current user ID
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
 // Variables for edit mode
 $edit_mode = false;
 $edit_id = null;
@@ -17,6 +20,13 @@ if (isset($_POST['add_program'])) {
     if (!empty($program_name) && !empty($program_code)) {
         $stmt = $pdo->prepare("INSERT INTO programs (program_name, program_code) VALUES (?, ?)");
         $stmt->execute([$program_name, $program_code]);
+
+        // Log action
+        if ($user_id) {
+            $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+            $log->execute([$user_id, "Added new program: $program_name ($program_code)"]);
+        }
+
         $message = "<p class='success-msg'>Program added successfully!</p>";
     } else {
         $message = "<p class='error-msg'>Please fill in all fields.</p>";
@@ -28,16 +38,37 @@ if (isset($_POST['update_program'])) {
     $id = $_POST['id'];
     $program_name = trim($_POST['program_name']);
     $program_code = trim($_POST['program_code']);
+
     $stmt = $pdo->prepare("UPDATE programs SET program_name=?, program_code=? WHERE id=?");
     $stmt->execute([$program_name, $program_code, $id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Updated program (ID: $id) to: $program_name ($program_code)"]);
+    }
+
     $message = "<p class='success-msg'>Program updated successfully!</p>";
 }
 
 // Handle delete
 if (isset($_POST['delete_program'])) {
     $id = $_POST['id'];
+
+    // Get program details before deleting (for log)
+    $getProgram = $pdo->prepare("SELECT program_name, program_code FROM programs WHERE id=?");
+    $getProgram->execute([$id]);
+    $deleted = $getProgram->fetch(PDO::FETCH_ASSOC);
+
     $stmt = $pdo->prepare("DELETE FROM programs WHERE id=?");
     $stmt->execute([$id]);
+
+    // Log action
+    if ($user_id && $deleted) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Deleted program: {$deleted['program_name']} ({$deleted['program_code']})"]);
+    }
+
     $message = "<p class='error-msg'>Program deleted successfully!</p>";
 }
 

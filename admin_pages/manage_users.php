@@ -9,6 +9,15 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // ✅ Function to log actions
+    function logAction($pdo, $user_id, $action) {
+        $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $stmt->execute([$user_id, $action]);
+    }
+
+    // ✅ Get the current admin’s ID (make sure this is set when logging in)
+    $admin_id = $_SESSION['user_id'] ?? 0;
+
     // Handle form submissions
     if(isset($_POST['add_user'])) {
         $username = $_POST['username'];
@@ -20,6 +29,9 @@ try {
 
         $stmt = $pdo->prepare("INSERT INTO users (username, password, role, email, contact, status) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$username, $password, $role, $email, $contact, $status]);
+
+        // ✅ Log the add action
+        logAction($pdo, $admin_id, "Added user: $username");
     }
 
     if(isset($_POST['update_user'])) {
@@ -38,12 +50,25 @@ try {
             $stmt = $pdo->prepare("UPDATE users SET username=?, role=?, email=?, contact=?, status=? WHERE id=?");
             $stmt->execute([$username, $role, $email, $contact, $status, $id]);
         }
+
+        // ✅ Log the update action
+        logAction($pdo, $admin_id, "Updated user ID $id: $username");
     }
 
     if(isset($_GET['delete'])) {
         $id = $_GET['delete'];
+
+        // Fetch username before deleting for log clarity
+        $getUser = $pdo->prepare("SELECT username FROM users WHERE id=?");
+        $getUser->execute([$id]);
+        $userData = $getUser->fetch(PDO::FETCH_ASSOC);
+        $username = $userData ? $userData['username'] : 'Unknown User';
+
         $stmt = $pdo->prepare("DELETE FROM users WHERE id=?");
         $stmt->execute([$id]);
+
+        // ✅ Log the delete action
+        logAction($pdo, $admin_id, "Deleted user ID $id: $username");
     }
 
     // Fetch users with optional search
@@ -66,6 +91,7 @@ try {
     echo "<p style='color:red;'>Database error: ".$e->getMessage()."</p>";
 }
 ?>
+
 
 <style>
 /* Form Heading */

@@ -4,6 +4,9 @@ require __DIR__ . '/../db_connect.php'; // include DB connection
 // Messages
 $message = "";
 
+// Get current user ID
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
 // Variables to control edit mode
 $edit_mode = false;
 $edit_id = null;
@@ -16,6 +19,13 @@ if (isset($_POST['add_year_level'])) {
     $year_code = trim($_POST['year_code']);
     $stmt = $pdo->prepare("INSERT INTO year_levels (year_level, year_code) VALUES (?, ?)");
     $stmt->execute([$year_level, $year_code]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Added new year level: $year_level ($year_code)"]);
+    }
+
     $message = "<p class='success-msg'>Year Level added successfully!</p>";
 }
 
@@ -26,14 +36,34 @@ if (isset($_POST['update_year_level'])) {
     $year_code = trim($_POST['year_code']);
     $stmt = $pdo->prepare("UPDATE year_levels SET year_level=?, year_code=? WHERE id=?");
     $stmt->execute([$year_level, $year_code, $id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Updated year level (ID: $id) to: $year_level ($year_code)"]);
+    }
+
     $message = "<p class='success-msg'>Year Level updated successfully!</p>";
 }
 
 // Handle delete
 if (isset($_POST['delete_year_level'])) {
     $id = $_POST['id'];
+
+    // Get year level details before deleting (for logging)
+    $getYear = $pdo->prepare("SELECT year_level, year_code FROM year_levels WHERE id=?");
+    $getYear->execute([$id]);
+    $deleted = $getYear->fetch(PDO::FETCH_ASSOC);
+
     $stmt = $pdo->prepare("DELETE FROM year_levels WHERE id=?");
     $stmt->execute([$id]);
+
+    // Log action
+    if ($user_id && $deleted) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Deleted year level: {$deleted['year_level']} ({$deleted['year_code']})"]);
+    }
+
     $message = "<p class='error-msg'>Year Level deleted successfully!</p>";
 }
 
@@ -53,6 +83,7 @@ if (isset($_POST['edit_year_level'])) {
 // Fetch all year levels
 $year_levels = $pdo->query("SELECT * FROM year_levels ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <div class="container">
     <?= $message; ?>

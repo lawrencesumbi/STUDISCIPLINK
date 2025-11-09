@@ -4,6 +4,9 @@ require __DIR__ . '/../db_connect.php'; // include DB connection
 // Messages
 $message = "";
 
+// Get current user ID
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
 // Edit mode variables
 $edit_mode = false;
 $edit_id = null;
@@ -15,6 +18,13 @@ if (isset($_POST['add_section'])) {
     if ($section_name) {
         $stmt = $pdo->prepare("INSERT INTO sections (section_name) VALUES (?)");
         $stmt->execute([$section_name]);
+
+        // Log action
+        if ($user_id) {
+            $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+            $log->execute([$user_id, "Added new section: $section_name"]);
+        }
+
         $message = "<p class='success-msg'>Section added successfully!</p>";
     } else {
         $message = "<p class='error-msg'>Please enter a section name.</p>";
@@ -27,14 +37,34 @@ if (isset($_POST['update_section'])) {
     $section_name = trim($_POST['section_name']);
     $stmt = $pdo->prepare("UPDATE sections SET section_name=? WHERE id=?");
     $stmt->execute([$section_name, $id]);
+
+    // Log action
+    if ($user_id) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Updated section (ID: $id) to: $section_name"]);
+    }
+
     $message = "<p class='success-msg'>Section updated successfully!</p>";
 }
 
 // Handle delete section
 if (isset($_POST['delete_section'])) {
     $id = $_POST['id'];
+
+    // Get section name before deleting for logging
+    $getSection = $pdo->prepare("SELECT section_name FROM sections WHERE id=?");
+    $getSection->execute([$id]);
+    $deleted = $getSection->fetch(PDO::FETCH_ASSOC);
+
     $stmt = $pdo->prepare("DELETE FROM sections WHERE id=?");
     $stmt->execute([$id]);
+
+    // Log action
+    if ($user_id && $deleted) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([$user_id, "Deleted section: {$deleted['section_name']}"]);
+    }
+
     $message = "<p class='error-msg'>Section deleted successfully!</p>";
 }
 
@@ -53,6 +83,7 @@ if (isset($_POST['edit_section'])) {
 // Fetch all sections
 $sections = $pdo->query("SELECT * FROM sections ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <div class="container">
     <?= $message; ?>
