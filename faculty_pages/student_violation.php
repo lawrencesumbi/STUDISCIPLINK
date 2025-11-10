@@ -1,12 +1,19 @@
 <?php
 require __DIR__ . '/../db_connect.php';
 
+
 // Ensure faculty is logged in
 if (!isset($_SESSION['user_id'])) {
     echo "<p style='color:red;'>You must be logged in as faculty.</p>";
     exit;
 }
 $user_id = $_SESSION['user_id'];
+
+// ✅ Function to log actions
+function logAction($pdo, $user_id, $action) {
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+    $stmt->execute([$user_id, $action]);
+}
 
 // Get current school year
 $current_sy = $pdo->query("SELECT * FROM school_years WHERE is_current=1 LIMIT 1")->fetch(PDO::FETCH_ASSOC);
@@ -34,53 +41,26 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // ---------------------- FETCH VIOLATIONS ----------------------
 $violations = $pdo->query("SELECT * FROM violations ORDER BY violation ASC")->fetchAll(PDO::FETCH_ASSOC);
 
-// ---------------------- HANDLE ADD VIOLATION ----------------------
 $message = "";
 $edit_id = null;
 $edit_data = null;
 
-if (isset($_POST['add_violation'])) {
-    $student_id = $_POST['student_id'];
-    $violation_id = $_POST['violation_id'];
-    $description = trim($_POST['description']);
-    $location = trim($_POST['location']);
-
-    if (!empty($student_id) && !empty($violation_id) && !empty($location)) {
-        $stmt = $pdo->prepare("
-            INSERT INTO student_violations 
-                (student_id, violation_id, description, location, date_time, status, user_id, school_year_id)
-            VALUES (?, ?, ?, ?, NOW(), 'Pending', ?, ?)
-        ");
-        $stmt->execute([$student_id, $violation_id, $description, $location, $user_id, $current_sy_id]);
-        $message = "<p class='success-msg'>Violation recorded successfully (Pending status).</p>";
-    } else {
-        $message = "<p class='error-msg'>Please complete all required fields.</p>";
-    }
-}
-
-// Load record for editing
-if (isset($_GET['edit_id'])) {
-    $edit_id = intval($_GET['edit_id']);
-    $stmt = $pdo->prepare("SELECT * FROM student_violations WHERE id=? AND user_id=? LIMIT 1");
-    $stmt->execute([$edit_id, $user_id]);
-    $edit_data = $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-// Delete violation
-if (isset($_GET['delete_id'])) {
-    $delete_id = intval($_GET['delete_id']);
-    $stmt = $pdo->prepare("DELETE FROM student_violations WHERE id=? AND user_id=? AND status='Pending'");
-    $stmt->execute([$delete_id, $user_id]);
-    $message = "<p class='success-msg'>Violation deleted successfully.</p>";
-}
-
-// Add new or update
-if (isset($_POST['save_violation'])) {
+// ---------------------- HANDLE ADD / SAVE VIOLATION ----------------------
+if (isset($_POST['add_violation']) || isset($_POST['save_violation'])) {
     $student_id = $_POST['student_id'];
     $violation_id = $_POST['violation_id'];
     $description = trim($_POST['description']);
     $location = trim($_POST['location']);
     $hidden_id = $_POST['hidden_id'] ?? "";
+
+    // Fetch student & violation names for logging
+    $s = $pdo->prepare("SELECT CONCAT(first_name,' ',last_name) FROM students WHERE id=?");
+    $s->execute([$student_id]);
+    $student_name = $s->fetchColumn();
+
+    $v = $pdo->prepare("SELECT violation FROM violations WHERE id=?");
+    $v->execute([$violation_id]);
+    $violation_name = $v->fetchColumn();
 
     if (!empty($student_id) && !empty($violation_id) && !empty($location)) {
         if ($hidden_id) {
@@ -92,6 +72,7 @@ if (isset($_POST['save_violation'])) {
             ");
             $stmt->execute([$student_id, $violation_id, $description, $location, $hidden_id, $user_id]);
             $message = "<p class='success-msg'>Violation updated successfully.</p>";
+            logAction($pdo, $user_id, "Updated violation for $student_name – $violation_name");
         } else {
             // Insert
             $stmt = $pdo->prepare("
@@ -101,35 +82,89 @@ if (isset($_POST['save_violation'])) {
             ");
             $stmt->execute([$student_id, $violation_id, $description, $location, $user_id, $current_sy_id]);
             $message = "<p class='success-msg'>Violation recorded successfully (Pending status).</p>";
+            logAction($pdo, $user_id, "Added violation for $student_name – $violation_name");
         }
     } else {
         $message = "<p class='error-msg'>Please complete all required fields.</p>";
     }
 }
 
-// ---------------------- FETCH STUDENT VIOLATIONS ----------------------
-$stmt = $pdo->prepare("
-    SELECT sv.id, s.first_name, s.last_name, 
-           p.program_code, 
-           yl.year_code AS year_level,
-           sec.section_name,
-           v.violation, sv.description, sv.location, sv.date_time, sv.status
-    FROM student_violations sv
-    JOIN students s ON sv.student_id = s.id
-    JOIN programs p ON s.program_id = p.id
-    JOIN year_levels yl ON s.year_level_id = yl.id
-    JOIN sections sec ON s.section_id = sec.id
-    JOIN violations v ON sv.violation_id = v.id
-    WHERE sv.user_id = ? AND sv.school_year_id = ?
-    ORDER BY sv.date_time DESC
-");
-$stmt->execute([$user_id, $current_sy_id]);
+// ---------------------- LOAD FOR EDIT ----------------------
+if (isset($_GET['edit_id'])) {
+    $edit_id = intval($_GET['edit_id']);
+    $stmt = $pdo->prepare("SELECT * FROM student_violations WHERE id=? AND user_id=? LIMIT 1");
+    $stmt->execute([$edit_id, $user_id]);
+    $edit_data = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-$studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// ---------------------- DELETE ----------------------
+if (isset($_GET['delete_id'])) {
+    $delete_id = intval($_GET['delete_id']);
 
-// ---------------------- TOTAL VIOLATIONS ----------------------
+    $info = $pdo->prepare("
+        SELECT sv.id, CONCAT(s.first_name,' ',s.last_name) AS student_name, v.violation 
+        FROM student_violations sv
+        JOIN students s ON sv.student_id = s.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE sv.id=? AND sv.user_id=?
+    ");
+    $info->execute([$delete_id, $user_id]);
+    $details = $info->fetch(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare("DELETE FROM student_violations WHERE id=? AND user_id=? AND status='Pending'");
+    $stmt->execute([$delete_id, $user_id]);
+    $message = "<p class='success-msg'>Violation deleted successfully.</p>";
+
+    if ($details) {
+        logAction($pdo, $user_id, "Deleted violation for {$details['student_name']} – {$details['violation']}");
+    }
+}
+
+// ---------------------- SEARCH VIOLATIONS ----------------------
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$studentViolations = [];
+
+if ($search) {
+    $stmt = $pdo->prepare("
+        SELECT sv.id, s.first_name, s.last_name, p.program_code, yl.year_code AS year_level,
+               sec.section_name, v.violation, sv.description, sv.location, sv.date_time, sv.status
+        FROM student_violations sv
+        JOIN students s ON sv.student_id = s.id
+        JOIN programs p ON s.program_id = p.id
+        JOIN year_levels yl ON s.year_level_id = yl.id
+        JOIN sections sec ON s.section_id = sec.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE sv.user_id = ? AND sv.school_year_id = ?
+        AND (s.first_name LIKE ? OR s.last_name LIKE ? OR v.violation LIKE ?)
+        ORDER BY sv.date_time DESC
+    ");
+    $stmt->execute([$user_id, $current_sy_id, "%$search%", "%$search%", "%$search%"]);
+    $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // ✅ Log search
+    logAction($pdo, $user_id, "Searched violations for: $search");
+} else {
+    $stmt = $pdo->prepare("
+        SELECT sv.id, s.first_name, s.last_name, p.program_code, yl.year_code AS year_level,
+               sec.section_name, v.violation, sv.description, sv.location, sv.date_time, sv.status
+        FROM student_violations sv
+        JOIN students s ON sv.student_id = s.id
+        JOIN programs p ON s.program_id = p.id
+        JOIN year_levels yl ON s.year_level_id = yl.id
+        JOIN sections sec ON s.section_id = sec.id
+        JOIN violations v ON sv.violation_id = v.id
+        WHERE sv.user_id = ? AND sv.school_year_id = ?
+        ORDER BY sv.date_time DESC
+    ");
+    $stmt->execute([$user_id, $current_sy_id]);
+    $studentViolations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 $totalViolations = count($studentViolations);
 ?>
+
+
+
 
 <div class="container small-container">
     <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>
@@ -349,6 +384,8 @@ function applyFilters() {
 function cancelFilters() {
     window.location.href = "faculty.php?page=student_violation";
 }
+
+
 </script>
 
 

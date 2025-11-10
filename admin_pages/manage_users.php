@@ -1,5 +1,6 @@
 <?php
 // admin_pages/manage_users.php
+
 $host = "localhost";
 $dbname = "studisciplink";
 $user = "root";
@@ -15,7 +16,7 @@ try {
         $stmt->execute([$user_id, $action]);
     }
 
-    // ✅ Get the current admin’s ID (make sure this is set when logging in)
+    // ✅ Get the current admin’s ID
     $admin_id = $_SESSION['user_id'] ?? 0;
 
     // Handle form submissions
@@ -30,7 +31,7 @@ try {
         $stmt = $pdo->prepare("INSERT INTO users (username, password, role, email, contact, status) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$username, $password, $role, $email, $contact, $status]);
 
-        // ✅ Log the add action
+        // ✅ Log add
         logAction($pdo, $admin_id, "Added user: $username");
     }
 
@@ -51,14 +52,14 @@ try {
             $stmt->execute([$username, $role, $email, $contact, $status, $id]);
         }
 
-        // ✅ Log the update action
+        // ✅ Log update
         logAction($pdo, $admin_id, "Updated user ID $id: $username");
     }
 
     if(isset($_GET['delete'])) {
         $id = $_GET['delete'];
 
-        // Fetch username before deleting for log clarity
+        // Fetch username before deleting
         $getUser = $pdo->prepare("SELECT username FROM users WHERE id=?");
         $getUser->execute([$id]);
         $userData = $getUser->fetch(PDO::FETCH_ASSOC);
@@ -67,11 +68,11 @@ try {
         $stmt = $pdo->prepare("DELETE FROM users WHERE id=?");
         $stmt->execute([$id]);
 
-        // ✅ Log the delete action
+        // ✅ Log delete
         logAction($pdo, $admin_id, "Deleted user ID $id: $username");
     }
 
-    // Fetch users with optional search
+    // ✅ Handle search and log it
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
     if ($search) {
@@ -82,15 +83,20 @@ try {
                                OR status LIKE ?  
                                ORDER BY id ASC");
         $stmt->execute(["%$search%", "%$search%", "%$search%", "%$search%"]);
+
+        // ✅ Log search
+        logAction($pdo, $admin_id, "Searched a user: $search");
     } else {
         $stmt = $pdo->query("SELECT * FROM users ORDER BY id ASC");
     }
+
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch(PDOException $e) {
     echo "<p style='color:red;'>Database error: ".$e->getMessage()."</p>";
 }
 ?>
+
 
 
 <style>

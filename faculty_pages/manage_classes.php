@@ -60,11 +60,24 @@ $sections = $sections->fetchAll(PDO::FETCH_ASSOC);
 
 $message = "";
 
-// Enroll class
+// ✅ Enroll class
 if (isset($_POST['enroll_class'])) {
     $program_id = $_POST['program_id'];
     $year_level_id = $_POST['year_level_id'];
     $section_id = $_POST['section_id'];
+
+    // Fetch program, year, and section names for logging
+    $prog = $pdo->prepare("SELECT program_name FROM programs WHERE id=?");
+    $prog->execute([$program_id]);
+    $program_name = $prog->fetchColumn();
+
+    $yr = $pdo->prepare("SELECT year_level FROM year_levels WHERE id=?");
+    $yr->execute([$year_level_id]);
+    $year_name = $yr->fetchColumn();
+
+    $sec = $pdo->prepare("SELECT section_name FROM sections WHERE id=?");
+    $sec->execute([$section_id]);
+    $section_name = $sec->fetchColumn();
 
     // ✅ Only select students in the current school year
     $stmt = $pdo->prepare("SELECT * FROM students 
@@ -84,17 +97,49 @@ if (isset($_POST['enroll_class'])) {
         foreach ($students as $stu) {
             $stmt->execute([$class_enrollment_id, $stu['id']]);
         }
+
+        // ✅ Log action
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([
+            $user_id,
+            "Enrolled a class ($program_name - $year_name - $section_name) with " . count($students) . " students."
+        ]);
+
         $message = "<p class='success-msg'>Class enrolled successfully (" . count($students) . " students added)</p>";
     } else {
         $message = "<p class='error-msg'>No students found.</p>";
     }
 }
 
-// Delete class (removes all its student_enrollments too)
+// ✅ Delete class (removes all its student_enrollments too)
 if (isset($_POST['delete_class'])) {
     $class_id = $_POST['class_enrollment_id'];
+
+    // Fetch class info for logging
+    $getClass = $pdo->prepare("
+        SELECT p.program_name, yl.year_level, sec.section_name 
+        FROM class_enrollments ce
+        INNER JOIN programs p ON ce.program_id = p.id
+        INNER JOIN year_levels yl ON ce.year_level_id = yl.id
+        INNER JOIN sections sec ON ce.section_id = sec.id
+        WHERE ce.id=? AND ce.user_id=?
+    ");
+    $getClass->execute([$class_id, $user_id]);
+    $class = $getClass->fetch(PDO::FETCH_ASSOC);
+
+    // Delete records
     $pdo->prepare("DELETE FROM student_enrollments WHERE class_enrollment_id=?")->execute([$class_id]);
     $pdo->prepare("DELETE FROM class_enrollments WHERE id=? AND user_id=?")->execute([$class_id, $user_id]);
+
+    // ✅ Log action
+    if ($class) {
+        $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log->execute([
+            $user_id,
+            "Deleted class ({$class['program_name']} - {$class['year_level']} - {$class['section_name']}) and all its students."
+        ]);
+    }
+
     $message = "<p class='error-msg'>Class and its students deleted successfully!</p>";
 }
 
@@ -130,7 +175,14 @@ $sql .= " ORDER BY s.last_name, s.first_name";
 $enrolled_students = $pdo->prepare($sql);
 $enrolled_students->execute($params);
 $enrolled_students = $enrolled_students->fetchAll(PDO::FETCH_ASSOC);
+
+if (!empty($search)) {
+    $log_action = "Searched enrolled student: $search";
+    $log = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+    $log->execute([$user_id, $log_action]);
+}
 ?>
+
 
 <div class="container small-container">
     <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>

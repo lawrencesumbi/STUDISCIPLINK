@@ -79,7 +79,7 @@ if (!in_array($page, $allowed_pages)) {
         <a href="?page=manage_sanction" class="<?= ($page == 'manage_sanction') ? 'active' : '' ?>">Manage Sanction</a>
     <a href="?page=record_violation" class="<?= ($page == 'record_violation') ? 'active' : '' ?>">Record Violation</a>
     <a href="?page=my_account" class="<?= ($page == 'my_account') ? 'active' : '' ?>">My Account</a>
-    <a href="logout.php">Logout</a>
+    <a href="logout.php" onclick="return confirm('Are you sure you want to log out?');">Logout</a>
 </div>
 
 

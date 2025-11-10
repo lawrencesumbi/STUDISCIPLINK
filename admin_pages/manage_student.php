@@ -29,13 +29,13 @@ $message = "";
 $edit_mode = false;
 $edit_student = [];
 
-// Activity log helper
+// ✅ Activity log helper
 function log_activity($pdo, $user_id, $action) {
-    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action) VALUES (?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
     $stmt->execute([$user_id, $action]);
 }
 
-// After adding student
+// Add student
 if (isset($_POST['add_student'])) {
     $stmt = $pdo->prepare("INSERT INTO students 
         (first_name, last_name, school_year_id, section_id, year_level_id, program_id, address, contact, user_id) 
@@ -79,10 +79,10 @@ if (isset($_POST['update_student'])) {
         $id
     ]);
 
-    // ✅ Remember last selected values
     $_SESSION['last_program'] = $_POST['program_id'];
     $_SESSION['last_year'] = $_POST['year_level_id'];
     $_SESSION['last_section'] = $_POST['section_id'];
+
     log_activity($pdo, $current_user_id, "Updated student ID $id: {$_POST['first_name']} {$_POST['last_name']}");
     $message = "<p class='success-msg'>Student updated successfully!</p>";
 }
@@ -108,7 +108,7 @@ if (isset($_POST['edit_student'])) {
     if ($edit_student) $edit_mode = true;
 }
 
-// Search & Filters
+// ✅ Search & Filters
 $search = $_GET['search'] ?? '';
 $filter_program = $_GET['filter_program'] ?? '';
 $filter_year = $_GET['filter_year'] ?? '';
@@ -128,6 +128,9 @@ if (!empty($search)) {
     $sql .= " AND (st.first_name LIKE ? OR st.last_name LIKE ? OR sec.section_name LIKE ? OR yl.year_level LIKE ? OR p.program_name LIKE ?)";
     $search_param = "%$search%";
     $params = array_merge($params, [$search_param, $search_param, $search_param, $search_param, $search_param]);
+
+    // ✅ Log the search action
+    log_activity($pdo, $current_user_id, "Searched a student: $search");
 }
 
 if ($filter_program) { $sql .= " AND st.program_id = ?"; $params[] = $filter_program; }
@@ -139,6 +142,7 @@ $students = $pdo->prepare($sql);
 $students->execute($params);
 $students = $students->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <div class="container small-container">
     <h3>Current School Year: <span style="color:#b30000;"><?= htmlspecialchars($current_sy['school_year']); ?></span></h3>

@@ -130,7 +130,8 @@ if(!in_array($page, $allowed_pages)) {
     <a href="?page=manage_section" class="<?php echo $page=='manage_section' ? 'active' : ''; ?>">Manage Section</a>
     <a href="?page=manage_student" class="<?php echo $page=='manage_student' ? 'active' : ''; ?>">Manage Student</a>
     <a href="?page=my_account" class="<?php echo $page=='my_account' ? 'active' : ''; ?>">My Account</a>
-    <a href="logout.php">Logout</a>
+    <a href="logout.php" onclick="return confirm('Are you sure you want to log out?');">Logout</a>
+
 </div>
 
 <div class="main-content">

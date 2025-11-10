@@ -84,7 +84,7 @@ if (!in_array($page, $allowed_pages)) {
     <a href="?page=manage_cases" class="<?= ($page == 'manage_cases') ? 'active' : '' ?>">Manage Cases</a>
     <a href="?page=generate_reports" class="<?= ($page == 'generate_reports') ? 'active' : '' ?>">Generate Reports</a>
     <a href="?page=my_account" class="<?= ($page == 'my_account') ? 'active' : '' ?>">My Account</a>
-    <a href="logout.php">Logout</a>
+    <a href="logout.php" onclick="return confirm('Are you sure you want to log out?');">Logout</a>
 </div>
 
 
