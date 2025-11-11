@@ -31,6 +31,17 @@ $filter_program = $_GET['filter_program'] ?? '';
 $filter_year = $_GET['filter_year'] ?? '';
 $filter_section = $_GET['filter_section'] ?? '';
 
+// ✅ Log search/filter action
+if (!empty($search) || $filter_program || $filter_year || $filter_section) {
+    $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action) VALUES (?, ?)");
+    $log_action = "Searched a record";
+    if (!empty($search)) $log_action .= ": $search";
+    if ($filter_program) $log_action .= " filtered by program ID $filter_program";
+    if ($filter_year) $log_action .= " filtered by year_level ID $filter_year";
+    if ($filter_section) $log_action .= " filtered by section ID $filter_section";
+    $log_stmt->execute([$current_user_id, $log_action]);
+}
+
 $sql = "
     SELECT st.*, sec.section_name, yl.year_level, p.program_code
     FROM students st
@@ -139,6 +150,14 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
                             </form>
                         </td>
                     </tr>
+                    <?php
+                    // ✅ Log view record action
+                    if (isset($_POST['view_record']) && $_POST['id'] == $stu['id']) {
+                        $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action) VALUES (?, ?)");
+                        $log_action = "Viewed record of student ID " . $stu['id'];
+                        $log_stmt->execute([$current_user_id, $log_action]);
+                    }
+                    ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr><td colspan="9" style="text-align:center;">No students found.</td></tr>
@@ -147,6 +166,7 @@ $students = $students->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 </div>
+
 
 <style>
 .small-container {

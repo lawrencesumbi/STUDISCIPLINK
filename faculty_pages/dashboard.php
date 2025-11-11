@@ -184,6 +184,7 @@ $chartData = $stmt->fetchAll(PDO::FETCH_ASSOC);
             ]
         },
         options: {
+            animation: false,
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
@@ -237,6 +238,7 @@ $chartData = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }]
         },
         options: {
+            animation: false,
             responsive: true,
             maintainAspectRatio: false,
             plugins: {

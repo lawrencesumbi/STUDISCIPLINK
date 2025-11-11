@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2025 at 11:13 AM
+-- Generation Time: Nov 11, 2025 at 07:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1137,7 +1137,304 @@ INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
 (1069, 3, 'Logged in', '2025-10-06 17:05:28'),
 (1070, 3, 'Logged out', '2025-10-06 17:07:54'),
 (1071, 9, 'Logged in', '2025-10-06 17:07:57'),
-(1072, 9, 'Logged out', '2025-10-06 17:13:21');
+(1072, 9, 'Logged out', '2025-10-06 17:13:21'),
+(1073, 1, 'Logged in', '2025-10-18 23:07:18'),
+(1074, 1, 'Logged out', '2025-10-18 23:07:34'),
+(1075, 4, 'Logged in', '2025-10-18 23:07:42'),
+(1076, 4, 'Logged out', '2025-10-18 23:09:19');
+INSERT INTO `logs` (`id`, `user_id`, `action`, `date_time`) VALUES
+(1077, 9, 'Logged in', '2025-10-18 23:09:26'),
+(1078, 9, 'Logged out', '2025-10-18 23:10:16'),
+(1079, 1, 'Logged in', '2025-11-08 22:11:37'),
+(1080, 1, 'Logged out', '2025-11-08 22:11:56'),
+(1081, 1, 'Logged in', '2025-11-08 22:12:00'),
+(1082, 1, 'Updated account info', '2025-11-09 13:27:37'),
+(1083, 1, 'Logged out', '2025-11-09 13:27:41'),
+(1084, 1, 'Logged in', '2025-11-09 13:27:45'),
+(1085, 1, 'Logged out', '2025-11-09 13:33:25'),
+(1086, 1, 'Logged in', '2025-11-09 13:33:29'),
+(1087, 1, 'Added student: Sachi Maglasang', '2025-11-09 13:43:42'),
+(1088, 1, 'Updated student ID 31', '2025-11-09 13:44:50'),
+(1089, 1, 'Updated student ID 31', '2025-11-09 13:45:52'),
+(1090, 1, 'Updated student ID 31', '2025-11-09 13:47:49'),
+(1091, 1, 'Deleted student ID 31: Sachi Maglasang', '2025-11-09 13:49:35'),
+(1092, 1, 'Added student: Jellian Grace Arcillas', '2025-11-09 14:08:49'),
+(1093, 1, 'Updated student ID 32: Jellian Arcillas', '2025-11-09 14:09:02'),
+(1094, 1, 'Added user: raulsumbi', '2025-11-09 14:11:13'),
+(1095, 1, 'Updated user: raulsumbi (ID: 13)', '2025-11-09 14:11:35'),
+(1096, 1, 'Updated user ID 13: raulsumbi', '2025-11-09 14:12:23'),
+(1097, 1, 'Deleted user ID 13: raulsumbi', '2025-11-09 14:13:10'),
+(1098, 1, 'Added new school year: 2025-2026 2nd Sem', '2025-11-09 14:17:43'),
+(1099, 1, 'Updated school year (ID: 5) to: 2025-2026 3rd Sem', '2025-11-09 14:18:02'),
+(1100, 1, 'Deleted school year: 2025-2026 3rd Sem', '2025-11-09 14:18:35'),
+(1101, 1, 'Added new program: Bachelor of Science in Hospitality Management (BSHM)', '2025-11-09 14:22:37'),
+(1102, 1, 'Updated program (ID: 6) to: Bachelor of Science in Hospitality Management (BSHMM)', '2025-11-09 14:23:12'),
+(1103, 1, 'Deleted program: Bachelor of Science in Hospitality Management (BSHMM)', '2025-11-09 14:23:22'),
+(1104, 1, 'Added new program: Bachelor of Science in Hospitality Management (BSHM)', '2025-11-09 14:23:45'),
+(1105, 1, 'Added new year level: 5th Year (5)', '2025-11-09 14:26:26'),
+(1106, 1, 'Updated year level (ID: 5) to: 5th Year (55)', '2025-11-09 14:26:41'),
+(1107, 1, 'Deleted year level: 5th Year (55)', '2025-11-09 14:27:06'),
+(1108, 1, 'Added new section: E', '2025-11-09 14:32:19'),
+(1109, 1, 'Updated section (ID: 7) to: EEEE', '2025-11-09 14:32:31'),
+(1110, 1, 'Deleted section: EEEE', '2025-11-09 14:32:48'),
+(1111, 1, 'Added student: Sample Student', '2025-11-09 14:34:47'),
+(1112, 1, 'Updated student ID 33: Samplee Student', '2025-11-09 14:35:21'),
+(1113, 1, 'Set current school year to: 2025-2026 1st Sem', '2025-11-09 14:35:47'),
+(1114, 1, 'Set current school year to: 2024-2025 1st Sem', '2025-11-09 14:35:59'),
+(1115, 1, 'Set current school year to: 2024-2025 2nd Sem', '2025-11-09 14:36:28'),
+(1116, 1, 'Deleted student ID 33: Samplee Student', '2025-11-09 14:37:13'),
+(1117, 1, 'Changed password', '2025-11-09 14:42:03'),
+(1118, 1, 'Updated account info', '2025-11-09 14:42:16'),
+(1119, 1, 'Logged out', '2025-11-09 14:42:22'),
+(1120, 1, 'Logged in', '2025-11-09 14:42:57'),
+(1121, 1, 'Changed password', '2025-11-09 14:43:08'),
+(1122, 1, 'Logged out', '2025-11-09 14:43:10'),
+(1123, 4, 'Logged in', '2025-11-10 22:47:01'),
+(1124, 4, 'Enrolled a class (Bachelor of Science in Information Technology - 2nd Year - A) with 2 students.', '2025-11-10 22:53:50'),
+(1125, 4, 'Logged out', '2025-11-10 22:54:14'),
+(1126, 1, 'Logged in', '2025-11-10 22:54:21'),
+(1127, 1, 'Logged out', '2025-11-10 22:55:59'),
+(1128, 4, 'Logged in', '2025-11-10 22:56:03'),
+(1129, 4, 'Deleted class (Bachelor of Science in Information Technology - 2nd Year - A) and all its students.', '2025-11-10 22:56:12'),
+(1130, 4, 'Logged out', '2025-11-10 22:56:15'),
+(1131, 1, 'Logged in', '2025-11-10 22:56:19'),
+(1132, 1, 'Logged out', '2025-11-10 22:56:35'),
+(1133, 4, 'Logged in', '2025-11-10 22:56:39'),
+(1134, 4, 'Set school year \'2025-2026 1st Sem\' as current.', '2025-11-10 22:58:14'),
+(1135, 4, 'Set school year \'2024-2025 1st Sem\' as current.', '2025-11-10 22:58:15'),
+(1136, 4, 'Set school year \'2024-2025 2nd Sem\' as current.', '2025-11-10 22:58:16'),
+(1137, 4, 'Logged out', '2025-11-10 22:58:17'),
+(1138, 1, 'Logged in', '2025-11-10 22:58:20'),
+(1139, 1, 'Searched users with keyword: \'ok\'', '2025-11-10 23:03:56'),
+(1140, 1, 'Searched users with keyword: \'admin\'', '2025-11-10 23:03:59'),
+(1141, 1, 'Searched users with keyword: \'active\'', '2025-11-10 23:04:15'),
+(1142, 1, 'Searched a keyword: \'hhaha\'', '2025-11-10 23:05:10'),
+(1143, 1, 'Searched a keyword: patricia', '2025-11-10 23:05:40'),
+(1144, 1, 'Searched a keyword: PATRICIA', '2025-11-10 23:05:52'),
+(1145, 1, 'Searched students with keyword: \'hello\'', '2025-11-10 23:10:44'),
+(1146, 1, 'Searched a students: \'hi\'', '2025-11-10 23:11:48'),
+(1147, 1, 'Searched a student: \'hello\'', '2025-11-10 23:12:01'),
+(1148, 1, 'Searched a user: hi', '2025-11-10 23:12:20'),
+(1149, 1, 'Searched a student: ok', '2025-11-10 23:12:43'),
+(1150, 1, 'Logged out', '2025-11-10 23:12:51'),
+(1151, 4, 'Logged in', '2025-11-10 23:12:55'),
+(1152, 4, 'Logged out', '2025-11-10 23:13:16'),
+(1153, 1, 'Logged in', '2025-11-10 23:13:19'),
+(1154, 1, 'Logged out', '2025-11-10 23:13:35'),
+(1155, 4, 'Logged in', '2025-11-10 23:13:41'),
+(1156, 4, 'Logged out', '2025-11-10 23:23:47'),
+(1157, 1, 'Logged in', '2025-11-10 23:23:54'),
+(1158, 1, 'Logged out', '2025-11-10 23:23:59'),
+(1159, 4, 'Logged in', '2025-11-10 23:24:11'),
+(1160, 4, 'Searched enrolled students with keyword: \'k\'', '2025-11-10 23:31:39'),
+(1161, 4, 'Searched enrolled students with keyword: \'Hi\'', '2025-11-10 23:31:47'),
+(1162, 4, 'Logged out', '2025-11-10 23:31:49'),
+(1163, 1, 'Logged in', '2025-11-10 23:31:52'),
+(1164, 1, 'Logged out', '2025-11-10 23:32:25'),
+(1165, 4, 'Logged in', '2025-11-10 23:32:34'),
+(1166, 4, 'Searched enrolled student: active', '2025-11-10 23:32:57'),
+(1167, 4, 'Logged out', '2025-11-10 23:33:00'),
+(1168, 1, 'Logged in', '2025-11-10 23:33:03'),
+(1169, 1, 'Logged out', '2025-11-10 23:33:40'),
+(1170, 4, 'Logged in', '2025-11-10 23:33:44'),
+(1171, 4, 'Added new student violation report (Student ID: 21, Violation ID: 1).', '2025-11-10 23:43:33'),
+(1172, 4, 'Edited student violation record (ID: 43).', '2025-11-10 23:43:48'),
+(1173, 4, 'Deleted student violation record (Violation ID: 43).', '2025-11-10 23:43:53'),
+(1174, 4, 'Logged out', '2025-11-10 23:43:55'),
+(1175, 1, 'Logged in', '2025-11-10 23:43:58'),
+(1176, 1, 'Logged out', '2025-11-10 23:52:07'),
+(1177, 4, 'Logged in', '2025-11-10 23:52:11'),
+(1178, 4, 'Added violation for John Doe – Cheating', '2025-11-10 23:52:29'),
+(1179, 4, 'Updated violation for John Doe – Cheating', '2025-11-10 23:52:34'),
+(1180, 4, 'Deleted violation for John Doe – Cheating', '2025-11-10 23:52:38'),
+(1181, 4, 'Logged out', '2025-11-10 23:52:45'),
+(1182, 1, 'Logged in', '2025-11-10 23:52:47'),
+(1183, 1, 'Logged out', '2025-11-10 23:54:02'),
+(1184, 4, 'Logged in', '2025-11-10 23:54:06'),
+(1185, 4, 'Logged out', '2025-11-10 23:54:16'),
+(1186, 1, 'Logged in', '2025-11-10 23:54:20'),
+(1187, 1, 'Logged out', '2025-11-10 23:59:44'),
+(1188, 4, 'Logged in', '2025-11-10 23:59:49'),
+(1189, 4, 'Logged out', '2025-11-10 23:59:57'),
+(1190, 1, 'Logged in', '2025-11-10 23:59:59'),
+(1191, 1, 'Logged out', '2025-11-11 00:00:10'),
+(1192, 4, 'Logged in', '2025-11-11 00:00:14'),
+(1193, 4, 'Logged out', '2025-11-11 00:00:25'),
+(1194, 1, 'Logged in', '2025-11-11 00:00:28'),
+(1195, 1, 'Logged out', '2025-11-11 00:04:48'),
+(1196, 4, 'Logged in', '2025-11-11 00:04:52'),
+(1197, 4, 'Logged out', '2025-11-11 00:05:09'),
+(1198, 1, 'Logged in', '2025-11-11 00:05:20'),
+(1199, 1, 'Logged out', '2025-11-11 00:07:46'),
+(1200, 4, 'Logged in', '2025-11-11 00:07:50'),
+(1201, 4, 'Logged out', '2025-11-11 00:08:20'),
+(1202, 1, 'Logged in', '2025-11-11 00:08:23'),
+(1203, 1, 'Logged out', '2025-11-11 00:08:54'),
+(1204, 4, 'Logged in', '2025-11-11 00:08:58'),
+(1205, 4, 'Logged out', '2025-11-11 00:10:33'),
+(1206, 1, 'Logged in', '2025-11-11 00:10:41'),
+(1207, 1, 'Searched a user: hi', '2025-11-11 00:10:48'),
+(1208, 1, 'Searched a user: admin', '2025-11-11 00:10:51'),
+(1209, 1, 'Logged out', '2025-11-11 00:13:09'),
+(1210, 4, 'Logged in', '2025-11-11 00:13:18'),
+(1211, 4, 'Logged out', '2025-11-11 00:13:20'),
+(1212, 1, 'Logged in', '2025-11-11 00:13:23'),
+(1213, 1, 'Logged out', '2025-11-11 00:13:33'),
+(1214, 1, 'Logged in', '2025-11-11 00:14:30'),
+(1215, 1, 'Logged out', '2025-11-11 00:14:42'),
+(1216, 4, 'Logged in', '2025-11-11 00:14:46'),
+(1217, 4, 'Logged out', '2025-11-11 00:14:51'),
+(1218, 1, 'Logged in', '2025-11-11 00:14:57'),
+(1219, 1, 'Logged out', '2025-11-11 00:21:08'),
+(1220, 4, 'Logged in', '2025-11-11 00:21:18'),
+(1221, 4, 'Searched enrolled student: hi', '2025-11-11 00:21:38'),
+(1222, 4, 'Searched enrolled student: hi', '2025-11-11 00:21:54'),
+(1223, 4, 'Applied filters', '2025-11-11 00:45:12'),
+(1224, 4, 'Applied filters', '2025-11-11 00:45:12'),
+(1225, 4, 'Applied filters', '2025-11-11 00:45:13'),
+(1226, 4, 'Applied filters', '2025-11-11 00:45:13'),
+(1227, 4, 'Applied filters', '2025-11-11 00:45:13'),
+(1228, 4, 'Applied filters (Search=\'pending\')', '2025-11-11 00:45:25'),
+(1229, 4, 'Logged out', '2025-11-11 00:45:29'),
+(1230, 1, 'Logged in', '2025-11-11 00:45:32'),
+(1231, 1, 'Logged out', '2025-11-11 00:46:39'),
+(1232, 4, 'Logged in', '2025-11-11 00:46:44'),
+(1233, 4, 'Logged out', '2025-11-11 00:46:57'),
+(1234, 1, 'Logged in', '2025-11-11 00:47:00'),
+(1235, 1, 'Logged out', '2025-11-11 11:51:01'),
+(1236, 4, 'Logged in', '2025-11-11 11:52:04'),
+(1237, 4, 'Logged out', '2025-11-11 11:52:23'),
+(1238, 3, 'Logged in', '2025-11-11 11:52:27'),
+(1239, 3, 'Logged out', '2025-11-11 11:52:40'),
+(1240, 9, 'Logged in', '2025-11-11 11:52:43'),
+(1241, 9, 'Logged out', '2025-11-11 11:52:50'),
+(1242, 4, 'Logged in', '2025-11-11 11:52:53'),
+(1243, 4, 'Logged out', '2025-11-11 11:54:14'),
+(1244, 1, 'Logged in', '2025-11-11 11:54:17'),
+(1245, 1, 'Logged out', '2025-11-11 12:10:02'),
+(1246, 9, 'Logged in', '2025-11-11 12:10:04'),
+(1247, 9, 'Logged out', '2025-11-11 12:10:07'),
+(1248, 4, 'Logged in', '2025-11-11 12:10:14'),
+(1249, 4, 'Logged out', '2025-11-11 12:10:18'),
+(1250, 1, 'Logged in', '2025-11-11 12:10:20'),
+(1251, 1, 'Logged out', '2025-11-11 12:13:13'),
+(1252, 4, 'Logged in', '2025-11-11 12:13:16'),
+(1253, 4, 'Logged out', '2025-11-11 12:13:20'),
+(1254, 1, 'Logged in', '2025-11-11 12:13:22'),
+(1255, 1, 'Logged out', '2025-11-11 12:34:52'),
+(1256, 4, 'Logged in', '2025-11-11 12:35:02'),
+(1257, 4, 'Logged out', '2025-11-11 12:38:01'),
+(1258, 1, 'Logged in', '2025-11-11 12:38:05'),
+(1259, 1, 'Logged out', '2025-11-11 12:41:29'),
+(1260, 4, 'Logged in', '2025-11-11 12:41:34'),
+(1261, 4, 'Logged out', '2025-11-11 12:45:12'),
+(1262, 1, 'Logged in', '2025-11-11 12:45:16'),
+(1263, 1, 'Logged out', '2025-11-11 12:46:56'),
+(1264, 4, 'Logged in', '2025-11-11 12:47:00'),
+(1265, 4, 'Logged out', '2025-11-11 12:47:12'),
+(1266, 1, 'Logged in', '2025-11-11 12:47:15'),
+(1267, 1, 'Logged out', '2025-11-11 12:47:20'),
+(1268, 4, 'Logged in', '2025-11-11 12:47:28'),
+(1269, 4, 'Logged out', '2025-11-11 12:48:34'),
+(1270, 1, 'Logged in', '2025-11-11 12:48:37'),
+(1271, 1, 'Logged out', '2025-11-11 12:48:48'),
+(1272, 4, 'Logged in', '2025-11-11 12:48:52'),
+(1273, 4, 'Logged out', '2025-11-11 12:49:36'),
+(1274, 1, 'Logged in', '2025-11-11 12:49:41'),
+(1275, 1, 'Logged out', '2025-11-11 12:51:39'),
+(1276, 1, 'Logged in', '2025-11-11 12:51:44'),
+(1277, 1, 'Logged out', '2025-11-11 12:52:25'),
+(1278, 4, 'Logged in', '2025-11-11 12:52:29'),
+(1279, 4, 'Logged out', '2025-11-11 12:52:42'),
+(1280, 3, 'Logged in', '2025-11-11 12:52:48'),
+(1281, 3, 'Set School Year \'2025-2026 1st Sem\' as current', '2025-11-11 12:59:38'),
+(1282, 3, 'Set School Year \'2024-2025 1st Sem\' as current', '2025-11-11 12:59:41'),
+(1283, 3, 'Set School Year \'2024-2025 2nd Sem\' as current', '2025-11-11 12:59:45'),
+(1284, 3, 'Logged out', '2025-11-11 12:59:48'),
+(1285, 1, 'Logged in', '2025-11-11 12:59:51'),
+(1286, 1, 'Logged out', '2025-11-11 13:00:21'),
+(1287, 3, 'Logged in', '2025-11-11 13:00:26'),
+(1288, 3, 'Added violation \'Boy Wearing Earings\'', '2025-11-11 13:01:56'),
+(1289, 3, 'Updated violation ID #5 to \'Boy Wearing Earingss\'', '2025-11-11 13:02:00'),
+(1290, 3, 'Deleted violation \'Boy Wearing Earingss\' (ID #5)', '2025-11-11 13:02:02'),
+(1291, 3, 'Logged out', '2025-11-11 13:02:04'),
+(1292, 1, 'Logged in', '2025-11-11 13:02:07'),
+(1293, 1, 'Logged out', '2025-11-11 13:02:55'),
+(1294, 3, 'Logged in', '2025-11-11 13:02:59'),
+(1295, 3, 'Added sanction: Depression', '2025-11-11 13:07:59'),
+(1296, 3, 'Updated sanction ID 7 to \'Depressionnnnnnnn\'', '2025-11-11 13:08:03'),
+(1297, 3, 'Deleted sanction: Depressionnnnnnnn (ID 7)', '2025-11-11 13:08:05'),
+(1298, 3, 'Logged out', '2025-11-11 13:08:07'),
+(1299, 1, 'Logged in', '2025-11-11 13:08:13'),
+(1300, 1, 'Logged out', '2025-11-11 13:08:45'),
+(1301, 3, 'Logged in', '2025-11-11 13:08:49'),
+(1302, 3, 'Updated record ID 9: sanction_id=5, remarks=\'1-10 items assignment.\'', '2025-11-11 13:35:53'),
+(1303, 3, 'Deleted record ID 9: Mary Divine Grace Obaob, Violation=\'Cheating\', Sanction=\'Make-up Assignment\'', '2025-11-11 13:36:01'),
+(1304, 3, 'Added record for student_violation_id: 42, sanction_id: 6', '2025-11-11 13:36:13'),
+(1305, 3, 'Logged out', '2025-11-11 13:36:19'),
+(1306, 1, 'Logged in', '2025-11-11 13:36:25'),
+(1307, 1, 'Logged out', '2025-11-11 13:39:04'),
+(1308, 4, 'Logged in', '2025-11-11 13:39:09'),
+(1309, 4, 'Added violation for John Doe – No Uniform', '2025-11-11 13:39:33'),
+(1310, 4, 'Logged out', '2025-11-11 13:39:41'),
+(1311, 3, 'Logged in', '2025-11-11 13:40:44'),
+(1312, 3, 'Added record for John Doe - Violation: \'No Uniform\', Sanction: \'Warning\', Remarks: \'Dal a sunod\'', '2025-11-11 13:41:13'),
+(1313, 3, 'Updated record for John Doe - Violation: \'No Uniform\', New Sanction: \'Warning\', Remarks: \'Dal a sunoddd\'', '2025-11-11 13:41:28'),
+(1314, 3, 'Deleted record for John Doe - Violation: \'No Uniform\', Sanction: \'Warning\'', '2025-11-11 13:41:31'),
+(1315, 3, 'Logged out', '2025-11-11 13:41:48'),
+(1316, 1, 'Logged in', '2025-11-11 13:41:56'),
+(1317, 1, 'Logged out', '2025-11-11 13:42:52'),
+(1318, 3, 'Logged in', '2025-11-11 13:42:57'),
+(1319, 3, 'Logged out', '2025-11-11 13:43:10'),
+(1320, 9, 'Logged in', '2025-11-11 13:50:27'),
+(1321, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:44'),
+(1322, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:45'),
+(1323, 9, 'Set school year \'2024-2025 1st Sem\' as current', '2025-11-11 13:54:46'),
+(1324, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:47'),
+(1325, 9, 'Set school year \'2025-2026 1st Sem\' as current', '2025-11-11 13:54:48'),
+(1326, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:50'),
+(1327, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:52'),
+(1328, 9, 'Set school year \'2024-2025 2nd Sem\' as current', '2025-11-11 13:54:53'),
+(1329, 9, 'Set school year \'Unknown\' as current', '2025-11-11 13:54:54'),
+(1330, 9, 'Logged out', '2025-11-11 13:54:56'),
+(1331, 1, 'Logged in', '2025-11-11 13:55:03'),
+(1332, 1, 'Logged out', '2025-11-11 13:56:14'),
+(1333, 9, 'Logged in', '2025-11-11 13:56:16'),
+(1334, 9, 'Set School Year \'2025-2026 1st Sem\' as current', '2025-11-11 13:56:19'),
+(1335, 9, 'Set School Year \'2024-2025 1st Sem\' as current', '2025-11-11 13:56:19'),
+(1336, 9, 'Set School Year \'2024-2025 2nd Sem\' as current', '2025-11-11 13:56:20'),
+(1337, 9, 'Logged out', '2025-11-11 13:56:22'),
+(1338, 1, 'Logged in', '2025-11-11 13:56:24'),
+(1339, 1, 'Logged out', '2025-11-11 13:56:43'),
+(1340, 9, 'Logged in', '2025-11-11 13:56:46'),
+(1341, 9, 'Marked case ID 8 as Resolved', '2025-11-11 14:16:05'),
+(1342, 9, 'Logged out', '2025-11-11 14:16:11'),
+(1343, 1, 'Logged in', '2025-11-11 14:16:15'),
+(1344, 1, 'Logged out', '2025-11-11 14:16:37'),
+(1345, 9, 'Logged in', '2025-11-11 14:16:42'),
+(1346, 9, 'Logged out', '2025-11-11 14:19:37'),
+(1347, 1, 'Logged in', '2025-11-11 14:19:41'),
+(1348, 1, 'Logged out', '2025-11-11 14:20:22'),
+(1349, 9, 'Logged in', '2025-11-11 14:20:24'),
+(1350, 9, 'Searched students with keyword \'hi\'', '2025-11-11 14:20:33'),
+(1351, 9, 'Searched students with keyword \'Hello\'', '2025-11-11 14:20:37'),
+(1352, 9, 'Logged out', '2025-11-11 14:21:09'),
+(1353, 1, 'Logged in', '2025-11-11 14:21:13'),
+(1354, 1, 'Logged out', '2025-11-11 14:22:16'),
+(1355, 9, 'Logged in', '2025-11-11 14:22:39'),
+(1356, 9, 'Searched record filtered by program ID 1', '2025-11-11 14:22:43'),
+(1357, 9, 'Searched record filtered by year_level ID 1', '2025-11-11 14:22:48'),
+(1358, 9, 'Searched record filtered by year_level ID 1', '2025-11-11 14:22:49'),
+(1359, 9, 'Searched record: john', '2025-11-11 14:22:52'),
+(1360, 9, 'Logged out', '2025-11-11 14:22:56'),
+(1361, 1, 'Logged in', '2025-11-11 14:22:59'),
+(1362, 1, 'Logged out', '2025-11-11 14:23:56'),
+(1363, 9, 'Logged in', '2025-11-11 14:23:59'),
+(1364, 9, 'Searched a record', '2025-11-11 14:24:05'),
+(1365, 9, 'Searched a record: Daniel', '2025-11-11 14:24:08'),
+(1366, 9, 'Logged out', '2025-11-11 14:24:12'),
+(1367, 1, 'Logged in', '2025-11-11 14:24:18'),
+(1368, 1, 'Logged out', '2025-11-11 14:25:07');
 
 -- --------------------------------------------------------
 
@@ -1160,7 +1457,8 @@ INSERT INTO `programs` (`id`, `program_code`, `program_name`) VALUES
 (2, 'BSED', 'Bachelor of Science in Secondary Education'),
 (3, 'BSCRIM', 'Bachelor of Science in Criminology'),
 (4, 'BSTM', 'Bachelor of Science in Tourism Management'),
-(5, 'BSN', 'Bachelor of Science in Nursing');
+(5, 'BSN', 'Bachelor of Science in Nursing'),
+(7, 'BSHM', 'Bachelor of Science in Hospitality Management');
 
 -- --------------------------------------------------------
 
@@ -1185,8 +1483,8 @@ CREATE TABLE `record_violations` (
 
 INSERT INTO `record_violations` (`id`, `student_violations_id`, `sanction_id`, `remarks`, `date_recorded`, `user_id`, `school_year_id`, `status`) VALUES
 (7, 39, 3, 'Kapoya uy', '2025-10-01 15:58:39', 3, 2, 'Resolved'),
-(8, 40, 2, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Ongoing'),
-(9, 41, 5, 'give her another assignment', '2025-10-05 14:16:44', 3, 2, 'Ongoing');
+(8, 40, 2, 'Pag sul ob sunod', '2025-10-01 16:09:51', 3, 2, 'Resolved'),
+(10, 42, 6, 'Manglimpyo sa CR', '2025-11-11 05:36:13', 3, 2, 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -1207,7 +1505,8 @@ CREATE TABLE `resolved_cases` (
 --
 
 INSERT INTO `resolved_cases` (`id`, `record_violation_id`, `status`, `date_resolved`, `school_year_id`) VALUES
-(6, 7, 'Resolved', '2025-10-01 16:48:40', 2);
+(6, 7, 'Resolved', '2025-10-01 16:48:40', 2),
+(7, 8, 'Resolved', '2025-11-11 06:16:05', 2);
 
 -- --------------------------------------------------------
 
@@ -1307,7 +1606,8 @@ INSERT INTO `students` (`id`, `first_name`, `last_name`, `school_year_id`, `prog
 (21, 'John', 'Doe', 2, 2, 2, 3, 'Naga Cebu', '09123456789', '', 6),
 (23, 'John', 'Dave', 2, 2, 1, 3, 'Minglanilla Cebu', '09123456789', '', 6),
 (28, 'Roxy', 'Roller', 1, 2, 1, 2, 'Cebu Philippines', '09123456789', '', 6),
-(30, 'Mary Divine Grace', 'Obaob', 2, 5, 1, 2, 'Pitalo San Fernando Cebu', '09123456789', '', 1);
+(30, 'Mary Divine Grace', 'Obaob', 2, 5, 1, 2, 'Pitalo San Fernando Cebu', '09123456789', '', 1),
+(32, 'Jellian', 'Arcillas', 2, 4, 2, 2, 'Mandaue Cebu', '09123456789', '', 1);
 
 -- --------------------------------------------------------
 
@@ -1363,7 +1663,8 @@ INSERT INTO `student_violations` (`id`, `student_id`, `violation_id`, `descripti
 (39, 17, 4, 'Wearing Cevilian on Mondays', 'Campus', '2025-09-25 22:00:40', 'Recorded', 8, 2),
 (40, 30, 3, 'She forget to bring her ID and lived in San Fernando', 'Annex Building', '2025-10-01 13:24:41', 'Recorded', 4, 2),
 (41, 30, 1, 'Naay kodego sa iyang kamot', 'Room 201', '2025-10-02 00:11:24', 'Recorded', 4, 2),
-(42, 8, 2, 'Suwat suwat sa blackboard', 'ROOM 101', '2025-10-06 17:03:27', 'Pending', 4, 2);
+(42, 8, 2, 'Suwat suwat sa blackboard', 'ROOM 101', '2025-10-06 17:03:27', 'Recorded', 4, 2),
+(45, 21, 4, 'nabilins balay', 'campus', '2025-11-11 13:39:33', 'Recorded', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -1387,8 +1688,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `status`, `img`) VALUES
-(1, 'admin', '$2y$10$ov6ePzMX3b96jDzNgEXGFuuHHAvKRJ6E7BPyhb6505aYKbHkmsZAW', 'admin', 'administrator@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
-(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'pending', ''),
+(1, 'admin', '$2y$10$nawJt.cTVgtI3xklIW.XuuUJ.WppuazXQydzb.yORzCtj6bhsi6bm', 'admin', 'admin@gmail.com', '09303172724', 'active', '../studisciplink/userUploads/download (2).jpg'),
+(2, 'patriciaobaob', '$2y$10$AWfFB3AaX0oflt9PmLOGBeomgKpLGlL5ez6lednMoafVYmqZURIlm', 'sao', 'patobaob@gmail.com', '09123456789', 'active', ''),
 (3, 'guidance', '$2y$10$ql2NM0Hd3kZXf.5ML.Ch7ute/nGm9qDckx0PJ5P2Xqjj/iCs0KE7y', 'guidance', 'guidance@gmail.com', '09987654321', 'active', '../studisciplink/userUploads/92700584-e219-4775-b0b1-1b75cd3ee529.jpg'),
 (4, 'faculty', '$2y$10$GToR8dPdBzjm9mnaZGx9peH7R10B6lF7pUVZpjSBa8FmK5.yqCEDy', 'faculty', 'faculty@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/f56486c5427dc5a7ed81252862d87c96.jpg'),
 (5, 'jaymaicanarvasa', '$2y$10$IFv1MHhxKCqhtUskH3w0tez3x9.yC6i9UqybW8Rf6LA3paRdQ/dve', 'admin', 'jaymaica@gmail.com', '09987654321', 'pending', ''),
@@ -1396,7 +1697,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `contact`, `
 (7, 'jaylonmantillas', '$2y$10$ieINs2o2zZcC/bi3N50hbOsYDoy6jtCN8AUbnGS8sL3juNhQQDmoK', 'admin', 'jaylon@gmail.com', '09987654321', 'pending', ''),
 (8, 'johndoe', '$2y$10$Ug7uQl3SC3kMUHXdMRt8xekqV2yvu0n8jKMaWLaxliX87L3jnk3.S', 'faculty', 'johndoe@gmail.com', '09123456789', 'active', ''),
 (9, 'sao', '$2y$10$XWtIE.mkkS2u1kUfBv4oNuESZkXN.YwxokO3efx/WGxYsdH7Gj4Uy', 'sao', 'sao@gmail.com', '09123456789', 'active', '../studisciplink/userUploads/office-cat-scaled.jpeg'),
-(10, 'dally', '$2y$10$cyMnmcgQddw5xlv0ZUHaGONtsvoOQi5BK7DEG.C8bJlLFIh2lGdg.', 'guidance', 'dally@gmail.com', '09123456789', 'pending', '');
+(10, 'dally', '$2y$10$cyMnmcgQddw5xlv0ZUHaGONtsvoOQi5BK7DEG.C8bJlLFIh2lGdg.', 'guidance', 'dally@gmail.com', '09123456789', 'pending', ''),
+(11, 'david', '$2y$10$3QQdDW4o4TTofG3r0uoLz.lEzpqNgavbd9SbapFDWyOdTP2KraQXO', 'sao', 'david@gmail.com', '09123456789', 'pending', ''),
+(12, 'jonash', '$2y$10$jKM8gkOoLDPmjjksGnvnLu2bRqEj3BpPNItb8KzAgsuwqyuTXuI16', 'admin', 'jonash@gmail.com', '09123456789', 'pending', '');
 
 -- --------------------------------------------------------
 
@@ -1562,85 +1865,85 @@ ALTER TABLE `year_levels`
 -- AUTO_INCREMENT for table `class_enrollments`
 --
 ALTER TABLE `class_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1073;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1369;
 
 --
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `record_violations`
 --
 ALTER TABLE `record_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `resolved_cases`
 --
 ALTER TABLE `resolved_cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `sanctions`
 --
 ALTER TABLE `sanctions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `school_years`
 --
 ALTER TABLE `school_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `student_enrollments`
 --
 ALTER TABLE `student_enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `student_violations`
 --
 ALTER TABLE `student_violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `violations`
 --
 ALTER TABLE `violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `year_levels`
 --
 ALTER TABLE `year_levels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

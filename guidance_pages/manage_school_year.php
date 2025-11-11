@@ -1,15 +1,31 @@
 <?php
 require __DIR__ . '/../db_connect.php';
 
+
 $message = "";
 
 // Handle set current school year (persistent)
 if (isset($_POST['select_sy'])) {
     $id = $_POST['id'];
+
+    // Get the school year name for logging
+    $stmt = $pdo->prepare("SELECT school_year FROM school_years WHERE id = ?");
+    $stmt->execute([$id]);
+    $selected_sy = $stmt->fetchColumn();
+
+    // Update current school year
     $pdo->query("UPDATE school_years SET is_current = 0");
-    $stmt = $pdo->prepare("UPDATE school_years SET is_current = 1 WHERE id=?");
+    $stmt = $pdo->prepare("UPDATE school_years SET is_current = 1 WHERE id = ?");
     $stmt->execute([$id]);
     $message = "<p class='success-msg'>School Year set as current successfully!</p>";
+
+    // ✅ Log action
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        $action = "Set School Year '$selected_sy' as current";
+        $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log_stmt->execute([$user_id, $action]);
+    }
 }
 
 // Fetch all school years

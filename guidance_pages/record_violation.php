@@ -9,28 +9,48 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// ✅ Get current school year
+// Get current school year
 $current_sy_row = $pdo->query("SELECT * FROM school_years WHERE is_current=1 LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 $current_sy_id = $current_sy_row ? $current_sy_row['id'] : null;
 $current_sy = $current_sy_row ? $current_sy_row['school_year'] : "None";
 
-// Messages
 $message = "";
-
-// Edit mode vars
 $edit_mode = false;
 $edit_id = null;
 $edit_sanction_id = null;
 $edit_remarks = "";
 $edit_violation_id = null;
 
-// ✅ Handle Add Record
+// Function to log user actions
+function logAction($pdo, $user_id, $action) {
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+    $stmt->execute([$user_id, $action]);
+}
+
+// Handle Add Record
 if (isset($_POST['add_record'])) {
     $student_violation_id = $_POST['student_violations_id'];
     $sanction_id = $_POST['sanction_id'];
     $remarks = trim($_POST['remarks']);
 
     if ($student_violation_id && $sanction_id && $current_sy_id) {
+        // Get human-readable data
+        $stmt = $pdo->prepare("
+            SELECT st.first_name, st.last_name, v.violation AS violation_name, s.sanction AS sanction_name
+            FROM student_violations sv
+            JOIN students st ON sv.student_id = st.id
+            JOIN violations v ON sv.violation_id = v.id
+            JOIN sanctions s ON s.id = ?
+            WHERE sv.id = ?
+        ");
+        $stmt->execute([$sanction_id, $student_violation_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $student_name = $row['first_name'] . " " . $row['last_name'];
+        $violation_name = $row['violation_name'];
+        $sanction_name = $row['sanction_name'];
+
+        // Insert record
         $stmt = $pdo->prepare("INSERT INTO record_violations 
             (student_violations_id, sanction_id, remarks, user_id, school_year_id, status) 
             VALUES (?, ?, ?, ?, ?, 'Ongoing')");
@@ -40,30 +60,77 @@ if (isset($_POST['add_record'])) {
         $stmt->execute([$student_violation_id]);
 
         $message = "<p class='success-msg'>Record added successfully! (Status: Ongoing)</p>";
+
+        // Log action with human-readable info
+        logAction($pdo, $user_id, "Added record for $student_name - Violation: '$violation_name', Sanction: '$sanction_name', Remarks: '$remarks'");
     } else {
         $message = "<p class='error-msg'>Please complete the form.</p>";
     }
 }
 
-// ✅ Handle Update Record
+// Handle Update Record
 if (isset($_POST['update_record'])) {
     $id = $_POST['id'];
     $sanction_id = $_POST['sanction_id'];
     $remarks = trim($_POST['remarks']);
+
+    // Get human-readable info
+    $stmt = $pdo->prepare("
+        SELECT st.first_name, st.last_name, v.violation AS violation_name, s.sanction AS sanction_name
+        FROM record_violations rv
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        JOIN sanctions s ON rv.sanction_id = s.id
+        WHERE rv.id = ?
+    ");
+    $stmt->execute([$id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $student_name = $row['first_name'] . " " . $row['last_name'];
+    $violation_name = $row['violation_name'];
+    $sanction_name = $row['sanction_name'];
+
     $stmt = $pdo->prepare("UPDATE record_violations SET sanction_id=?, remarks=? WHERE id=?");
     $stmt->execute([$sanction_id, $remarks, $id]);
+
     $message = "<p class='success-msg'>Record updated successfully!</p>";
+
+    logAction($pdo, $user_id, "Updated record for $student_name - Violation: '$violation_name', New Sanction: '$sanction_name', Remarks: '$remarks'");
 }
 
-// ✅ Handle Delete Record
+// Handle Delete Record
 if (isset($_POST['delete_record'])) {
     $id = $_POST['id'];
+
+    // Get human-readable info
+    $stmt = $pdo->prepare("
+        SELECT st.first_name, st.last_name, v.violation AS violation_name, s.sanction AS sanction_name
+        FROM record_violations rv
+        JOIN student_violations sv ON rv.student_violations_id = sv.id
+        JOIN students st ON sv.student_id = st.id
+        JOIN violations v ON sv.violation_id = v.id
+        JOIN sanctions s ON rv.sanction_id = s.id
+        WHERE rv.id = ?
+    ");
+    $stmt->execute([$id]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $stmt = $pdo->prepare("DELETE FROM record_violations WHERE id=?");
     $stmt->execute([$id]);
+
     $message = "<p class='error-msg'>Record deleted successfully!</p>";
+
+    if ($row) {
+        $student_name = $row['first_name'] . " " . $row['last_name'];
+        $violation_name = $row['violation_name'];
+        $sanction_name = $row['sanction_name'];
+        logAction($pdo, $user_id, "Deleted record for $student_name - Violation: '$violation_name', Sanction: '$sanction_name'");
+    }
 }
 
-// ✅ Handle Edit Mode
+
+// Handle Edit Mode
 if (isset($_POST['edit_record'])) {
     $edit_id = $_POST['id'];
     $stmt = $pdo->prepare("
@@ -85,7 +152,7 @@ if (isset($_POST['edit_record'])) {
         $edit_id = $row['id'];
         $edit_sanction_id = $row['sanction_id'];
         $edit_remarks = $row['remarks'];
-        $edit_violation_id = $row['student_violation_id']; // important
+        $edit_violation_id = $row['student_violation_id'];
         $edit_student_name = $row['first_name'] . " " . $row['last_name'];
         $edit_violation_name = $row['violation_name'];
     }

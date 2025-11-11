@@ -1,13 +1,23 @@
 <?php
 require __DIR__ . '/../db_connect.php'; // include DB connection
 
-// Messages
-$message = "";
+// Make sure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo "<p style='color:red;'>You must be logged in.</p>";
+    exit;
+}
 
-// Edit mode variables
+$user_id = $_SESSION['user_id'];
+$message = "";
 $edit_mode = false;
 $edit_id = null;
 $edit_name = "";
+
+// Function to log user actions
+function logAction($pdo, $user_id, $action) {
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+    $stmt->execute([$user_id, $action]);
+}
 
 // Handle add sanction
 if (isset($_POST['add_sanction'])) {
@@ -16,6 +26,9 @@ if (isset($_POST['add_sanction'])) {
         $stmt = $pdo->prepare("INSERT INTO sanctions (sanction) VALUES (?)");
         $stmt->execute([$sanction_name]);
         $message = "<p class='success-msg'>Sanction added successfully!</p>";
+
+        // Log action
+        logAction($pdo, $user_id, "Added sanction: $sanction_name");
     } else {
         $message = "<p class='error-msg'>Please enter a sanction.</p>";
     }
@@ -28,14 +41,25 @@ if (isset($_POST['update_sanction'])) {
     $stmt = $pdo->prepare("UPDATE sanctions SET sanction=? WHERE id=?");
     $stmt->execute([$sanction_name, $id]);
     $message = "<p class='success-msg'>Sanction updated successfully!</p>";
+
+    // Log action
+    logAction($pdo, $user_id, "Updated sanction ID $id to '$sanction_name'");
 }
 
 // Handle delete sanction
 if (isset($_POST['delete_sanction'])) {
     $id = $_POST['id'];
+    // Get sanction name before deleting
+    $stmt = $pdo->prepare("SELECT sanction FROM sanctions WHERE id=?");
+    $stmt->execute([$id]);
+    $sanction = $stmt->fetchColumn();
+
     $stmt = $pdo->prepare("DELETE FROM sanctions WHERE id=?");
     $stmt->execute([$id]);
     $message = "<p class='error-msg'>Sanction deleted successfully!</p>";
+
+    // Log action
+    logAction($pdo, $user_id, "Deleted sanction: $sanction (ID $id)");
 }
 
 // Handle edit (load values into form)

@@ -40,6 +40,14 @@ if (isset($_POST['resolve_case'])) {
     ");
     $stmt->execute([$record_id, $current_sy_id]);
 
+    // ✅ Log action
+    $log_stmt = $pdo->prepare("
+        INSERT INTO logs (user_id, action) 
+        VALUES (?, ?)
+    ");
+    $log_action = "Marked case ID $record_id as Resolved";
+    $log_stmt->execute([$user_id, $log_action]);
+
     $message = "<p class='success-msg'>Case ID $record_id marked as Resolved.</p>";
 }
 

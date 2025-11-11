@@ -16,6 +16,15 @@ if (isset($_POST['add_violation'])) {
         $stmt = $pdo->prepare("INSERT INTO violations (violation) VALUES (?)");
         $stmt->execute([$violation_name]);
         $message = "<p class='success-msg'>Violation added successfully!</p>";
+
+        // ✅ Log action
+        if (isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $action = "Added violation '$violation_name'";
+            $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+            $log_stmt->execute([$user_id, $action]);
+        }
+
     } else {
         $message = "<p class='error-msg'>Please enter a violation.</p>";
     }
@@ -28,14 +37,36 @@ if (isset($_POST['update_violation'])) {
     $stmt = $pdo->prepare("UPDATE violations SET violation=? WHERE id=?");
     $stmt->execute([$violation_name, $id]);
     $message = "<p class='success-msg'>Violation updated successfully!</p>";
+
+    // ✅ Log action
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        $action = "Updated violation ID #$id to '$violation_name'";
+        $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log_stmt->execute([$user_id, $action]);
+    }
 }
 
 // Handle delete violation
 if (isset($_POST['delete_violation'])) {
     $id = $_POST['id'];
+
+    // Get the name before deleting for clearer log
+    $stmt = $pdo->prepare("SELECT violation FROM violations WHERE id=?");
+    $stmt->execute([$id]);
+    $deleted_name = $stmt->fetchColumn();
+
     $stmt = $pdo->prepare("DELETE FROM violations WHERE id=?");
     $stmt->execute([$id]);
     $message = "<p class='error-msg'>Violation deleted successfully!</p>";
+
+    // ✅ Log action
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        $action = "Deleted violation '$deleted_name' (ID #$id)";
+        $log_stmt = $pdo->prepare("INSERT INTO logs (user_id, action, date_time) VALUES (?, ?, NOW())");
+        $log_stmt->execute([$user_id, $action]);
+    }
 }
 
 // Handle edit (load values into form)
